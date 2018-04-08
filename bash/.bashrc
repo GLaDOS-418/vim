@@ -4,14 +4,14 @@ CHROME=/usr/lib/chrome
 #phantomjs required for youtube-dl
 #PHANTOMJS=/home/arnob/Downloads/phantomjs-2.1.3/bin
 export EDITOR=vim
-export MYVIMRC=~/dotfiles/.vimrc
+export MYVIMRC=~/.vimrc
 export PATH=$PATH:$CHROME
 #export PS1=${debian_chroot:+($debian_chroot)}\u@\h:\w\$ #old value
 export PS1="[\u]:[\W]$" #[username]:[baseWorkingDirectory]
 
 #aliases
 alias emacs="emacs & &> /dev/null"
-alias suvim="sudo -E vim"
+alias suvim="sudo -E gvim"
  #remove unused packages(orphans): if none found o/p :"no targets specified"
 alias cleanpac="sudo pacman -Rns $(pacman -Qtdq)"
 alias cdp="cd /mnt/windows/projects"
@@ -22,6 +22,10 @@ alias prp="pipenv run python"
 alias psh="pipenv shell"
 alias ipshow="ip link show"
 alias tux="sudo arpon -d -i wlp3s0 -D"
+alias vvim="vim ~/.vimrc"
+alias vbash="vim ~/.bashrc"
+alias sbash="source ~/.bashrc"
+#alias vim="gvim"
 
 ################################################################
 ########           copied from su ~/.bashrc      ###############
