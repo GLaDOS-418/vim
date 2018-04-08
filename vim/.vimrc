@@ -21,8 +21,8 @@ set autoindent
 set smartindent
 set expandtab " tabs are spaces
 " set tabstop=4 " number of visual spaces per TAB
-set shiftwidth=4
-set softtabstop=4 " number of spaces in TAB when editing
+set shiftwidth=2
+set softtabstop=2 " number of spaces in TAB when editing
 
 " UI config ---------------------------------------------------
 set number " show line numbers
@@ -33,8 +33,9 @@ set cursorline " highlight current line
 nnoremap <leader>tn :set number!<CR>
 nnoremap <leader>trn :set relativenumber!<CR>
 
-filetype on "required
-"filetype plugin indent on    " required
+" filetype on "required
+filetype off "required
+filetype plugin indent on    " required
 "filetype indent on " load filetype-specific indent files ~/.vim/indent/python.vim
 
 set splitright
@@ -125,6 +126,13 @@ nnoremap <leader>sv :source $MYVIMRC<CR>
 " nnoremap <leader>s :mksession<CR>
 
 " Plugins -----------------------------------------------------
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+Plugin 'gmarik/Vundle.vim'
+
 " gundo
 " ctrlP
 " ag
@@ -132,5 +140,6 @@ nnoremap <leader>sv :source $MYVIMRC<CR>
 " ultisnips
 
 
+call vundle#end()            " required
 " Custom functions --------------------------------------------
 
