@@ -1,15 +1,30 @@
+################################################################
+# LOCAL VARIABLE
+################################################################
+
 ANACONDA=/home/arnob/anaconda3/bin
 FLATBUFFERS=/home/arnob/binaries/flatbuffers
 CHROME=/usr/lib/chrome
+DOTFILES='~/dotfiles'
+SAVE_CMD="python3 ~/dotfiles/save_command.py"
 #phantomjs required for youtube-dl
 #PHANTOMJS=/home/arnob/Downloads/phantomjs-2.1.3/bin
+
+
+################################################################
+# EXPORT
+################################################################
+
 export EDITOR=vim
 export MYVIMRC=~/.vimrc
 export PATH=$PATH:$CHROME
+export HISTFILE=~/.bash_history
 #export PS1=${debian_chroot:+($debian_chroot)}\u@\h:\w\$ #old value
-export PS1="[\u]:[\W]$" #[username]:[baseWorkingDirectory]
+#export PS1="[\u]:[\W]$" #[username]:[baseWorkingDirectory]
 
-#aliases
+################################################################
+# ALIAS
+################################################################
 alias emacs="emacs & &> /dev/null"
 alias suvim="sudo -E gvim"
  #remove unused packages(orphans): if none found o/p :"no targets specified"
@@ -25,7 +40,8 @@ alias tux="sudo arpon -d -i wlp3s0 -D"
 alias vvim="vim ~/.vimrc"
 alias vbash="vim ~/.bashrc"
 alias sbash="source ~/.bashrc"
-#alias vim="gvim"
+alias gv="gvim"
+alias spac="$SAVE_CMD sudo pacman"
 
 ################################################################
 ########           copied from su ~/.bashrc      ###############
