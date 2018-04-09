@@ -170,7 +170,8 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 Plugin 'gmarik/Vundle.vim'
-
+" Plugin 'ying17zi/vim-live-latex-preview'
+" Plugin 'LaTeX-Box-Team/LaTeX-Box'
 " gundo
 " ctrlP
 " ag
@@ -180,6 +181,10 @@ Plugin 'gmarik/Vundle.vim'
 
 call vundle#end()            " required
 
+
+" Auto commands  --------------------------------------------
+
+au FileType tex nnoremap <buffer> <leader>t :!pdflatex % <CR>
 
 " Custom functions --------------------------------------------
 

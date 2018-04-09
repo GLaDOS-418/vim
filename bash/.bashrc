@@ -9,15 +9,16 @@ DOTFILES='~/dotfiles'
 SAVE_CMD="python3 ~/dotfiles/save_command.py"
 #phantomjs required for youtube-dl
 #PHANTOMJS=/home/arnob/Downloads/phantomjs-2.1.3/bin
-
+LIVE_LATEX_PREVIEW='~/.vim/bundle/vim-live-latex-preview/bin/'
+DOT_SETUP_FILE='~/dotfiles/dot_setup.sh'
 
 ################################################################
 # EXPORT
 ################################################################
 
+export PATH=$PATH:$CHROME:$LIVE_LATEX_PREVIEW
 export EDITOR=vim
 export MYVIMRC=~/.vimrc
-export PATH=$PATH:$CHROME
 export HISTFILE=~/.bash_history
 #export PS1=${debian_chroot:+($debian_chroot)}\u@\h:\w\$ #old value
 #export PS1="[\u]:[\W]$" #[username]:[baseWorkingDirectory]
@@ -42,6 +43,16 @@ alias vbash="vim ~/.bashrc"
 alias sbash="source ~/.bashrc"
 alias gv="gvim"
 alias spac="$SAVE_CMD sudo pacman"
+alias syao="$SAVE_CMD sudo yaourt"
+
+################################################################
+# CUSTOM FUNCTIONS
+################################################################
+
+function lstcmd(){
+  fc -ln "$1" "$1" | sed '1s/^[[:space:]]*//' | xargs echo >> $DOT_SETUP_FILE
+}
+
 
 ################################################################
 ########           copied from su ~/.bashrc      ###############
