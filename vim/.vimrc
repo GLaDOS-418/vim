@@ -1,17 +1,23 @@
-" source vim configs ------------------------------------------
-" 
-" https://dougblack.io/words/a-good-vimrc.html
-" https://realpython.com/blog/python/vim-and-python-a-match-made-in-heaven/
-" https://github.com/amix/vimrc/tree/master/vimrcs
+"------------------------------------------------------------------------------
+" SOURCE VIM CONFIGS 
+"------------------------------------------------------------------------------
 
-" Misc --------------------------------------------------------
+" dougblack.io/words/a-good-vimrc.html
+" realpython.com/blog/python/vim-and-python-a-match-made-in-heaven/
+" witkowskibartosz.com/blog/gitgutter-vim-plugin.html
+" github.com/amix/vimrc/tree/master/vimrcs
+
+"------------------------------------------------------------------------------
+" MISC 
+"------------------------------------------------------------------------------
+
 set nocompatible "be iMproverd, required
 let mapleader=',' "leader is comma
 " jk is escape
 inoremap jk <ESC>
 " <leader>k is move right one space
 inoremap <leader>k <right>
-set clipboard=unnamed "to use operating system clipboard
+set clipboard=unnamedplus "to use operating system clipboard
 
 " ignore compiled files
 set wildignore=*.o,*~.*.pyc
@@ -25,7 +31,9 @@ set history=500  " set how many lines of history vim has to remember
 set autoread " set the file to autoread when a file is changed from outside
 set encoding=utf8 
 
-" Colors ------------------------------------------------------
+"------------------------------------------------------------------------------
+" COLORS 
+"------------------------------------------------------------------------------
 
 if $COLORTERM == 'gnome-terminal'
   set term=screen-256color "set teminal color to support 256 colors
@@ -40,7 +48,10 @@ set background=dark
 syntax enable " enable syntax processing
 
 
-" Spaces and Tabs ---------------------------------------------
+"------------------------------------------------------------------------------
+" SPACES AND TABS 
+"------------------------------------------------------------------------------
+
 set autoindent
 set smartindent
 set expandtab " tabs are spaces
@@ -49,7 +60,10 @@ set shiftwidth=2
 set softtabstop=2 " number of spaces in TAB when editing
 
 
-" UI config ---------------------------------------------------
+"------------------------------------------------------------------------------
+" UI CONFIG 
+"------------------------------------------------------------------------------
+
 set number " show line numbers
 set showcmd " shows last entered command in bottom right bar, not working
 set cursorline " highlight current line
@@ -96,7 +110,9 @@ set lazyredraw " redraw only when needed
 set showmatch " highlight matching [{()}]
 
 
-" Searching ---------------------------------------------------
+"------------------------------------------------------------------------------
+" SEARCHING 
+"------------------------------------------------------------------------------
 
 " Use case insensitive search, except when using capital letters
 set ignorecase
@@ -119,10 +135,13 @@ set foldnestmax=10 " max 10 nested folds
 " space open/closes folds in current block
 nnoremap <space> za
 " fold based on syntax. other values are: indent, marker, manual, expr, diff, syntax
-set foldmethod=indent " no plugin for syntax yet.
+set foldmethod=syntax " no plugin for syntax yet.
 
 
-" Movements --------------------------------------------------------
+"------------------------------------------------------------------------------
+" MOVEMENTS 
+"------------------------------------------------------------------------------
+
 " move vertically by visual line
 nnoremap j gj
 nnoremap k gk
@@ -150,7 +169,9 @@ nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
 
-" Leader Shortcuts --------------------------------------------
+"------------------------------------------------------------------------------
+" LEADER SHORTCUTS 
+"------------------------------------------------------------------------------
 
 " edit/load vimrc/bashrc
 nnoremap <leader>ev :vsp $MYVIMRC<CR>
@@ -163,7 +184,12 @@ nnoremap <leader>sv :source $MYVIMRC<CR>
 " Remove the Windows ^M - when the encodings gets messed up
 noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 
-" Plugins -----------------------------------------------------
+" stage current file in git
+nnoremap <leader>ga :!git add %<CR>
+
+"------------------------------------------------------------------------------
+" PLUGINS 
+"------------------------------------------------------------------------------
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -177,16 +203,46 @@ Plugin 'gmarik/Vundle.vim'
 " ag
 " ycm
 " ultisnips
-
+" fugitive
+Plugin 'airblade/vim-gitgutter'
+" markdown
+" indentmarkers
+" syntastic
+" vinegar
+" airline
 
 call vundle#end()            " required
 
+" gitgutter
+set updatetime=1000 "wait how much time to detect file update
+let g:gitgutter_max_signs = 500 "threshold upto which gitgutter shows sign
+let g:gitgutter_highlight_lines = 1
 
-" Auto commands  --------------------------------------------
+nmap hn <Plug>GitGutterNextHunk
+nmap hp <Plug>GitGutterPrevHunk
+nmap <leader>ha <Plug>GitGutterStageHunk
+nmap <leader>hr <Plug>GitGutterUndoHunk
+nmap <leader>hv <Plug>GitGutterPreviewHunk            
+
+nnoremap <leader>ggt <esc>:GitGutterToggle<cr>
+
+if exists('&signcolumn')  " Vim 7.4.2201
+  set signcolumn=yes
+else
+  let g:gitgutter_sign_column_always = 1
+endif
+
+"------------------------------------------------------------------------------
+" AUTO COMMANDS  
+"------------------------------------------------------------------------------
 
 au FileType tex nnoremap <buffer> <leader>t :!pdflatex % <CR>
+au FileType tex nnoremap <buffer> <leader>x :!xelatex % <CR>
 
-" Custom functions --------------------------------------------
+
+"------------------------------------------------------------------------------
+" CUSTOM FUNCTIONS
+"------------------------------------------------------------------------------
 
 function! VisualSelection(direction, extra_filter) range
     let l:saved_reg = @"
@@ -205,4 +261,6 @@ function! VisualSelection(direction, extra_filter) range
     let @" = l:saved_reg
 endfunction
 
-
+"------------------------------------------------------------------------------
+" END
+"------------------------------------------------------------------------------
