@@ -15,12 +15,14 @@ set nocompatible "be iMproverd, required
 let mapleader=',' "leader is comma
 " jk is escape
 inoremap jk <ESC>
+set nostartofline               " Make j/k respect the columns
+
 " <leader>k is move right one space
 inoremap <leader>k <right>
 set clipboard=unnamedplus "to use operating system clipboard
 
 " ignore compiled files
-set wildignore=*.o,*~.*.pyc
+set wildignore=*.o,*~,*.pyc,*.so,*.out,*.log
 if has("win16") || has("win32")
     set wildignore+=.git\*,.hg\*,.svn\*
 else
@@ -30,6 +32,8 @@ endif
 set history=500  " set how many lines of history vim has to remember
 set autoread " set the file to autoread when a file is changed from outside
 set encoding=utf8 
+set esckeys                     " Allow cursor keys in insert mode.
+set novb "no beeps vb-visual bell
 
 "------------------------------------------------------------------------------
 " COLORS 
@@ -119,6 +123,8 @@ set ignorecase
 set smartcase
 set incsearch " incremental search. search as chars are enetered
 set hlsearch " highlight matches
+set gdefault                " RegExp global by default
+set magic                   " Enable extended regexes.
 
 " turn off search highlight
 nnoremap <leader><space> :nohlsearch<CR>
@@ -135,7 +141,7 @@ set foldnestmax=10 " max 10 nested folds
 " space open/closes folds in current block
 nnoremap <space> za
 " fold based on syntax. other values are: indent, marker, manual, expr, diff, syntax
-set foldmethod=syntax " no plugin for syntax yet.
+set foldmethod=marker " no plugin for syntax yet.
 
 
 "------------------------------------------------------------------------------
