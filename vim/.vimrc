@@ -44,8 +44,9 @@ if $COLORTERM == 'gnome-terminal'
 endif
 
 try
-  colorscheme desert
+  colorscheme molokai
 catch
+  colorscheme desert
 endtry
 
 set background=dark
@@ -204,6 +205,7 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 " Plugin 'ying17zi/vim-live-latex-preview'
 " Plugin 'LaTeX-Box-Team/LaTeX-Box'
+Plugin 'tomasr/molokai'
 " gundo
 " ctrlP
 " ag
@@ -219,7 +221,9 @@ Plugin 'airblade/vim-gitgutter'
 
 call vundle#end()            " required
 
-" gitgutter
+
+" gitgutter configs
+
 set updatetime=1000 "wait how much time to detect file update
 let g:gitgutter_max_signs = 500 "threshold upto which gitgutter shows sign
 let g:gitgutter_highlight_lines = 1
@@ -237,6 +241,10 @@ if exists('&signcolumn')  " Vim 7.4.2201
 else
   let g:gitgutter_sign_column_always = 1
 endif
+
+
+" molokai theme config
+let g:molokai_original=1
 
 "------------------------------------------------------------------------------
 " AUTO COMMANDS  
