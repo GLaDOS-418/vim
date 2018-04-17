@@ -1,0 +1,1 @@
+../bundle/Spacegray.vim/colors/spacegray.vim
