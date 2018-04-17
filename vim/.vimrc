@@ -6,7 +6,11 @@
 " realpython.com/blog/python/vim-and-python-a-match-made-in-heaven/
 " witkowskibartosz.com/blog/gitgutter-vim-plugin.html
 " github.com/amix/vimrc/tree/master/vimrcs
-
+" vimcasts.org/episodes/spell-checking/
+" nvie.com/posts/how-i-boosted-my-vim/
+" medium.com/usevim/vim-101-set-hidden-f78800142855
+"
+"
 "------------------------------------------------------------------------------
 " MISC 
 "------------------------------------------------------------------------------
@@ -22,18 +26,22 @@ inoremap <leader>k <right>
 set clipboard=unnamedplus "to use operating system clipboard
 
 " ignore compiled files
-set wildignore=*.o,*~,*.pyc,*.so,*.out,*.log
+set wildignore=*.o,*~,*.pyc,*.so,*.out,*.log,*.aux,*.bak,*.swp,*.class
 if has("win16") || has("win32")
     set wildignore+=.git\*,.hg\*,.svn\*
 else
     set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
 endif
 
-set history=500  " set how many lines of history vim has to remember
+set history=1000  " set how many lines of history vim has to remember
 set autoread " set the file to autoread when a file is changed from outside
 set encoding=utf8 
 set esckeys                     " Allow cursor keys in insert mode.
-set novb "no beeps vb-visual bell
+set nowrap  "don't wrap lines
+set title                " change the terminal's title
+set visualbell           " don't beep
+set noerrorbells         " don't beep
+set spelllang=en " 'en_gb' sets region to British English. use 'en' for all regions
 
 "------------------------------------------------------------------------------
 " COLORS 
@@ -44,7 +52,8 @@ if $COLORTERM == 'gnome-terminal'
 endif
 
 try
-  colorscheme molokai
+  " colorscheme molokai
+  colorscheme spacegray
 catch
   colorscheme desert
 endtry
@@ -52,6 +61,10 @@ endtry
 set background=dark
 syntax enable " enable syntax processing
 
+" colorscheme spcegray
+let g:spacegray_low_contrast = 1
+let g:spacegray_use_italics = 1
+let g:spacegray_underline_search = 1
 
 "------------------------------------------------------------------------------
 " SPACES AND TABS 
@@ -194,6 +207,9 @@ noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 " stage current file in git
 nnoremap <leader>ga :!git add %<CR>
 
+"spell check toggle
+nmap <silent> <leader>s :set spell!<cr>
+
 "------------------------------------------------------------------------------
 " PLUGINS 
 "------------------------------------------------------------------------------
@@ -206,6 +222,7 @@ Plugin 'gmarik/Vundle.vim'
 " Plugin 'ying17zi/vim-live-latex-preview'
 " Plugin 'LaTeX-Box-Team/LaTeX-Box'
 Plugin 'tomasr/molokai'
+Plugin 'ajh17/Spacegray.vim'
 " gundo
 " ctrlP
 " ag
@@ -218,6 +235,8 @@ Plugin 'airblade/vim-gitgutter'
 " syntastic
 " vinegar
 " airline
+" closetag : plugin for autoclose html
+Plugin 'alvan/vim-closetag'
 
 call vundle#end()            " required
 
@@ -228,11 +247,11 @@ set updatetime=1000 "wait how much time to detect file update
 let g:gitgutter_max_signs = 500 "threshold upto which gitgutter shows sign
 let g:gitgutter_highlight_lines = 1
 
-nmap hn <Plug>GitGutterNextHunk
-nmap hp <Plug>GitGutterPrevHunk
-nmap <leader>ha <Plug>GitGutterStageHunk
-nmap <leader>hr <Plug>GitGutterUndoHunk
-nmap <leader>hv <Plug>GitGutterPreviewHunk            
+nmap gn <Plug>GitGutterNextHunk
+nmap gp <Plug>GitGutterPrevHunk
+nmap <leader>hs <Plug>GitGutterStageHunk
+nmap <leader>hu <Plug>GitGutterUndoHunk
+nmap <leader>hp <Plug>GitGutterPreviewHunk            
 
 nnoremap <leader>ggt <esc>:GitGutterToggle<cr>
 
@@ -246,6 +265,30 @@ endif
 " molokai theme config
 let g:molokai_original=1
 
+
+" vim-closetag
+" filenames like *.xml, *.html, *.xhtml, ...
+" These are the file extensions where this plugin is enabled.
+"
+let g:closetag_filenames = '*.html,*.xhtml,*.phtml'
+
+" filenames like *.xml, *.xhtml, ...
+" This will make the list of non-closing tags self-closing in the specified files.
+"
+let g:closetag_xhtml_filenames = '*.xhtml,*.jsx'
+
+" integer value [0|1]
+" This will make the list of non-closing tags case-sensitive (e.g. `<Link>` will be closed while `<link>` won't.)
+"
+let g:closetag_emptyTags_caseSensitive = 1
+
+" Shortcut for closing tags, default is '>'
+"
+let g:closetag_shortcut = '>'
+
+" Add > at current position without closing the current tag, default is ''
+"
+let g:closetag_close_shortcut = '<leader>>'
 "------------------------------------------------------------------------------
 " AUTO COMMANDS  
 "------------------------------------------------------------------------------
