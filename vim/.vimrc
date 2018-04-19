@@ -1,6 +1,6 @@
-"------------------------------------------------------------------------------
+"----------------------------------------------------------------
 " SOURCE VIM CONFIGS 
-"------------------------------------------------------------------------------
+"----------------------------------------------------------------
 
 " dougblack.io/words/a-good-vimrc.html
 " realpython.com/blog/python/vim-and-python-a-match-made-in-heaven/
@@ -9,11 +9,53 @@
 " vimcasts.org/episodes/spell-checking/
 " nvie.com/posts/how-i-boosted-my-vim/
 " medium.com/usevim/vim-101-set-hidden-f78800142855
+" devel.tech/snippets/n/vIMmz8vZ/minimal-vim-configuration-with-vim-plug/#putting-it-all-together
 "
-"
-"------------------------------------------------------------------------------
+
+"----------------------------------------------------------------
+" PLUGIN MANAGER
+"----------------------------------------------------------------
+
+" download vim-plug and install plugins if vim started without plug.
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall | source $MYVIMRC
+endif
+
+" plug plugin setup.
+call plug#begin('~/.vim/plugged')
+
+" Automatically install missing plugins on startup. [commented to improve
+" startup]
+if !empty(filter(copy(g:plugs), '!isdirectory(v:val.dir)'))
+  autocmd VimEnter * PlugInstall | q
+endif
+
+" Plug 'ying17zi/vim-live-latex-preview'
+" Plug 'LaTeX-Box-Team/LaTeX-Box'
+Plug 'tomasr/molokai'
+Plug 'ajh17/Spacegray.vim'
+" gundo
+" ctrlP
+" ag
+" ycm
+" ultisnips
+" fugitive
+Plug 'airblade/vim-gitgutter'
+" markdown
+" indentmarkers
+" syntastic
+" vinegar
+" airline
+" closetag : plugin for autoclose html
+Plug 'alvan/vim-closetag'
+
+call plug#end()            " required
+
+"----------------------------------------------------------------
 " MISC 
-"------------------------------------------------------------------------------
+"----------------------------------------------------------------
 
 set nocompatible "be iMproverd, required
 let mapleader=',' "leader is comma
@@ -37,15 +79,14 @@ set history=1000  " set how many lines of history vim has to remember
 set autoread " set the file to autoread when a file is changed from outside
 set encoding=utf8 
 set esckeys                     " Allow cursor keys in insert mode.
-set nowrap  "don't wrap lines
 set title                " change the terminal's title
 set visualbell           " don't beep
 set noerrorbells         " don't beep
 set spelllang=en " 'en_gb' sets region to British English. use 'en' for all regions
 
-"------------------------------------------------------------------------------
+"----------------------------------------------------------------
 " COLORS 
-"------------------------------------------------------------------------------
+"----------------------------------------------------------------
 
 if $COLORTERM == 'gnome-terminal'
   set term=screen-256color "set teminal color to support 256 colors
@@ -66,9 +107,9 @@ let g:spacegray_low_contrast = 1
 let g:spacegray_use_italics = 1
 let g:spacegray_underline_search = 1
 
-"------------------------------------------------------------------------------
+"----------------------------------------------------------------
 " SPACES AND TABS 
-"------------------------------------------------------------------------------
+"----------------------------------------------------------------
 
 set autoindent
 set smartindent
@@ -78,9 +119,9 @@ set shiftwidth=2
 set softtabstop=2 " number of spaces in TAB when editing
 
 
-"------------------------------------------------------------------------------
+"----------------------------------------------------------------
 " UI CONFIG 
-"------------------------------------------------------------------------------
+"----------------------------------------------------------------
 
 set number " show line numbers
 set showcmd " shows last entered command in bottom right bar, not working
@@ -91,9 +132,12 @@ set ruler
 nnoremap <leader>tn :set number!<CR>
 nnoremap <leader>trn :set relativenumber!<CR>
 
+" removed the below filetype plugin block as vim-plug handles it internally
 " filetype on "required
-filetype off "required
-filetype plugin indent on    " required
+" filetype off "required
+" filetype plugin indent on    " required
+
+
 "filetype indent on " load filetype-specific indent files ~/.vim/indent/python.vim
 
 set splitright
@@ -128,9 +172,9 @@ set lazyredraw " redraw only when needed
 set showmatch " highlight matching [{()}]
 
 
-"------------------------------------------------------------------------------
+"----------------------------------------------------------------
 " SEARCHING 
-"------------------------------------------------------------------------------
+"----------------------------------------------------------------
 
 " Use case insensitive search, except when using capital letters
 set ignorecase
@@ -158,9 +202,9 @@ nnoremap <space> za
 set foldmethod=marker " no plugin for syntax yet.
 
 
-"------------------------------------------------------------------------------
+"----------------------------------------------------------------
 " MOVEMENTS 
-"------------------------------------------------------------------------------
+"----------------------------------------------------------------
 
 " move vertically by visual line
 nnoremap j gj
@@ -189,9 +233,9 @@ nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
 
-"------------------------------------------------------------------------------
+"----------------------------------------------------------------
 " LEADER SHORTCUTS 
-"------------------------------------------------------------------------------
+"----------------------------------------------------------------
 
 " edit/load vimrc/bashrc
 nnoremap <leader>ev :vsp $MYVIMRC<CR>
@@ -210,38 +254,12 @@ nnoremap <leader>ga :!git add %<CR>
 "spell check toggle
 nmap <silent> <leader>s :set spell!<cr>
 
-"------------------------------------------------------------------------------
-" PLUGINS 
-"------------------------------------------------------------------------------
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+"----------------------------------------------------------------
+" PLUGIN SETTINGS
+"----------------------------------------------------------------
 
-Plugin 'gmarik/Vundle.vim'
-" Plugin 'ying17zi/vim-live-latex-preview'
-" Plugin 'LaTeX-Box-Team/LaTeX-Box'
-Plugin 'tomasr/molokai'
-Plugin 'ajh17/Spacegray.vim'
-" gundo
-" ctrlP
-" ag
-" ycm
-" ultisnips
-" fugitive
-Plugin 'airblade/vim-gitgutter'
-" markdown
-" indentmarkers
-" syntastic
-" vinegar
-" airline
-" closetag : plugin for autoclose html
-Plugin 'alvan/vim-closetag'
-
-call vundle#end()            " required
-
-
-" gitgutter configs
+" gitgutter - plugin config
 
 set updatetime=1000 "wait how much time to detect file update
 let g:gitgutter_max_signs = 500 "threshold upto which gitgutter shows sign
@@ -262,44 +280,28 @@ else
 endif
 
 
-" molokai theme config
+" molokai theme - plugin config
 let g:molokai_original=1
 
 
-" vim-closetag
-" filenames like *.xml, *.html, *.xhtml, ...
-" These are the file extensions where this plugin is enabled.
-"
+" vim-closetag - plugin config
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml'
-
-" filenames like *.xml, *.xhtml, ...
-" This will make the list of non-closing tags self-closing in the specified files.
-"
 let g:closetag_xhtml_filenames = '*.xhtml,*.jsx'
-
-" integer value [0|1]
-" This will make the list of non-closing tags case-sensitive (e.g. `<Link>` will be closed while `<link>` won't.)
-"
 let g:closetag_emptyTags_caseSensitive = 1
+let g:closetag_shortcut = '>'  " Shortcut for closing tags, default is '>'
+let g:closetag_close_shortcut = '<leader>>' " Add > at current position without closing the current tag, default is ''
 
-" Shortcut for closing tags, default is '>'
-"
-let g:closetag_shortcut = '>'
-
-" Add > at current position without closing the current tag, default is ''
-"
-let g:closetag_close_shortcut = '<leader>>'
-"------------------------------------------------------------------------------
+"----------------------------------------------------------------
 " AUTO COMMANDS  
-"------------------------------------------------------------------------------
+"----------------------------------------------------------------
 
 au FileType tex nnoremap <buffer> <leader>t :!pdflatex % <CR>
 au FileType tex nnoremap <buffer> <leader>x :!xelatex % <CR>
 
 
-"------------------------------------------------------------------------------
+"----------------------------------------------------------------
 " CUSTOM FUNCTIONS
-"------------------------------------------------------------------------------
+"----------------------------------------------------------------
 
 function! VisualSelection(direction, extra_filter) range
     let l:saved_reg = @"
@@ -318,6 +320,6 @@ function! VisualSelection(direction, extra_filter) range
     let @" = l:saved_reg
 endfunction
 
-"------------------------------------------------------------------------------
+"----------------------------------------------------------------
 " END
-"------------------------------------------------------------------------------
+"----------------------------------------------------------------
