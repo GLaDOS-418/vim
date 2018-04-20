@@ -17,3 +17,4 @@ sudo pacman -Sy texlive-most texlive-lang
 sudo yaourt -Sy biber
 sudo pacman -Sy mupdf
 sudo yaourt tree
+sudo pacman -Sy bash-completion
