@@ -155,7 +155,7 @@ set softtabstop=2 " number of spaces in TAB when editing
 "------------------------------------------------------------
 
 set number          " show line numbers
-set relativenumber  "show relative line number
+set relativenumber  " show relative line number
 set showcmd         " shows last entered command in bottom right bar, not working
 set cursorline      " highlight current line
 set scrolloff=5     " minimum line offset to present on screen while scrolling.
@@ -205,9 +205,8 @@ set showmatch   " highlight matching [{()}]
 " SEARCHING 
 "------------------------------------------------------------
 
-" Use case insensitive search, except when using capital letters
-set ignorecase
-set smartcase
+set ignorecase    " use case insensitive search
+set smartcase     " except when using capital letters
 set incsearch     " incremental search. search as chars are enetered
 set hlsearch      " highlight matches
 set gdefault      " RegExp global by default
@@ -284,7 +283,7 @@ noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 nnoremap <leader>ga :!git add %<CR>
 
 "spell check toggle
-nmap <silent> <leader>s :set spell!<cr>
+nnoremap <silent> <leader>s :set spell!<cr>
 
 
 "------------------------------------------------------------
@@ -293,19 +292,19 @@ nmap <silent> <leader>s :set spell!<cr>
 
 " gitgutter - plugin config {{{
 
-set updatetime=1000 "wait how much time to detect file update
-let g:gitgutter_max_signs = 500 "threshold upto which gitgutter shows sign
+set updatetime=1000                 "wait how much time to detect file update
+let g:gitgutter_max_signs = 500     "threshold upto which gitgutter shows sign
 let g:gitgutter_highlight_lines = 1
 
-nmap gn <Plug>GitGutterNextHunk
-nmap gp <Plug>GitGutterPrevHunk
-nmap <leader>hs <Plug>GitGutterStageHunk
-nmap <leader>hu <Plug>GitGutterUndoHunk
-nmap <leader>hp <Plug>GitGutterPreviewHunk            
+nnoremap gn <Plug>GitGutterNextHunk
+nnoremap gp <Plug>GitGutterPrevHunk
+nnoremap <leader>hs <Plug>GitGutterStageHunk
+nnoremap <leader>hu <Plug>GitGutterUndoHunk
+nnoremap <leader>hp <Plug>GitGutterPreviewHunk            
 
 nnoremap <leader>ggt <esc>:GitGutterToggle<cr>
 
-if exists('&signcolumn')  " Vim 7.4.2201
+if exists('&signcolumn')  " vim 7.4.2201+
   set signcolumn=yes
 else
   let g:gitgutter_sign_column_always = 1
@@ -317,7 +316,7 @@ endif
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml'
 let g:closetag_xhtml_filenames = '*.xhtml,*.jsx'
 let g:closetag_emptyTags_caseSensitive = 1
-let g:closetag_shortcut = '>'  " Shortcut for closing tags, default is '>'
+let g:closetag_shortcut = '>'               " Shortcut for closing tags, default is '>'
 let g:closetag_close_shortcut = '<leader>>' " Add > at current position without closing the current tag, default is ''
 "}}}
 
