@@ -47,23 +47,29 @@ Plug 'airblade/vim-gitgutter'
 
 Plug 'alvan/vim-closetag'
 Plug 'sjl/gundo.vim'
-" Plug 'wincent/command-t', {
-"     \ 'do': 'cd ruby/command-t/ext/command-t && ruby extconf.rb && make'
-" \ }
+Plug 'wincent/command-t', {
+    \ 'do': 'cd ruby/command-t/ext/command-t && ruby extconf.rb && make'
+    \ }
+
+" considerable plugins-not tried yet
+" ctrlP and fzf (alternative of command-t)
+" vimwiki (alternative of vim-notes)
 " Plug 'ying17zi/vim-live-latex-preview'
 " Plug 'LaTeX-Box-Team/LaTeX-Box'
 " grepg
 " vim surround
 " ag
 " ycm
-" syntastic
+" syntastic (ALE is an alternative: async)
 " ultisnips
 " markdown
 " indentmarkers
 " vinegar
-" airline
+" airline (lighther than powerline: a custome statusline can be used: would be even lighter)
 
-call plug#end()            " required
+call plug#end() 
+
+" PS - a deeper look needed for fugitive, gundo, command-t, notes.
 
 "------------------------------------------------------------
 " MISC 
@@ -168,19 +174,19 @@ set splitbelow
 "matching pair of braces
 inoremap {      {}<Left>
 inoremap {<CR>  {<CR>}<Esc>O
-inoremap {{     {
+" inoremap {{     {
 inoremap {}     {}
 
 "matching pair of square brackets
 inoremap [      []<Left>
 inoremap [<CR>  [<CR>]<Esc>O
-inoremap [[     [
+" inoremap [[     [
 inoremap []     []
 
 "handling paranthesis
 inoremap (      ()<Left>
 inoremap (<CR>  (<CR>)<Esc>O
-inoremap ((     (
+" inoremap ((     (
 inoremap ()     ()
 
 " "handling angular brackets
@@ -285,7 +291,7 @@ nmap <silent> <leader>s :set spell!<cr>
 " PLUGIN SETTINGS
 "------------------------------------------------------------
 
-" gitgutter - plugin config
+" gitgutter - plugin config {{{
 
 set updatetime=1000 "wait how much time to detect file update
 let g:gitgutter_max_signs = 500 "threshold upto which gitgutter shows sign
@@ -304,17 +310,19 @@ if exists('&signcolumn')  " Vim 7.4.2201
 else
   let g:gitgutter_sign_column_always = 1
 endif
+"}}}
 
 
-" vim-closetag - plugin config
+" vim-closetag - plugin config {{{
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml'
 let g:closetag_xhtml_filenames = '*.xhtml,*.jsx'
 let g:closetag_emptyTags_caseSensitive = 1
 let g:closetag_shortcut = '>'  " Shortcut for closing tags, default is '>'
 let g:closetag_close_shortcut = '<leader>>' " Add > at current position without closing the current tag, default is ''
+"}}}
 
 
-"vim notes - plugin config
+"vim notes - plugin config {{{
 let g:notes_directories = ['/mnt/windows/projects/notes','~/dotfiles/vim/notes']
 " let g:notes_list_bullets = ['*', '-', '+']
 " let g:notes_unicode_enabled = 0
@@ -322,6 +330,17 @@ let g:notes_suffix = '.md'
 let g:notes_title_sync='change-title'
 vnoremap <Leader>ns :NoteFromSelectedText<CR>
 nnoremap <C-e> :edit note:
+"}}}
+
+"command-t - plugin config {{{
+" change pwd to root git dir
+nnoremap <leader>gr :call CD_Git_Root()<cr>
+" add wildignore filetypes from .gitignore
+nnoremap <leader>cti :call WildignoreFromGitignore()<cr>
+"start command-t to find files in notes directory.
+nnoremap <leader>gn :CommandT /mnt/windows/projects/notes<cr>
+"}}}
+
 "------------------------------------------------------------
 " AUTO COMMANDS  
 "------------------------------------------------------------
@@ -357,6 +376,50 @@ function! VisualSelection(direction, extra_filter) range
     let @" = l:saved_reg
 endfunction
 
+
+function! Git_Repo_Cdup() " Get the relative path to repo root
+    "Ask git for the root of the git repo (as a relative '../../' path)
+    let git_top = system('git rev-parse --show-cdup')
+    let git_fail = 'fatal: Not a git repository'
+    if strpart(git_top, 0, strlen(git_fail)) == git_fail
+        " Above line says we are not in git repo. Ugly. Better version?
+        return ''
+    else
+        " Return the cdup path to the root. If already in root,
+        " path will be empty, so add './'
+        return './' . git_top
+    endif
+endfunction
+
+function! CD_Git_Root()
+    execute 'cd '.Git_Repo_Cdup()
+    let curdir = getcwd()
+    echo 'CWD now set to: '.curdir
+endfunction
+
+
+" Define the wildignore from gitignore. Primarily for CommandT
+function! WildignoreFromGitignore()
+    silent call CD_Git_Root()
+    let gitignore = '.gitignore'
+    if filereadable(gitignore)
+        let igstring = ''
+        for oline in readfile(gitignore)
+            let line = substitute(oline, '\s|\n|\r', '', "g")
+            if line =~ '^#' | con | endif
+            if line == '' | con  | endif
+            if line =~ '^!' | con  | endif
+            if line =~ '/$' | let igstring .= "," . line . "*" | con | endif
+            let igstring .= "," . line
+        endfor
+        let execstring = "set wildignore+=".substitute(igstring,'^,','',"g")
+        execute execstring
+        echo 'Wildignore defined from gitignore in: '.getcwd()
+    else
+        echo 'Unable to find gitignore'
+    endif
+endfunction
+
 "------------------------------------------------------------
 " SOURCE VIM CONFIGS 
 "------------------------------------------------------------
@@ -370,6 +433,7 @@ endfunction
 " medium.com/usevim/vim-101-set-hidden-f78800142855
 " devel.tech/snippets/n/vIMmz8vZ/minimal-vim-configuration-with-vim-plug/#putting-it-all-together
 " naperwrimo.org/wiki/index.php?title=Vim_for_Writers
+" ctoomey.com/writing/command-t-optimized/
 " r/vim
 
 "------------------------------------------------------------
