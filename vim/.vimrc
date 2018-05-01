@@ -100,7 +100,7 @@ set visualbell            " don't beep
 set noerrorbells          " don't beep
 set spelllang=en          " 'en_gb' sets region to British English. use 'en' for all regions
 set noswapfile
-set nobackup              "gives error when same file being edited by multiple vim sessions
+" set nobackup              " gives no error when same file being edited by multiple vim sessions
 set textwidth=0           " no automatic linefeeds in insert mode
 set wrap                  " word wrap the text(normal/visual)
 "insert datetime in the format specified on <F9>
@@ -239,9 +239,9 @@ set foldmethod=marker   " no plugin for syntax yet.
 " MOVEMENTS 
 "------------------------------------------------------------
 
-" move vertically by visual line
-nnoremap j gj
-nnoremap k gk
+" move vertically by visual line(normal/visual mode)
+noremap j gj
+noremap k gk
 
 " move to end/beginning of line(normal/visual  mode)
 noremap E $
