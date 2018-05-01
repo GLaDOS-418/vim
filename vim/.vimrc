@@ -75,13 +75,13 @@ call plug#end()
 " MISC 
 "------------------------------------------------------------
 
-set nocompatible "be iMproverd, required
-let mapleader=',' "leader is comma
+" set nocompatible          "commented: r/vim/wiki/vimrctips
+let mapleader=','           "leader is comma
 " jk is escape
 inoremap jk <ESC>
-set nostartofline               " Make j/k respect the columns
+set nostartofline           " Make j/k respect the columns
 
-set clipboard=unnamedplus "to use operating system clipboard
+set clipboard=unnamedplus   "to use operating system clipboard
 
 " ignore compiled files
 set wildignore=*.o,*~,*.pyc,*.so,*.out,*.log,*.aux,*.bak,*.swp,*.class
@@ -104,11 +104,11 @@ set noswapfile
 set textwidth=0           " no automatic linefeeds in insert mode
 set wrap                  " word wrap the text(normal/visual)
 "insert datetime in the format specified on <F9>
-nnoremap <F9> "=strftime("%c")<CR>P
-inoremap <F9> <C-R>=strftime("%c")<CR>
+nnoremap <F9> "=strftime("%Y-%m-%d_%a")<CR>P
+inoremap <F9> <C-R>=strftime("%Y-%m-%d_%a")<CR>
 
 "------------------------------------------------------------
-" COLORS 
+" COLORS   
 "------------------------------------------------------------
 
 if $COLORTERM == 'gnome-terminal'
@@ -145,7 +145,7 @@ let g:gruvbox_contrast_dark='soft'
 set autoindent
 set cindent       " better alternative to smartindent
 set expandtab     " tabs are spaces
-" set tabstop=2   " number of visual spaces per TAB
+" set tabstop=2   " commented: r/vim/wiki/tabstop
 set shiftwidth=2
 set softtabstop=2 " number of spaces in TAB when editing
 
@@ -345,15 +345,18 @@ nnoremap <leader>gn :CommandT /mnt/windows/projects/notes<cr>
 " AUTO COMMANDS  
 "------------------------------------------------------------
 
-" latex compilation shell commands. req: (pdf|xe)latex
-autocmd FileType tex nnoremap <buffer> <leader>t :!pdflatex % <CR>
-autocmd FileType tex nnoremap <buffer> <leader>x :!xelatex % <CR>
+" group au commands: so they won't be added when vimrc sourced again
+augroup autogroup
+    " Remove all auto-commands from the group autogroup
+    autocmd! 
 
-"inserts date_time in this format int *.note files
-autocmd FileType note inoremap <F9> <C-R>=strftime("%Y_%b_%d_%a_%H_%M_%S")<CR>
-autocmd FileType note nnnoremap <F9> "=strftime("%Y_%b_%d_%a_%H_%M_%S")<CR>P
+    " latex compilation shell commands. req: (pdf|xe)latex
+    autocmd FileType tex nnoremap <buffer> <leader>t :!pdflatex % <CR>
+    autocmd FileType tex nnoremap <buffer> <leader>x :!xelatex % <CR>
+    
+    autocmd FocusLost * :wall          " Save on lost focus
 
-autocmd FocusLost * :wall          " Save on lost focus
+augroup END
 
 "------------------------------------------------------------
 " CUSTOM FUNCTIONS
