@@ -16,7 +16,7 @@
 " SOURCE VIM CONFIGS 
 
 "------------------------------------------------------------
-" PLUGIN MANAGER
+" PLUGIN MANAGER {{{
 "------------------------------------------------------------
 
 " download vim-plug and install plugins if vim started without plug.
@@ -29,36 +29,40 @@ endif
 " plug plugin setup.
 call plug#begin('~/.vim/plugged')
 
-" Automatically install missing plugins on startup. [commented to improve
-" startup
+" Automatically install missing plugins on startup. [commented to improve startup
 if !empty(filter(copy(g:plugs), '!isdirectory(v:val.dir)'))
   autocmd VimEnter * PlugInstall | q
 endif
 
 Plug 'tomasr/molokai'
 Plug 'ajh17/Spacegray.vim'
-Plug 'morhetz/gruvbox'
+Plug 'morhetz/gruvbox'          " currently in use
 
-Plug 'xolox/vim-misc'
-Plug 'xolox/vim-notes'
+Plug 'xolox/vim-notes'| Plug 'xolox/vim-misc' 
 
-Plug 'tpope/vim-fugitive'
-Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'       " to handle git commands
+Plug 'airblade/vim-gitgutter'   " to see git diff
 
-Plug 'alvan/vim-closetag'
-Plug 'sjl/gundo.vim'
-Plug 'wincent/command-t', {
+Plug 'alvan/vim-closetag'       " to close markup lang tags
+
+Plug 'mileszs/ack.vim'          " ag.vim is deprecated.
+Plug 'sjl/gundo.vim'            " to see vim history-tree
+" {{{ command-t when ruby support available else ctrlp
+Plug 'wincent/command-t', has('ruby') ? {
     \ 'do': 'cd ruby/command-t/ext/command-t && ruby extconf.rb && make'
-    \ }
+    \ }:{ 'on': [] }
+" install 'the_silver_searcher for speeding up ack and ctrlp.
+" github.com/ggreer/the_silver_searcher
+Plug 'ctrlpvim/ctrlp.vim', has('ruby')?{'on':[]}:{}
+" }}}
 
 " considerable plugins-not tried yet
-" ctrlP and fzf (alternative of command-t)
+" fzf (alternative of command-t)
 " vimwiki (alternative of vim-notes)
 " Plug 'ying17zi/vim-live-latex-preview'
 " Plug 'LaTeX-Box-Team/LaTeX-Box'
 " grepg
 " vim surround
-" ag
 " ycm
 " syntastic (ALE is an alternative: async)
 " ultisnips
@@ -69,19 +73,34 @@ Plug 'wincent/command-t', {
 
 call plug#end() 
 
-" PS - a deeper look needed for fugitive, gundo, command-t, notes.
+" PS - a deeper look needed for fugitive, gundo, command-t, notes, ack.
+" }}}
 
 "------------------------------------------------------------
-" MISC 
+" MISC {{{
 "------------------------------------------------------------
 
 " set nocompatible          "commented: r/vim/wiki/vimrctips
 let mapleader=','           "leader is comma
+set nostartofline           " Make j/k respect the columns
+set clipboard=unnamedplus   "to use operating system clipboard
+set history=1000            " set how many lines of history vim has to remember
+set autoread                " set the file to autoread when a file is changed from outside
+set encoding=utf8           " set vim encoding to utf-8
+set esckeys                 " Allow cursor keys in insert mode.
+set title                   " change the terminal's title
+set spelllang=en            " 'en_gb' sets region to British English. use 'en' for all regions
+set noswapfile              " stops vim from creating a .swp file
+" set nobackup              " " gives no error when same file being edited by multiple vim sessions
+set textwidth=0             " no automatic linefeeds in insert mode
+set wrap                    " word wrap the text(normal/visual)
+set visualbell              " don't beep
+set noerrorbells            " don't beep
+syntax enable               " enable syntax processing
+" clearing the t_vb variable deactivates flashing
+set t_vb=
 " jk is escape
 inoremap jk <ESC>
-set nostartofline           " Make j/k respect the columns
-
-set clipboard=unnamedplus   "to use operating system clipboard
 
 " ignore compiled files
 set wildignore=*.o,*~,*.pyc,*.so,*.out,*.log,*.aux,*.bak,*.swp,*.class
@@ -91,26 +110,19 @@ else
     set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
 endif
 
-set history=1000          " set how many lines of history vim has to remember
-set autoread              " set the file to autoread when a file is changed from outside
-set encoding=utf8
-set esckeys               " Allow cursor keys in insert mode.
-set title                 " change the terminal's title
-set visualbell            " don't beep
-set noerrorbells          " don't beep
-set spelllang=en          " 'en_gb' sets region to British English. use 'en' for all regions
-set noswapfile
-" set nobackup              " gives no error when same file being edited by multiple vim sessions
-set textwidth=0           " no automatic linefeeds in insert mode
-set wrap                  " word wrap the text(normal/visual)
 "insert datetime in the format specified on <F9>
 nnoremap <F9> "=strftime("%Y-%m-%d_%a")<CR>P
 inoremap <F9> <C-R>=strftime("%Y-%m-%d_%a")<CR>
 
+" }}}
+
 "------------------------------------------------------------
-" COLORS   
+" COLORS    {{{
 "------------------------------------------------------------
 
+set background=dark
+
+" :call ShowColorSchemeName() to show the current colorscheme that vim is using[custom fn]
 if $COLORTERM == 'gnome-terminal'
   set term=screen-256color "set teminal color to support 256 colors
 endif
@@ -123,8 +135,6 @@ catch
   colorscheme desert
 endtry
 
-set background=dark
-syntax enable " enable syntax processing
 
 " molokai theme - plugin config
 " let g:molokai_original=1
@@ -138,8 +148,10 @@ syntax enable " enable syntax processing
 " gruvbox - plugin config
 let g:gruvbox_contrast_dark='soft'
 
+" }}}
+
 "------------------------------------------------------------
-" SPACES AND TABS 
+" SPACES AND TABS  {{{
 "------------------------------------------------------------
 
 set autoindent
@@ -150,8 +162,10 @@ set shiftwidth=2
 set softtabstop=2 " number of spaces in TAB when editing
 
 
+" }}}
+
 "------------------------------------------------------------
-" UI CONFIG 
+" UI CONFIG  {{{
 "------------------------------------------------------------
 
 set number          " show line numbers
@@ -201,8 +215,10 @@ set lazyredraw  " redraw only when needed
 set showmatch   " highlight matching [{()}]
 
 
+" }}}
+
 "------------------------------------------------------------
-" SEARCHING 
+" SEARCHING  {{{
 "------------------------------------------------------------
 
 set ignorecase    " use case insensitive search
@@ -234,8 +250,10 @@ set foldmethod=marker   " no plugin for syntax yet.
 
 " }}}
 
+" }}}
+
 "------------------------------------------------------------
-" MOVEMENTS 
+" MOVEMENTS  {{{
 "------------------------------------------------------------
 
 " move vertically by visual line(normal/visual mode)
@@ -257,8 +275,10 @@ nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
 
+" }}}
+
 "------------------------------------------------------------
-" LEADER SHORTCUTS 
+" LEADER SHORTCUTS  {{{
 "------------------------------------------------------------
 
 " toggle line numbers
@@ -286,8 +306,10 @@ nnoremap <leader>ga :!git add %<CR>
 nnoremap <silent> <leader>s :set spell!<cr>
 
 
+" }}}
+
 "------------------------------------------------------------
-" PLUGIN SETTINGS
+" PLUGIN SETTINGS {{{
 "------------------------------------------------------------
 
 " gitgutter - plugin config {{{
@@ -322,7 +344,7 @@ let g:closetag_close_shortcut = '<leader>>' " Add > at current position without 
 
 
 "vim notes - plugin config {{{
-let g:notes_directories = ['/mnt/windows/projects/notes','~/dotfiles/vim/notes']
+let g:notes_directories = ['~/dotfiles/vim/notes']
 " let g:notes_list_bullets = ['*', '-', '+']
 " let g:notes_unicode_enabled = 0
 let g:notes_suffix = '.md'
@@ -331,17 +353,40 @@ vnoremap <Leader>ns :NoteFromSelectedText<CR>
 nnoremap <C-e> :edit note:
 "}}}
 
+" ack.vim - plugin config {{{
+if executable('ag')
+  let g:ackprg = 'ag --nogroup --nocolor --column --heading --follow --smart-case'
+  "search in pwd. [!] if not given, the first occurence is jumped to.
+endif
+
+nnoremap <leader>a :Ack!<space>
+
+" }}}
+
 "command-t - plugin config {{{
+
 " change pwd to root git dir
 nnoremap <leader>gr :call CD_Git_Root()<cr>
 " add wildignore filetypes from .gitignore
 nnoremap <leader>cti :call WildignoreFromGitignore()<cr>
-"start command-t to find files in notes directory.
-nnoremap <leader>gn :CommandT /mnt/windows/projects/notes<cr>
+if has('ruby')
+  " with ruby support use command-t
+  " start command-t to find files in notes directory.
+  nnoremap <leader>fn :CommandT /mnt/windows/projects/notes<cr>
+else
+  " with no ruby support in vim, use ctrl-p + ag(silver search for vim)
+  let g:ctrlp_match_window = 'bottom,order:ttb'                  " top-to-bottom filename matching
+  let g:ctrlp_switch_buffer = 0                                  " always open file in new buffer
+  let g:ctrlp_working_path_mode = 0                              " ability to change pwd in vim session
+  let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""' " use ag to search 
+endif
+
 "}}}
 
+" }}}
+
 "------------------------------------------------------------
-" AUTO COMMANDS  
+" AUTO COMMANDS   {{{
 "------------------------------------------------------------
 
 " group au commands: so they won't be added when vimrc sourced again
@@ -357,8 +402,10 @@ augroup autogroup
 
 augroup END
 
+" }}}
+
 "------------------------------------------------------------
-" CUSTOM FUNCTIONS
+" CUSTOM FUNCTIONS {{{
 "------------------------------------------------------------
 
 function! VisualSelection(direction, extra_filter) range
@@ -422,8 +469,18 @@ function! WildignoreFromGitignore()
     endif
 endfunction
 
+function! ShowColorSchemeName()
+    try
+        echo g:colors_name
+    catch /^Vim:E121/
+        echo "default
+    endtry
+endfunction
+
+" }}}
+
 "------------------------------------------------------------
-" SOURCE VIM CONFIGS 
+" SOURCE VIM CONFIGS  {{{
 "------------------------------------------------------------
 
 " dougblack.io/words/a-good-vimrc.html
@@ -436,7 +493,10 @@ endfunction
 " devel.tech/snippets/n/vIMmz8vZ/minimal-vim-configuration-with-vim-plug/#putting-it-all-together
 " naperwrimo.org/wiki/index.php?title=Vim_for_Writers
 " ctoomey.com/writing/command-t-optimized/
+" ddrscott.github.io/blog/2016/side-search/#haven't_checked_yet
 " r/vim
+
+" }}}
 
 "------------------------------------------------------------
 " END
