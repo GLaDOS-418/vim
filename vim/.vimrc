@@ -55,6 +55,8 @@ Plug 'wincent/command-t', has('ruby') ? {
 " github.com/ggreer/the_silver_searcher
 Plug 'ctrlpvim/ctrlp.vim', has('ruby')?{'on':[]}:{}
 " }}}
+Plug 'scrooloose/vim-slumlord'
+Plug 'aklt/plantuml-syntax'
 
 " considerable plugins-not tried yet
 " fzf (alternative of command-t)
@@ -214,7 +216,72 @@ set wildmenu    " visual autocomplete for command menu
 set lazyredraw  " redraw only when needed
 set showmatch   " highlight matching [{()}]
 
+" vim statusline {{{
+function! GitBranch()
+  return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
+endfunction
 
+function! StatuslineGit()
+  let l:branchname = GitBranch()
+  return strlen(l:branchname) > 0?'  '.l:branchname.' ':''
+endfunction
+
+
+
+let g:currentmode={
+    \ 'n'  : 'N ',
+    \ 'no' : 'N·Operator Pending ',
+    \ 'v'  : 'V ',
+    \ 'V'  : 'V·Line ',
+    \ '^V' : 'V·Block ',
+    \ 's'  : 'Select ',
+    \ 'S'  : 'S·Line ',
+    \ '^S' : 'S·Block ',
+    \ 'i'  : 'I ',
+    \ 'R'  : 'R ',
+    \ 'Rv' : 'V·Replace ',
+    \ 'c'  : 'Command ',
+    \ 'cv' : 'Vim Ex ',
+    \ 'ce' : 'Ex ',
+    \ 'r'  : 'Prompt ',
+    \ 'rm' : 'More ',
+    \ 'r?' : 'Confirm ',
+    \ '!'  : 'Shell ',
+    \ 't'  : 'Terminal '
+    \}
+
+" Automatically change the statusline color depending on mode
+function! ChangeStatuslineColor()
+  if (mode() =~# '\v(n|no)')
+    exe 'hi! StatusLine ctermfg=009'
+  elseif (mode() =~# '\v(v|V)' || g:currentmode[mode()] ==# 'V·Block' || get(g:currentmode, mode(), '') ==# 't')
+    exe 'hi! StatusLine ctermfg=009'
+  elseif (mode() ==# 'i')
+    exe 'hi! StatusLine ctermfg=009'
+  else
+    exe 'hi! StatusLine ctermfg=009'
+  endif
+
+  return ''
+endfunction
+
+set laststatus=2
+set statusline=
+set statusline+=%#PmenuSel#           " set blue color
+set statusline+=%{StatuslineGit()}    " get git branch name
+set statusline+=%#LineNr#             " break blue color after br name
+set statusline+=\ %f                  " file name
+set statusline+=\%m                   " modified status/flag
+set statusline+=%=
+set statusline+=%#CursorColumn#
+set statusline+=\%y                   " file type
+set statusline+=\[%{&fileencoding?&fileencoding:&encoding}]     " file encoding
+set statusline+=\[%{&fileformat}\]    " file format[unix/dos]
+set statusline+=\ %p%%                " file position percentage
+set statusline+=\ %l:%c               " line:col
+" set statusline+=\ %{strftime('%R', getftime(expand('%')))}      " lst saved time
+set statusline+=%0*\ %{toupper(g:currentmode[mode()])}   " Current mode
+set statusline+=\ 
 " }}}
 
 "------------------------------------------------------------
@@ -345,9 +412,9 @@ let g:closetag_close_shortcut = '<leader>>' " Add > at current position without 
 
 "vim notes - plugin config {{{
 let g:notes_directories = ['~/dotfiles/vim/notes']
-" let g:notes_list_bullets = ['*', '-', '+']
-" let g:notes_unicode_enabled = 0
-let g:notes_suffix = '.md'
+let g:notes_list_bullets = ['*', '-', '+']
+let g:notes_unicode_enabled = 0
+" let g:notes_suffix = '.md'
 let g:notes_title_sync='change-title'
 vnoremap <Leader>ns :NoteFromSelectedText<CR>
 nnoremap <C-e> :edit note:
@@ -494,6 +561,7 @@ endfunction
 " naperwrimo.org/wiki/index.php?title=Vim_for_Writers
 " ctoomey.com/writing/command-t-optimized/
 " ddrscott.github.io/blog/2016/side-search/#haven't_checked_yet
+" hackernoon.com/the-last-statusline-for-vim-a613048959b2
 " r/vim
 
 " }}}
