@@ -1,5 +1,5 @@
 "------------------------------------------------------------
-" CATEGORIES
+" CATEGORIES {{{
 "------------------------------------------------------------
 
 " PLUGIN MANAGER
@@ -14,7 +14,7 @@
 " AUTO COMMANDS  
 " CUSTOM FUNCTIONS
 " SOURCE VIM CONFIGS 
-
+" }}}
 "------------------------------------------------------------
 " PLUGIN MANAGER {{{
 "------------------------------------------------------------
@@ -45,7 +45,7 @@ Plug 'airblade/vim-gitgutter'   " to see git diff
 
 Plug 'alvan/vim-closetag'       " to close markup lang tags
 
-Plug 'mileszs/ack.vim'          " ag.vim is deprecated.
+Plug 'mileszs/ack.vim'          " ag.vim is no longer maintained.
 Plug 'sjl/gundo.vim'            " to see vim history-tree
 " {{{ command-t when ruby support available else ctrlp
 Plug 'wincent/command-t', has('ruby') ? {
@@ -101,7 +101,8 @@ syntax enable               " enable syntax processing
 set t_vb=
 " jk is escape
 inoremap jk <ESC>
-
+" an attempt to prevent one key press
+noremap ; :
 " ignore compiled files
 set wildignore=*.o,*~,*.pyc,*.so,*.out,*.log,*.aux,*.bak,*.swp,*.class
 if has("win16") || has("win32")
@@ -113,7 +114,6 @@ endif
 "insert datetime in the format specified on <F9>
 nnoremap <F9> "=strftime("%Y-%m-%d_%a")<CR>P
 inoremap <F9> <C-R>=strftime("%Y-%m-%d_%a")<CR>
-
 " }}}
 
 "------------------------------------------------------------
@@ -297,13 +297,13 @@ nnoremap <leader>sv :source $MYVIMRC<CR>
 " nnoremap <leader>s :mksession<CR>
 
 " Remove the Windows ^M - when the encodings gets messed up
-noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
+noremap <leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 
 " stage current file in git
 nnoremap <leader>ga :!git add %<CR>
 
 "spell check toggle
-nnoremap <silent> <leader>s :set spell!<cr>
+nnoremap <leader>s :set spell!<cr>
 
 
 " }}}
@@ -349,7 +349,7 @@ let g:notes_directories = ['~/dotfiles/vim/notes']
 " let g:notes_unicode_enabled = 0
 let g:notes_suffix = '.md'
 let g:notes_title_sync='change-title'
-vnoremap <Leader>ns :NoteFromSelectedText<CR>
+vnoremap <leader>ns :NoteFromSelectedText<CR>
 nnoremap <C-e> :edit note:
 "}}}
 
@@ -365,6 +365,9 @@ nnoremap <leader>a :Ack!<space>
 
 "command-t - plugin config {{{
 
+" open cmd-t window
+nnoremap <leader>t :CommandT<CR> 
+nnoremap <leader>tp :CommandT 
 " change pwd to root git dir
 nnoremap <leader>gr :call CD_Git_Root()<cr>
 " add wildignore filetypes from .gitignore
@@ -395,9 +398,15 @@ augroup autogroup
     autocmd! 
 
     " latex compilation shell commands. req: (pdf|xe)latex
-    autocmd FileType tex nnoremap <buffer> <leader>t :!pdflatex % <CR>
-    autocmd FileType tex nnoremap <buffer> <leader>x :!xelatex % <CR>
+    autocmd filetype tex nnoremap <buffer> <leader>t :!pdflatex % <CR>
+    autocmd filetype tex nnoremap <buffer> <leader>x :!xelatex % <CR>
     
+    autocmd filetype cpp nnoremap <C-r> :w <bar> !clear && g++ -std=gnu++14 -O2 -D test % -o %:p:h/%:t:r.out && ./%:r.out<CR>
+    autocmd filetype cpp nnoremap <C-c> :w <bar> !clear && g++ -std=gnu++14 -D test -O2 % -o %:p:h/%:t:r.out && ./%:r.out<CR>
+    autocmd filetype c nnoremap <C-c> :w <bar> !gcc -std=c99 -lm % -o %:p:h/%:t:r.out && ./%:r.out<CR>
+    autocmd filetype java nnoremap <C-c> :w <bar> !javac % && java -enableassertions %:p <CR>
+    autocmd filetype python nnoremap <C-c> :w <bar> !python % <CR>
+    autocmd filetype go nnoremap <C-c> :w <bar> !go build % && ./%:p <CR>
     autocmd FocusLost * :wall          " Save on lost focus
 
 augroup END
