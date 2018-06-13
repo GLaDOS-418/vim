@@ -7,6 +7,7 @@
 " COLORS 
 " SPACES AND TABS 
 " UI CONFIG 
+" STATUSLINE
 " SEARCHING 
 " MOVEMENTS 
 " LEADER SHORTCUTS 
@@ -44,6 +45,7 @@ Plug 'tpope/vim-fugitive'       " to handle git commands
 Plug 'airblade/vim-gitgutter'   " to see git diff
 
 Plug 'alvan/vim-closetag'       " to close markup lang tags
+Plug 'tpope/vim-surround'       " to surround text with tags
 
 Plug 'mileszs/ack.vim'          " ag.vim is no longer maintained.
 Plug 'sjl/gundo.vim'            " to see vim history-tree
@@ -55,8 +57,9 @@ Plug 'wincent/command-t', has('ruby') ? {
 " github.com/ggreer/the_silver_searcher
 Plug 'ctrlpvim/ctrlp.vim', has('ruby')?{'on':[]}:{}
 " }}}
-Plug 'scrooloose/vim-slumlord'
-Plug 'aklt/plantuml-syntax'
+
+Plug 'scrooloose/vim-slumlord'  " inline previews for plantuml acitvity dia
+Plug 'aklt/plantuml-syntax'     " syntax/linting for plantuml
 
 " considerable plugins-not tried yet
 " fzf (alternative of command-t)
@@ -216,17 +219,9 @@ set wildmenu    " visual autocomplete for command menu
 set lazyredraw  " redraw only when needed
 set showmatch   " highlight matching [{()}]
 
-" vim statusline {{{
-function! GitBranch()
-  return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
-endfunction
-
-function! StatuslineGit()
-  let l:branchname = GitBranch()
-  return strlen(l:branchname) > 0?'  '.l:branchname.' ':''
-endfunction
-
-
+"------------------------------------------------------------
+" STATUSLINE {{{
+"------------------------------------------------------------
 
 let g:currentmode={
     \ 'n'  : 'N ',
@@ -282,6 +277,7 @@ set statusline+=\ %l:%c               " line:col
 " set statusline+=\ %{strftime('%R', getftime(expand('%')))}      " lst saved time
 set statusline+=%0*\ %{toupper(g:currentmode[mode()])}   " Current mode
 set statusline+=\ 
+
 " }}}
 
 "------------------------------------------------------------
@@ -385,11 +381,11 @@ set updatetime=1000                 "wait how much time to detect file update
 let g:gitgutter_max_signs = 500     "threshold upto which gitgutter shows sign
 let g:gitgutter_highlight_lines = 1
 
-nnoremap gn <Plug>GitGutterNextHunk
-nnoremap gp <Plug>GitGutterPrevHunk
-nnoremap <leader>hs <Plug>GitGutterStageHunk
-nnoremap <leader>hu <Plug>GitGutterUndoHunk
-nnoremap <leader>hp <Plug>GitGutterPreviewHunk            
+nnoremap gn :GitGutterNextHunk<CR>
+nnoremap gp :GitGutterPrevHunk<CR>
+nnoremap <leader>hs :GitGutterStageHunk<CR>
+nnoremap <leader>hu :GitGutterUndoHunk<CR>
+nnoremap <leader>hp :GitGutterPreviewHunk<CR> 
 
 nnoremap <leader>ggt <esc>:GitGutterToggle<cr>
 
@@ -483,6 +479,17 @@ augroup END
 "------------------------------------------------------------
 " CUSTOM FUNCTIONS {{{
 "------------------------------------------------------------
+
+
+function! GitBranch()
+  return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
+endfunction
+
+function! StatuslineGit()
+  let l:branchname = GitBranch()
+  return strlen(l:branchname) > 0?'  '.l:branchname.' ':''
+endfunction
+
 
 function! VisualSelection(direction, extra_filter) range
     let l:saved_reg = @"
