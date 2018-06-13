@@ -92,7 +92,8 @@ set nostartofline           " Make j/k respect the columns
 set clipboard=unnamedplus   "to use operating system clipboard
 set history=1000            " set how many lines of history vim has to remember
 set autoread                " set the file to autoread when a file is changed from outside
-set encoding=utf8           " set vim encoding to utf-8
+set encoding=utf-8          " set vim encoding to utf-8
+set fileencoding=utf-8      " set vim encoding to utf-8
 set esckeys                 " Allow cursor keys in insert mode.
 set title                   " change the terminal's title
 set spelllang=en            " 'en_gb' sets region to British English. use 'en' for all regions
@@ -129,7 +130,7 @@ inoremap <F9> <C-R>=strftime("%Y-%m-%d_%a")<CR>
 set background=dark
 
 " :call ShowColorSchemeName() to show the current colorscheme that vim is using[custom fn]
-if $COLORTERM == 'gnome-terminal'
+if $TERM == "xterm-256color" || $TERM == "screen-256color" || $COLORTERM == "gnome-terminal" || $COLORTERM == 'gnome-terminal'
   set term=screen-256color "set teminal color to support 256 colors
 endif
 
@@ -226,43 +227,12 @@ set showmatch   " highlight matching [{()}]
 
 set laststatus=2  " status line always enabled
 
-let g:currentmode={
-    \ 'n'  : 'N ',
-    \ 'no' : 'N·Operator Pending ',
-    \ 'v'  : 'V ',
-    \ 'V'  : 'V·Line ',
-    \ '^V' : 'V·Block ',
-    \ 's'  : 'Select ',
-    \ 'S'  : 'S·Line ',
-    \ '^S' : 'S·Block ',
-    \ 'i'  : 'I ',
-    \ 'R'  : 'R ',
-    \ 'Rv' : 'V·Replace ',
-    \ 'c'  : 'Command ',
-    \ 'cv' : 'Vim Ex ',
-    \ 'ce' : 'Ex ',
-    \ 'r'  : 'Prompt ',
-    \ 'rm' : 'More ',
-    \ 'r?' : 'Confirm ',
-    \ '!'  : 'Shell ',
-    \ 't'  : 'Terminal '
-    \}
-hi User1 guifg=#ffdad8  guibg=#880c0e
-hi User2 guifg=#000000  guibg=#F4905C
-hi User3 guifg=#292b00  guibg=#f4f597
-hi User4 guifg=#112605  guibg=#aefe7B
-hi User5 guifg=#051d00  guibg=#7dcc7d
-hi User7 guifg=#ffffff  guibg=#880c0e gui=bold
-hi User8 guifg=#ffffff  guibg=#5b7fbb
-hi User9 guifg=#ffffff  guibg=#810085
-hi User0 guifg=#ffffff  guibg=#094afe" hi User1 ctermfg=007
-" hi User2 ctermfg=008
-" hi User3 ctermfg=008
-" hi User4 ctermfg=008
-" hi User5 ctermfg=008
-" hi User7 ctermfg=008
-" hi User8 ctermfg=008
-" hi User9 ctermfg=007
+let g:currentmode={  'n'  : 'N ',  'no' : 'N·Operator Pending ',  'v'  : 'V ',  'V'  : 'V·Line ',  '^V' : 'V·Block ',  's'  : 'Select ',  'S'  : 'S·Line ',  '^S' : 'S·Block ',  'i'  : 'I ',  'R'  : 'R ',  'Rv' : 'V·Replace ',  'c'  : 'Command ',  'cv' : 'Vim Ex ',  'ce' : 'Ex ',  'r'  : 'Prompt ',  'rm' : 'More ',  'r?' : 'Confirm ',  '!'  : 'Shell ',  't'  : 'Terminal ' } 
+
+"define 3 custom highlight groups
+hi User1 ctermbg=green ctermfg=red   guibg=green guifg=red
+hi User2 ctermbg=red   ctermfg=blue  guibg=red   guifg=blue
+hi User3 ctermbg=blue  ctermfg=green guibg=blue  guifg=green
 
 " Automatically change the statusline color depending on mode
 function! ChangeStatuslineColor()
@@ -297,13 +267,14 @@ set statusline=                         " clear statusline
 "set statusline+=%{ChangeStatuslineColor()}               " Changing the statusline color
 set statusline+=%#PmenuSel#             " set blue color
 set statusline+=%.15{StatuslineGit()}   " get git branch name[max width of 15]
-set statusline+=%*                      " reset the color setting
-"set statusline+=%#LineNr#               " break blue color after br name
+set statusline+=%#LineNr#               " break blue color after br name
 set statusline+=\ %f                    " file name
 set statusline+=\ %m                    " modified status/flag
 set statusline+=%r                      " read only flag
 set statusline+=%=                      " switching to the right side
-set statusline+=%3*\ %{LinterStatus()}
+set statusline+=%#error#
+set statusline+=%3*\%{LinterStatus()}
+set statusline+=%*                      " switch back to normal statusline highlight
 set statusline+=%#CursorColumn#
 set statusline+=%y                      " file type
 set statusline+=[%{&fileencoding?&fileencoding:&encoding}]     " file encoding
@@ -313,7 +284,7 @@ set statusline+=\ %4l:%-3c              " line[width-4ch, padding-left]:col[widt
 set statusline+=\ %6L                   " number of lines in buffer[width-6ch, padding-left]
 " set statusline+=\ %{strftime('%R', getftime(expand('%')))}      " lst saved time
 set statusline+=\ %{strftime('%R')}
-set statusline+=%0*\ %{toupper(g:currentmode[mode()])}   " Current mode
+set statusline+=%0*\ %{toupper(get(g:currentmode,strtrans(mode())))}   " Current mode
 set statusline+=\                       " simple space in the end
 
 " }}}
