@@ -58,6 +58,7 @@ Plug 'wincent/command-t', has('ruby') ? {
 Plug 'ctrlpvim/ctrlp.vim', has('ruby')?{'on':[]}:{}
 " }}}
 
+Plug 'w0rp/ale'                 " asynchronous linting engine
 Plug 'scrooloose/vim-slumlord'  " inline previews for plantuml acitvity dia
 Plug 'aklt/plantuml-syntax'     " syntax/linting for plantuml
 
@@ -223,6 +224,8 @@ set showmatch   " highlight matching [{()}]
 " STATUSLINE {{{
 "------------------------------------------------------------
 
+set laststatus=2  " status line always enabled
+
 let g:currentmode={
     \ 'n'  : 'N ',
     \ 'no' : 'N·Operator Pending ',
@@ -244,39 +247,74 @@ let g:currentmode={
     \ '!'  : 'Shell ',
     \ 't'  : 'Terminal '
     \}
+hi User1 guifg=#ffdad8  guibg=#880c0e
+hi User2 guifg=#000000  guibg=#F4905C
+hi User3 guifg=#292b00  guibg=#f4f597
+hi User4 guifg=#112605  guibg=#aefe7B
+hi User5 guifg=#051d00  guibg=#7dcc7d
+hi User7 guifg=#ffffff  guibg=#880c0e gui=bold
+hi User8 guifg=#ffffff  guibg=#5b7fbb
+hi User9 guifg=#ffffff  guibg=#810085
+hi User0 guifg=#ffffff  guibg=#094afe" hi User1 ctermfg=007
+" hi User2 ctermfg=008
+" hi User3 ctermfg=008
+" hi User4 ctermfg=008
+" hi User5 ctermfg=008
+" hi User7 ctermfg=008
+" hi User8 ctermfg=008
+" hi User9 ctermfg=007
 
 " Automatically change the statusline color depending on mode
 function! ChangeStatuslineColor()
   if (mode() =~# '\v(n|no)')
-    exe 'hi! StatusLine ctermfg=009'
+    exe 'hi! StatusLine ctermfg=008'
   elseif (mode() =~# '\v(v|V)' || g:currentmode[mode()] ==# 'V·Block' || get(g:currentmode, mode(), '') ==# 't')
-    exe 'hi! StatusLine ctermfg=009'
+    exe 'hi! StatusLine ctermfg=005'
   elseif (mode() ==# 'i')
-    exe 'hi! StatusLine ctermfg=009'
+    exe 'hi! StatusLine ctermfg=004'
   else
-    exe 'hi! StatusLine ctermfg=009'
+    exe 'hi! StatusLine ctermfg=006'
   endif
 
   return ''
 endfunction
 
-set laststatus=2
-set statusline=
-set statusline+=%#PmenuSel#           " set blue color
-set statusline+=%{StatuslineGit()}    " get git branch name
-set statusline+=%#LineNr#             " break blue color after br name
-set statusline+=\ %f                  " file name
-set statusline+=\%m                   " modified status/flag
-set statusline+=%=
+" Function: display errors from Ale in statusline
+function! LinterStatus() abort
+   let l:counts = ale#statusline#Count(bufnr(''))
+   let l:all_errors = l:counts.error + l:counts.style_error
+   let l:all_non_errors = l:counts.total - l:all_errors
+   return l:counts.total == 0 ? '' : printf(
+   \ 'W:%d E:%d',
+   \ l:all_non_errors,
+   \ l:all_errors
+   \)
+endfunction
+
+" General Format: %-0{minwid}.{maxwid}{item}
+
+set statusline=                         " clear statusline
+"set statusline+=%{ChangeStatuslineColor()}               " Changing the statusline color
+set statusline+=%#PmenuSel#             " set blue color
+set statusline+=%.15{StatuslineGit()}   " get git branch name[max width of 15]
+set statusline+=%*                      " reset the color setting
+"set statusline+=%#LineNr#               " break blue color after br name
+set statusline+=\ %f                    " file name
+set statusline+=\ %m                    " modified status/flag
+set statusline+=%r                      " read only flag
+set statusline+=%=                      " switching to the right side
+set statusline+=%3*\ %{LinterStatus()}
 set statusline+=%#CursorColumn#
-set statusline+=\%y                   " file type
-set statusline+=\[%{&fileencoding?&fileencoding:&encoding}]     " file encoding
-set statusline+=\[%{&fileformat}\]    " file format[unix/dos]
-set statusline+=\ %p%%                " file position percentage
-set statusline+=\ %l:%c               " line:col
+set statusline+=%y                      " file type
+set statusline+=[%{&fileencoding?&fileencoding:&encoding}]     " file encoding
+set statusline+=[%{&fileformat}\]       " file format[unix/dos]
+set statusline+=\ %p%%                  " file position percentage
+set statusline+=\ %4l:%-3c              " line[width-4ch, padding-left]:col[width-3ch, padding-right]
+set statusline+=\ %6L                   " number of lines in buffer[width-6ch, padding-left]
 " set statusline+=\ %{strftime('%R', getftime(expand('%')))}      " lst saved time
+set statusline+=\ %{strftime('%R')}
 set statusline+=%0*\ %{toupper(g:currentmode[mode()])}   " Current mode
-set statusline+=\ 
+set statusline+=\                       " simple space in the end
 
 " }}}
 
