@@ -30,7 +30,7 @@ endif
 " plug plugin setup.
 call plug#begin('~/.vim/plugged')
 
-" Automatically install missing plugins on startup. [commented to improve startup
+" Automatically install missing plugins on startup. [commented to improve startup]
 if !empty(filter(copy(g:plugs), '!isdirectory(v:val.dir)'))
   autocmd VimEnter * PlugInstall | q
 endif
@@ -62,7 +62,7 @@ Plug 'w0rp/ale'                 " asynchronous linting engine
 Plug 'scrooloose/vim-slumlord'  " inline previews for plantuml acitvity dia
 Plug 'aklt/plantuml-syntax'     " syntax/linting for plantuml
 
-" considerable plugins-not tried yet
+" considerable plugins
 " fzf (alternative of command-t)
 " vimwiki (alternative of vim-notes)
 " Plug 'ying17zi/vim-live-latex-preview'
@@ -79,31 +79,32 @@ Plug 'aklt/plantuml-syntax'     " syntax/linting for plantuml
 
 call plug#end() 
 
-" PS - a deeper look needed for fugitive, gundo, command-t, notes, ack.
 " }}}
 
 "------------------------------------------------------------
 " MISC {{{
 "------------------------------------------------------------
 
-" set nocompatible          "commented: r/vim/wiki/vimrctips
-let mapleader=','           "leader is comma
-set nostartofline           " Make j/k respect the columns
-set clipboard=unnamedplus   "to use operating system clipboard
-set history=1000            " set how many lines of history vim has to remember
-set autoread                " set the file to autoread when a file is changed from outside
-set encoding=utf-8          " set vim encoding to utf-8
-set fileencoding=utf-8      " set vim encoding to utf-8
-set esckeys                 " Allow cursor keys in insert mode.
-set title                   " change the terminal's title
-set spelllang=en            " 'en_gb' sets region to British English. use 'en' for all regions
-set noswapfile              " stops vim from creating a .swp file
-" set nobackup              " " gives no error when same file being edited by multiple vim sessions
-set textwidth=0             " no automatic linefeeds in insert mode
-set wrap                    " word wrap the text(normal/visual)
-set visualbell              " don't beep
-set noerrorbells            " don't beep
-syntax enable               " enable syntax processing
+" set nocompatible              "commented: r/vim/wiki/vimrctips
+let mapleader=','               "leader is comma
+set nostartofline               " Make j/k respect the columns
+set clipboard=unnamedplus       "to use operating system clipboard
+set history=1000                " set how many lines of history vim has to remember
+set autoread                    " set the file to autoread when a file is changed from outside
+set encoding=utf-8              " set vim encoding to utf-8
+set fileencoding=utf-8          " set vim encoding to utf-8
+set esckeys                     " Allow cursor keys in insert mode.
+set title                       " change the terminal's title
+set spelllang=en                " 'en_gb' sets region to British English. use 'en' for all regions
+set noswapfile                  " stops vim from creating a .swp file
+" set nobackup                  " " gives no error when same file being edited by multiple vim sessions
+set textwidth=0                 " no automatic linefeeds in insert mode
+set wrap                        " word wrap the text(normal/visual)
+set visualbell                  " don't beep
+set noerrorbells                " don't beep
+set colorcolumn=100             " highlight on col 100
+set backspace=indent,eol,start  "allow backspacing over everything in insert mode
+syntax enable                   " enable syntax processing
 " clearing the t_vb variable deactivates flashing
 set t_vb=
 " jk is escape
@@ -130,8 +131,11 @@ inoremap <F9> <C-R>=strftime("%Y-%m-%d_%a")<CR>
 set background=dark
 
 " :call ShowColorSchemeName() to show the current colorscheme that vim is using[custom fn]
-if $TERM == "xterm-256color" || $TERM == "screen-256color" || $COLORTERM == "gnome-terminal" || $COLORTERM == 'gnome-terminal'
-  set term=screen-256color "set teminal color to support 256 colors
+if $TERM == "xterm-256color" || $TERM == "screen-256color" || $COLORTERM == "gnome-terminal" 
+  " github.com/neovim/neovim/issues/7722
+  " setting term might be the issue with garbage rendering on status line, command line,insert mode
+  " was easily reproducibe using ctrl+i in vim 8.1
+  " set term=screen-256color "set teminal color to support 256 colors
 endif
 
 try
@@ -227,18 +231,34 @@ set showmatch   " highlight matching [{()}]
 
 set laststatus=2  " status line always enabled
 
-let g:currentmode={  'n'  : 'N ',  'no' : 'N·Operator Pending ',  'v'  : 'V ',  'V'  : 'V·Line ',  '^V' : 'V·Block ',  's'  : 'Select ',  'S'  : 'S·Line ',  '^S' : 'S·Block ',  'i'  : 'I ',  'R'  : 'R ',  'Rv' : 'V·Replace ',  'c'  : 'Command ',  'cv' : 'Vim Ex ',  'ce' : 'Ex ',  'r'  : 'Prompt ',  'rm' : 'More ',  'r?' : 'Confirm ',  '!'  : 'Shell ',  't'  : 'Terminal ' } 
-
-"define 3 custom highlight groups
-hi User1 ctermbg=green ctermfg=red   guibg=green guifg=red
-hi User2 ctermbg=red   ctermfg=blue  guibg=red   guifg=blue
-hi User3 ctermbg=blue  ctermfg=green guibg=blue  guifg=green
+let g:currentmode={  
+      \ 'n'  : 'N ',
+      \ 'no' : 'N·Operator Pending ',
+      \ 'v'  : 'V ',
+      \ 'V'  : 'V·Line ',
+      \ '^V' : 'V·Block ',
+      \ 's'  : 'Select ',
+      \ 'S'  : 'S·Line ',
+      \ '^S' : 'S·Block ',
+      \ 'i'  : 'I ',
+      \ 'R'  : 'R ',
+      \ 'Rv' : 'V·Replace ',
+      \ 'c'  : 'Command ',
+      \ 'cv' : 'Vim Ex ',
+      \ 'ce' : 'Ex ',
+      \ 'r'  : 'Prompt ',
+      \ 'rm' : 'More ',
+      \ 'r?' : 'Confirm ',
+      \ '!'  : 'Shell ',
+      \ 't'  : 'Terminal ' } 
 
 " Automatically change the statusline color depending on mode
 function! ChangeStatuslineColor()
   if (mode() =~# '\v(n|no)')
     exe 'hi! StatusLine ctermfg=008'
-  elseif (mode() =~# '\v(v|V)' || g:currentmode[mode()] ==# 'V·Block' || get(g:currentmode, mode(), '') ==# 't')
+  elseif (mode() =~# '\v(v|V)' 
+        \ || g:currentmode[mode()] ==# 'V·Block' 
+        \ || get(g:currentmode, mode(), '') ==# 't')
     exe 'hi! StatusLine ctermfg=005'
   elseif (mode() ==# 'i')
     exe 'hi! StatusLine ctermfg=004'
@@ -251,41 +271,42 @@ endfunction
 
 " Function: display errors from Ale in statusline
 function! LinterStatus() abort
-   let l:counts = ale#statusline#Count(bufnr(''))
-   let l:all_errors = l:counts.error + l:counts.style_error
-   let l:all_non_errors = l:counts.total - l:all_errors
-   return l:counts.total == 0 ? '' : printf(
-   \ 'W:%d E:%d',
-   \ l:all_non_errors,
-   \ l:all_errors
-   \)
+  let l:counts = ale#statusline#Count(bufnr(''))
+  let l:all_errors = l:counts.error + l:counts.style_error
+  let l:all_non_errors = l:counts.total - l:all_errors
+  return l:counts.total == 0 ? '' : printf(
+  \ 'W:%d E:%d',
+  \ l:all_non_errors,
+  \ l:all_errors
+  \)
 endfunction
 
 " General Format: %-0{minwid}.{maxwid}{item}
+" Higlight Groups: #<format-name>#  -> see :help hl for more group names
 
 set statusline=                         " clear statusline
 "set statusline+=%{ChangeStatuslineColor()}               " Changing the statusline color
-set statusline+=%#PmenuSel#             " set blue color
+set statusline+=%#PmenuSel#             " set hl group to : popup menu normal line
 set statusline+=%.15{StatuslineGit()}   " get git branch name[max width of 15]
-set statusline+=%#LineNr#               " break blue color after br name
+set statusline+=%#WildMenu#            " set hl group to : directory listing style
 set statusline+=\ %f                    " file name
-set statusline+=\ %m                    " modified status/flag
+
+
 set statusline+=%r                      " read only flag
 set statusline+=%=                      " switching to the right side
-set statusline+=%#error#
-set statusline+=%3*\%{LinterStatus()}
-set statusline+=%*                      " switch back to normal statusline highlight
-set statusline+=%#CursorColumn#
+set statusline+=%#ErrorMsg#             " set hl group to : error message style
+set statusline+=%{LinterStatus()}   " show the error message from ALE plugin
+set statusline+=%#LineNr#
 set statusline+=%y                      " file type
 set statusline+=[%{&fileencoding?&fileencoding:&encoding}]     " file encoding
 set statusline+=[%{&fileformat}\]       " file format[unix/dos]
-set statusline+=\ %p%%                  " file position percentage
+set statusline+=\ %3p%%                 " file position percentage
+set statusline+=%#CursorLineNr#
 set statusline+=\ %4l:%-3c              " line[width-4ch, padding-left]:col[width-3ch, padding-right]
+set statusline+=%*                      " switch back to normal statusline highlight
 set statusline+=\ %6L                   " number of lines in buffer[width-6ch, padding-left]
-" set statusline+=\ %{strftime('%R', getftime(expand('%')))}      " lst saved time
-set statusline+=\ %{strftime('%R')}
-set statusline+=%0*\ %{toupper(get(g:currentmode,strtrans(mode())))}   " Current mode
-set statusline+=\                       " simple space in the end
+set statusline+=%#ModeMsg#
+set statusline+=\%3{toupper(get(g:currentmode,strtrans(mode())))} " Current mode
 
 " }}}
 
@@ -308,8 +329,8 @@ nnoremap <leader><space> :nohlsearch<CR>
 vnoremap <silent> * :<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
 vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
 
-" highlight last inserted text
-nnoremap gV `[v`]
+" highlight last inserted text *not working
+" nnoremap gV `[v`]
 
 " Folding {{{
 set foldenable          " enable folding
