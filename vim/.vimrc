@@ -107,8 +107,9 @@ set backspace=indent,eol,start  "allow backspacing over everything in insert mod
 syntax enable                   " enable syntax processing
 " clearing the t_vb variable deactivates flashing
 set t_vb=
-" jk is escape
+" jk/kj is escape
 inoremap jk <ESC>
+inoremap kj <ESC>
 " an attempt to prevent one key press
 noremap ; :
 " ignore compiled files
@@ -120,8 +121,8 @@ else
 endif
 
 "insert datetime in the format specified on <F9>
-nnoremap <F9> "=strftime("%Y-%m-%d_%a")<CR>P
-inoremap <F9> <C-R>=strftime("%Y-%m-%d_%a")<CR>
+nnoremap <F9> "=strftime("%Y-%m-%d")<CR>P
+inoremap <F9> <C-R>=strftime("%Y-%m-%d")<CR>
 " }}}
 
 "------------------------------------------------------------
@@ -494,7 +495,7 @@ augroup autogroup
     autocmd filetype tex nnoremap <buffer> <leader>t :!pdflatex % <CR>
     autocmd filetype tex nnoremap <buffer> <leader>x :!xelatex % <CR>
     
-    autocmd filetype cpp nnoremap <C-r> :w <bar> !clear && g++ -std=gnu++14 -O2 -D test % -o %:p:h/%:t:r.out && ./%:r.out<CR>
+   " autocmd filetype cpp nnoremap <C-r> :w <bar> !clear && g++ -std=gnu++14 -O2 -D test % -o %:p:h/%:t:r.out && ./%:r.out<CR>
     autocmd filetype cpp nnoremap <C-c> :w <bar> !clear && g++ -std=gnu++14 -D test -O2 % -o %:p:h/%:t:r.out && ./%:r.out<CR>
     autocmd filetype c nnoremap <C-c> :w <bar> !gcc -std=c99 -lm % -o %:p:h/%:t:r.out && ./%:r.out<CR>
     autocmd filetype java nnoremap <C-c> :w <bar> !javac % && java -enableassertions %:p <CR>
