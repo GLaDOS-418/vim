@@ -495,8 +495,7 @@ augroup autogroup
     autocmd filetype tex nnoremap <buffer> <leader>t :!pdflatex % <CR>
     autocmd filetype tex nnoremap <buffer> <leader>x :!xelatex % <CR>
     
-   " autocmd filetype cpp nnoremap <C-r> :w <bar> !clear && g++ -std=gnu++14 -O2 -D test % -o %:p:h/%:t:r.out && ./%:r.out<CR>
-    autocmd filetype cpp nnoremap <C-c> :w <bar> !clear && g++ -std=gnu++14 -D test -O2 % -o %:p:h/%:t:r.out && ./%:r.out<CR>
+    autocmd filetype cpp nnoremap <C-c> :w <bar> !clear && g++ -std=gnu++14 -g -D fio -O2 % -o %:p:h/%:t:r.out && ./%:r.out<CR>
     autocmd filetype c nnoremap <C-c> :w <bar> !gcc -std=c99 -lm % -o %:p:h/%:t:r.out && ./%:r.out<CR>
     autocmd filetype java nnoremap <C-c> :w <bar> !javac % && java -enableassertions %:p <CR>
     autocmd filetype python nnoremap <C-c> :w <bar> !python % <CR>
