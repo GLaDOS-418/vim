@@ -63,19 +63,14 @@ Plug 'scrooloose/vim-slumlord'  " inline previews for plantuml acitvity dia
 Plug 'aklt/plantuml-syntax'     " syntax/linting for plantuml
 
 " considerable plugins
-" fzf (alternative of command-t)
+" deoplete.nvim (async completion for nvim/vim8)(ycm alter)
 " vimwiki (alternative of vim-notes)
 " Plug 'ying17zi/vim-live-latex-preview'
 " Plug 'LaTeX-Box-Team/LaTeX-Box'
-" grepg
-" vim surround
-" ycm
-" syntastic (ALE is an alternative: async)
 " ultisnips
 " markdown
 " indentmarkers
 " vinegar
-" airline (lighther than powerline: a custome statusline can be used: would be even lighter)
 
 call plug#end() 
 
@@ -85,10 +80,10 @@ call plug#end()
 " MISC {{{
 "------------------------------------------------------------
 
-" set nocompatible              "commented: r/vim/wiki/vimrctips
-let mapleader=','               "leader is comma
+" set nocompatible              " commented: r/vim/wiki/vimrctips
+let mapleader=','               " leader is comma
 set nostartofline               " Make j/k respect the columns
-set clipboard=unnamedplus       "to use operating system clipboard
+set clipboard=unnamedplus       " to use operating system clipboard
 set history=1000                " set how many lines of history vim has to remember
 set autoread                    " set the file to autoread when a file is changed from outside
 set encoding=utf-8              " set vim encoding to utf-8
@@ -97,16 +92,19 @@ set esckeys                     " Allow cursor keys in insert mode.
 set title                       " change the terminal's title
 set spelllang=en                " 'en_gb' sets region to British English. use 'en' for all regions
 set noswapfile                  " stops vim from creating a .swp file
-" set nobackup                  " " gives no error when same file being edited by multiple vim sessions
+" set nobackup                  " gives no error when same file being edited by multiple vim sessions
 set textwidth=0                 " no automatic linefeeds in insert mode
 set wrap                        " word wrap the text(normal/visual)
 set visualbell                  " don't beep
 set noerrorbells                " don't beep
 set colorcolumn=100             " highlight on col 100
-set backspace=indent,eol,start  "allow backspacing over everything in insert mode
+set backspace=indent,eol,start  " allow backspacing over everything in insert mode
+set diffopt+=vertical           " for vim-fugitive to vs on diff
 syntax enable                   " enable syntax processing
 " clearing the t_vb variable deactivates flashing
 set t_vb=
+" stackoverflow.com/questions/21618614/vim-shows-garbage-characters
+set t_RV=
 " jk/kj is escape
 inoremap jk <ESC>
 inoremap kj <ESC>
@@ -134,7 +132,7 @@ set background=dark
 " :call ShowColorSchemeName() to show the current colorscheme that vim is using[custom fn]
 if $TERM == "xterm-256color" || $TERM == "screen-256color" || $COLORTERM == "gnome-terminal" 
   " github.com/neovim/neovim/issues/7722
-  " setting term might be the issue with garbage rendering on status line, command line,insert mode
+  " setting term blindly might be the issue with garbage rendering 
   " was easily reproducibe using ctrl+i in vim 8.1
   " set term=screen-256color "set teminal color to support 256 colors
 endif
@@ -499,8 +497,10 @@ augroup autogroup
     autocmd filetype c nnoremap <C-c> :w <bar> !gcc -std=c99 -lm % -o %:p:h/%:t:r.out && ./%:r.out<CR>
     autocmd filetype java nnoremap <C-c> :w <bar> !javac % && java -enableassertions %:p <CR>
     autocmd filetype python nnoremap <C-c> :w <bar> !python % <CR>
+
     autocmd filetype go nnoremap <C-c> :w <bar> !go build % && ./%:p <CR>
     autocmd FocusLost * :wall          " Save on lost focus
+    autocmd VimEnter * redraw!
 
 augroup END
 
