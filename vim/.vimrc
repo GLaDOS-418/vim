@@ -109,17 +109,37 @@ inoremap jk <ESC>
 inoremap kj <ESC>
 " an attempt to prevent one key press
 noremap ; :
+" redraw buffer
+nnoremap <F5> :redraw!<CR>
+inoremap <F5> :redraw!<CR>
 " ignore compiled files
 set wildignore=*.o,*~,*.pyc,*.so,*.out,*.log,*.aux,*.bak,*.swp,*.class
 if has("win16") || has("win32")
-    set wildignore+=.git\*,.hg\*,.svn\*
+    set wildignore+=.git\*
 else
-    set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
+    set wildignore+=*/.git/*,*/.DS_Store
 endif
 
 "insert datetime in the format specified on <F9>
 nnoremap <F9> "=strftime("%Y-%m-%d")<CR>P
 inoremap <F9> <C-R>=strftime("%Y-%m-%d")<CR>
+
+
+!stty -ixon
+call system("stty -a | grep '\( \|^\)ixon\>' >/dev/null")
+let g:ix_at_startup = (v:shell_error == 0)
+
+if g:ix_at_startup == 1
+  " Allow us to use Ctrl-s and Ctrl-q as keybinds
+  !stty -ixon
+
+  augroup reset_default
+    autocmd!
+    autocmd VimLeave * silent !stty ixon
+  augroup END
+endif
+
+
 " }}}
 
 "------------------------------------------------------------
@@ -185,7 +205,6 @@ set scrolloff=5     " minimum line offset to present on screen while scrolling.
 
 " removed the below filetype plugin block as vim-plug handles it internally
 " filetype on "required
-" filetype off "required
 " filetype plugin indent on    " required
 
 
@@ -286,14 +305,14 @@ set statusline=                         " clear statusline
 "set statusline+=%{ChangeStatuslineColor()}               " Changing the statusline color
 set statusline+=%#PmenuSel#             " set hl group to : popup menu normal line
 set statusline+=%.15{StatuslineGit()}   " get git branch name[max width of 15]
-set statusline+=%#WildMenu#            " set hl group to : directory listing style
+set statusline+=%#WildMenu#             " set hl group to : directory listing style
 set statusline+=\ %f                    " file name
 
 
 set statusline+=%r                      " read only flag
 set statusline+=%=                      " switching to the right side
 set statusline+=%#ErrorMsg#             " set hl group to : error message style
-set statusline+=%{LinterStatus()}   " show the error message from ALE plugin
+set statusline+=%{LinterStatus()}       " show the error message from ALE plugin
 set statusline+=%#LineNr#
 set statusline+=%y                      " file type
 set statusline+=[%{&fileencoding?&fileencoding:&encoding}]     " file encoding
@@ -359,12 +378,11 @@ noremap B ^
 noremap $ <nop>
 noremap ^ <nop>
 
-"split navigations
+" split navigations
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
-
 
 " }}}
 
@@ -393,7 +411,7 @@ noremap <leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 " stage current file in git
 nnoremap <leader>ga :!git add %<CR>
 
-"spell check toggle
+" spell check toggle
 nnoremap <leader>s :set spell!<cr>
 
 
@@ -402,6 +420,32 @@ nnoremap <leader>s :set spell!<cr>
 "------------------------------------------------------------
 " PLUGIN SETTINGS {{{
 "------------------------------------------------------------
+
+" ale - plugin config {{{
+
+let g:ale_linters = {
+  \ 'javascript': ['eslint'],
+  \ 'python': ['flake8']
+  \ }
+
+let g:ale_fixers = {
+  \ 'javascript': ['prettier', 'eslint'],
+  \ 'python': ['autopep8']
+  \ }
+
+let g:ale_sign_error = '>>'
+let g:ale_sign_info = '--'
+let g:ale_lint_on_text_changed = 0
+let g:ale_lint_on_save = 1
+let g:ale_lint_on_text_changed = 'never'      " lint only when file saved
+let g:ale_lint_on_enter = 0                   " don't run linters on opening a file
+let g:ale_lint_on_filetype_changed = 1
+let g:ale_completion_enabled = 0              " overrides omnicompletion if enabled
+let g:ale_fix_on_save = 1                     " fix files when you save them.
+let g:ale_warn_about_trailing_whitespace = 0  " disable for lpython files
+let g:ale_warn_about_trailing_blank_lines = 0 " disable for lpython files
+
+" }}}
 
 " gitgutter - plugin config {{{
 
@@ -424,7 +468,6 @@ else
 endif
 "}}}
 
-
 " vim-closetag - plugin config {{{
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml'
 let g:closetag_xhtml_filenames = '*.xhtml,*.jsx'
@@ -432,7 +475,6 @@ let g:closetag_emptyTags_caseSensitive = 1
 let g:closetag_shortcut = '>'               " Shortcut for closing tags, default is '>'
 let g:closetag_close_shortcut = '<leader>>' " Add > at current position without closing the current tag, default is ''
 "}}}
-
 
 "vim notes - plugin config {{{
 let g:notes_directories = ['~/dotfiles/vim/notes']
@@ -500,6 +542,7 @@ augroup autogroup
     autocmd filetype go nnoremap <C-c> :w <bar> !go build % && ./%:p <CR>
     autocmd FocusLost * :wall          " Save on lost focus
     autocmd VimEnter * redraw!
+    autocmd VimLeave * silent !stty ixon
 
 augroup END
 
