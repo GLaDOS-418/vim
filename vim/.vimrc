@@ -98,20 +98,27 @@ set visualbell                  " don't beep
 set noerrorbells                " don't beep
 set colorcolumn=100             " highlight on col 100
 set backspace=indent,eol,start  " allow backspacing over everything in insert mode
-set diffopt+=vertical           " for vim-fugitive to vs on diff
+set diffopt+=vertical           " vim-fugitive vertical split on diff
+set mouse+=a                    " use mouse to place cursor and copy w/o line num
 syntax enable                   " enable syntax processing
+
 " clearing the t_vb variable deactivates flashing
 set t_vb=
+
 " stackoverflow.com/questions/21618614/vim-shows-garbage-characters
 set t_RV=
+
 " jk/kj is escape
 inoremap jk <ESC>
 inoremap kj <ESC>
+
 " an attempt to prevent one key press
 noremap ; :
+
 " redraw buffer
-nnoremap <F5> :redraw!<CR>
+noremap  <F5> :redraw!<CR>
 inoremap <F5> :redraw!<CR>
+
 " ignore compiled files
 set wildignore=*.o,*~,*.pyc,*.so,*.out,*.log,*.aux,*.bak,*.swp,*.class
 if has("win16") || has("win32")
@@ -188,11 +195,12 @@ let g:gruvbox_contrast_dark='soft'
 "------------------------------------------------------------
 
 set autoindent
-set cindent       " better alternative to smartindent
-set expandtab     " tabs are spaces
-" set tabstop=2   " commented: r/vim/wiki/tabstop
-set shiftwidth=2
-set softtabstop=2 " number of spaces in TAB when editing
+set cindent           " better alternative to smartindent
+set expandtab         " tabs are spaces
+" set tabstop=2       " commented: r/vim/wiki/tabstop
+set shiftwidth=2      " when (un)indenting lines shift with 1unit shiftwidth
+set softtabstop=2     " number of spaces in TAB when editing
+set pastetoggle=<F2>  " toggle insert(paste) mode
 
 
 " }}}
@@ -418,6 +426,8 @@ nnoremap <leader>ga :!git add %<CR>
 " spell check toggle
 nnoremap <leader>s :set spell!<cr>
 
+" paste in insert mode without auto-formatting
+inoremap <leader>p <F2><esc>pa<F2>
 
 " }}}
 
@@ -446,8 +456,8 @@ let g:ale_lint_on_enter = 0                   " don't run linters on opening a f
 let g:ale_lint_on_filetype_changed = 1
 let g:ale_completion_enabled = 0              " overrides omnicompletion if enabled
 let g:ale_fix_on_save = 1                     " fix files when you save them.
-let g:ale_warn_about_trailing_whitespace = 0  " disable for lpython files
-let g:ale_warn_about_trailing_blank_lines = 0 " disable for lpython files
+let g:ale_warn_about_trailing_whitespace = 0  " disable for python files
+let g:ale_warn_about_trailing_blank_lines = 0 " disable for python files
 
 " }}}
 
