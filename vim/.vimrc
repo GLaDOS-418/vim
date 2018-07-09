@@ -124,20 +124,24 @@ endif
 nnoremap <F9> "=strftime("%Y-%m-%d")<CR>P
 inoremap <F9> <C-R>=strftime("%Y-%m-%d")<CR>
 
+" vi.stackexchange.com/questions/2419/mapping-ctrls-does-not-work#2425
+silent! !stty -ixon
+augroup reset_default
+  autocmd VimLeave * silent !stty ixon
+augroup END
 
-!stty -ixon
-call system("stty -a | grep '\( \|^\)ixon\>' >/dev/null")
-let g:ix_at_startup = (v:shell_error == 0)
-
-if g:ix_at_startup == 1
-  " Allow us to use Ctrl-s and Ctrl-q as keybinds
-  !stty -ixon
-
-  augroup reset_default
-    autocmd!
-    autocmd VimLeave * silent !stty ixon
-  augroup END
-endif
+" call system("stty -a | grep '\( \|^\)ixon\>' >/dev/null")
+" let g:ix_at_startup = (v:shell_error == 0)
+" 
+" if g:ix_at_startup == 1
+"   " Allow us to use Ctrl-s and Ctrl-q as keybinds
+"   !stty -ixon
+" 
+"   augroup reset_default
+"     autocmd!
+"     autocmd VimLeave * silent !stty ixon
+"   augroup END
+" endif
 
 
 " }}}
@@ -542,8 +546,6 @@ augroup autogroup
     autocmd filetype go nnoremap <C-c> :w <bar> !go build % && ./%:p <CR>
     autocmd FocusLost * :wall          " Save on lost focus
     autocmd VimEnter * redraw!
-    autocmd VimLeave * silent !stty ixon
-
 augroup END
 
 " }}}
