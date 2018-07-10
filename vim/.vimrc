@@ -106,7 +106,10 @@ syntax enable                   " enable syntax processing
 set t_vb=
 
 " stackoverflow.com/questions/21618614/vim-shows-garbage-characters
-set t_RV=
+" set t_RV=
+" github.com/vim/vim/issues/2538
+" set t_RS=
+" set t_SH=
 
 " jk/kj is escape
 inoremap jk <ESC>
@@ -316,7 +319,9 @@ endfunction
 set statusline=                         " clear statusline
 "set statusline+=%{ChangeStatuslineColor()}               " Changing the statusline color
 set statusline+=%#PmenuSel#             " set hl group to : popup menu normal line
-set statusline+=%.15{StatuslineGit()}   " get git branch name[max width of 15]
+
+" github.com/fatih/vim-go/issues/71#issuecomment-394808485
+" set statusline+=%.15{StatuslineGit()}   " get git branch name[max width of 15]
 set statusline+=%#WildMenu#             " set hl group to : directory listing style
 set statusline+=\ %f                    " file name
 
