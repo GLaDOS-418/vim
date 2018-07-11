@@ -322,6 +322,7 @@ set statusline+=%#PmenuSel#             " set hl group to : popup menu normal li
 
 " github.com/fatih/vim-go/issues/71#issuecomment-394808485
 " set statusline+=%.15{StatuslineGit()}   " get git branch name[max width of 15]
+set statusline+=%.15{FugitiveStatusline()}" get git branch name[max width of 15]
 set statusline+=%#WildMenu#             " set hl group to : directory listing style
 set statusline+=\ %f                    " file name
 
@@ -517,14 +518,15 @@ nnoremap <leader>a :Ack!<space>
 
 "command-t - plugin config {{{
 
-" open cmd-t window
-nnoremap <leader>t :CommandT<CR> 
-nnoremap <leader>tp :CommandT 
 " change pwd to root git dir
 nnoremap <leader>gr :call CD_Git_Root()<cr>
 " add wildignore filetypes from .gitignore
 nnoremap <leader>cti :call WildignoreFromGitignore()<cr>
+
 if has('ruby')
+  " open cmd-t window
+  nnoremap <leader>t :CommandT<CR> 
+  nnoremap <leader>tp :CommandT 
   " with ruby support use command-t
   " start command-t to find files in notes directory.
   nnoremap <leader>fn :CommandT /mnt/windows/projects/notes<cr>
@@ -539,6 +541,48 @@ endif
 "}}}
 
 " }}}
+
+"------------------------------------------------------------
+" LEADER SHORTCUTS  {{{
+"------------------------------------------------------------
+
+" toggle line numbers
+nnoremap <leader>tn :set number!<CR>
+nnoremap <leader>trn :set relativenumber!<CR>
+
+" <leader>k is move right one space
+inoremap <leader>k <right>
+
+" edit/load vimrc/bashrc
+nnoremap <leader>ev :vsp $MYVIMRC<CR>
+nnoremap <leader>eb :vsp ~/.bashrc<CR>
+nnoremap <leader>sv :source $MYVIMRC<CR>
+
+" save session. 
+" nnoremap <leader>s :mksession<CR>
+
+" Remove the Windows ^M - when the encodings gets messed up
+noremap <leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
+
+" stage current file in git
+nnoremap <leader>ga :!git add %<CR>
+
+" spell check toggle
+nnoremap <leader>s :set spell!<cr>
+
+" paste in insert mode without auto-formatting
+inoremap <leader>p <F2><esc>pa<F2>
+
+" }}}
+
+
+nnoremap gn :GitGutterNextHunk<CR>
+nnoremap gp :GitGutterPrevHunk<CR>
+nnoremap <leader>hs :GitGutterStageHunk<CR>
+nnoremap <leader>hu :GitGutterUndoHunk<CR>
+nnoremap <leader>hp :GitGutterPreviewHunk<CR> 
+
+nnoremap <leader>ggt <esc>:GitGutterToggle<cr>
 
 "------------------------------------------------------------
 " AUTO COMMANDS   {{{
