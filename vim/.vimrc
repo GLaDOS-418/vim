@@ -3,16 +3,16 @@
 "------------------------------------------------------------
 
 " PLUGIN MANAGER
-" MISC 
-" COLORS 
-" SPACES AND TABS 
-" UI CONFIG 
+" MISC
+" COLORS
+" SPACES AND TABS
+" UI CONFIG
 " STATUSLINE
-" SEARCHING 
-" MOVEMENTS 
-" LEADER SHORTCUTS 
+" SEARCHING
+" MOVEMENTS
+" LEADER SHORTCUTS
 " PLUGIN SETTINGS
-" AUTO COMMANDS  
+" AUTO COMMANDS
 " CUSTOM FUNCTIONS
 " }}}
 "------------------------------------------------------------
@@ -38,7 +38,7 @@ Plug 'tomasr/molokai'
 Plug 'ajh17/Spacegray.vim'
 Plug 'morhetz/gruvbox'          " currently in use
 
-Plug 'xolox/vim-notes'| Plug 'xolox/vim-misc' 
+Plug 'xolox/vim-notes'| Plug 'xolox/vim-misc'
 
 Plug 'tpope/vim-fugitive'       " to handle git commands
 Plug 'airblade/vim-gitgutter'   " to see git diff
@@ -71,7 +71,7 @@ Plug 'aklt/plantuml-syntax'     " syntax/linting for plantuml
 " indentmarkers
 " vinegar
 
-call plug#end() 
+call plug#end()
 
 " }}}
 
@@ -145,8 +145,8 @@ inoremap <F9> <C-R>=strftime("%Y-%m-%d")<CR>
 
 " vi.stackexchange.com/questions/2419/mapping-ctrls-does-not-work#2425
 silent! !stty -a | grep '\( \|^\)ixon' 1>/dev/null 2>&1
-let g:ix_at_startup = (v:shell_error == 0) 
- 
+let g:ix_at_startup = (v:shell_error == 0)
+
 if g:ix_at_startup == 1
     silent! !stty -ixon
     augroup reset_default
@@ -165,9 +165,9 @@ endif
 set background=dark
 
 " :call ShowColorSchemeName() to show the current colorscheme that vim is using[custom fn]
-if $TERM == "xterm-256color" || $TERM == "screen-256color" || $COLORTERM == "gnome-terminal" 
+if $TERM == "xterm-256color" || $TERM == "screen-256color" || $COLORTERM == "gnome-terminal"
   " github.com/neovim/neovim/issues/7722
-  " setting term blindly might be the issue with garbage rendering 
+  " setting term blindly might be the issue with garbage rendering
   " was easily reproducibe using ctrl+i in vim 8.1
   " set term=screen-256color "set teminal color to support 256 colors
 endif
@@ -266,7 +266,7 @@ set showmatch   " highlight matching [{()}]
 
 set laststatus=2  " status line always enabled
 
-let g:currentmode={  
+let g:currentmode={
       \ 'n'  : 'N ',
       \ 'no' : 'N·Operator Pending ',
       \ 'v'  : 'V ',
@@ -285,14 +285,14 @@ let g:currentmode={
       \ 'rm' : 'More ',
       \ 'r?' : 'Confirm ',
       \ '!'  : 'Shell ',
-      \ 't'  : 'Terminal ' } 
+      \ 't'  : 'Terminal ' }
 
 " Automatically change the statusline color depending on mode
 function! ChangeStatuslineColor()
   if (mode() =~# '\v(n|no)')
     exe 'hi! StatusLine ctermfg=008'
-  elseif (mode() =~# '\v(v|V)' 
-        \ || g:currentmode[mode()] ==# 'V·Block' 
+  elseif (mode() =~# '\v(v|V)'
+        \ || g:currentmode[mode()] ==# 'V·Block'
         \ || get(g:currentmode, mode(), '') ==# 't')
     exe 'hi! StatusLine ctermfg=005'
   elseif (mode() ==# 'i')
@@ -423,11 +423,15 @@ nnoremap <leader>ev :vsp $MYVIMRC<CR>
 nnoremap <leader>eb :vsp ~/.bashrc<CR>
 nnoremap <leader>sv :source $MYVIMRC<CR>
 
-" save session. 
+" save session.
 " nnoremap <leader>s :mksession<CR>
 
 " Remove the Windows ^M - when the encodings gets messed up
 noremap <leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
+
+" remove trailing space in file
+nnoremap <leader>ts :%s/\s\+$//ge<cr>
+vnoremap <leader>ts :s/\s\+$//ge<cr>
 
 " stage current file in git
 nnoremap <leader>ga :!git add %<CR>
@@ -480,7 +484,7 @@ nnoremap gn :GitGutterNextHunk<CR>
 nnoremap gp :GitGutterPrevHunk<CR>
 nnoremap <leader>hs :GitGutterStageHunk<CR>
 nnoremap <leader>hu :GitGutterUndoHunk<CR>
-nnoremap <leader>hp :GitGutterPreviewHunk<CR> 
+nnoremap <leader>hp :GitGutterPreviewHunk<CR>
 
 nnoremap <leader>ggt <esc>:GitGutterToggle<cr>
 
@@ -528,8 +532,8 @@ nnoremap <leader>cti :call WildignoreFromGitignore()<cr>
 
 if has('ruby')
   " open cmd-t window
-  nnoremap <leader>t :CommandT<CR> 
-  nnoremap <leader>tp :CommandT 
+  nnoremap <leader>t :CommandT<CR>
+  nnoremap <leader>tp :CommandT
   " with ruby support use command-t
   " start command-t to find files in notes directory.
   nnoremap <leader>fn :CommandT /mnt/windows/projects/notes<cr>
@@ -538,7 +542,7 @@ else
   let g:ctrlp_match_window = 'bottom,order:ttb'                  " top-to-bottom filename matching
   let g:ctrlp_switch_buffer = 0                                  " always open file in new buffer
   let g:ctrlp_working_path_mode = 0                              " ability to change pwd in vim session
-  let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""' " use ag to search 
+  let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""' " use ag to search
 endif
 
 "}}}
@@ -561,7 +565,7 @@ nnoremap <leader>ev :vsp $MYVIMRC<CR>
 nnoremap <leader>eb :vsp ~/.bashrc<CR>
 nnoremap <leader>sv :source $MYVIMRC<CR>
 
-" save session. 
+" save session.
 " nnoremap <leader>s :mksession<CR>
 
 " Remove the Windows ^M - when the encodings gets messed up
@@ -583,7 +587,7 @@ nnoremap gn :GitGutterNextHunk<CR>
 nnoremap gp :GitGutterPrevHunk<CR>
 nnoremap <leader>hs :GitGutterStageHunk<CR>
 nnoremap <leader>hu :GitGutterUndoHunk<CR>
-nnoremap <leader>hp :GitGutterPreviewHunk<CR> 
+nnoremap <leader>hp :GitGutterPreviewHunk<CR>
 
 nnoremap <leader>ggt <esc>:GitGutterToggle<cr>
 
@@ -594,12 +598,12 @@ nnoremap <leader>ggt <esc>:GitGutterToggle<cr>
 " group au commands: so they won't be added when vimrc sourced again
 augroup default_group
     " Remove all auto-commands from the group autogroup
-    autocmd! 
+    autocmd!
 
     " latex compilation shell commands. req: (pdf|xe)latex
     autocmd filetype tex nnoremap <buffer> <leader>t :!pdflatex % <CR>
     autocmd filetype tex nnoremap <buffer> <leader>x :!xelatex % <CR>
-    
+
     autocmd filetype cpp nnoremap <C-c> :w <bar> !clear && g++ -std=gnu++14 -g -D fio -O2 % -o %:p:h/%:t:r.out && ./%:r.out<CR>
     autocmd filetype c nnoremap <C-c> :w <bar> !gcc -std=c99 -lm % -o %:p:h/%:t:r.out && ./%:r.out<CR>
     autocmd filetype java nnoremap <C-c> :w <bar> !javac % && java -enableassertions %:p <CR>
