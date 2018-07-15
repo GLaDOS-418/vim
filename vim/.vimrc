@@ -20,7 +20,7 @@
 "------------------------------------------------------------
 
 " download vim-plug and install plugins if vim started without plug.
-if empty(glob('~/.vim/autoload/plug.vim'))
+if empty(glob('~/.vim/autoload/plug.vim')) && executable('curl')
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
         \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   autocmd VimEnter * PlugInstall | source $MYVIMRC
@@ -83,15 +83,16 @@ call plug#end()
 let mapleader=','               " leader is comma
 set nostartofline               " Make j/k respect the columns
 set clipboard=unnamedplus       " to use operating system clipboard
+set clipboard+=unnamed          " to use operating system clipboard
 set history=1000                " set how many lines of history vim has to remember
 set autoread                    " set the file to autoread when a file is changed from outside
 set encoding=utf-8              " set vim encoding to utf-8
 set fileencoding=utf-8          " set vim encoding to utf-8
 set esckeys                     " Allow cursor keys in insert mode.
 set title                       " change the terminal's title
-set spelllang=en                " 'en_gb' sets region to British English. use 'en' for all regions
+set spelllang=en                " 'en_gb' sets region to British English. 'en' for all regions
 set noswapfile                  " stops vim from creating a .swp file
-" set nobackup                  " gives no error when same file being edited by multiple vim sessions
+" set nobackup                  " no error when same file being edited by multiple vim sessions
 set textwidth=0                 " no automatic linefeeds in insert mode
 set wrap                        " word wrap the text(normal/visual)
 set visualbell                  " don't beep
@@ -122,9 +123,17 @@ noremap ; :
 noremap  <F5> :redraw!<CR>
 inoremap <F5> :redraw!<CR>
 
+" backslash key not working.
+" home to pipe
+noremap OH \|
+inoremap OH \|
+" end to backslash
+noremap OF \
+inoremap OF \
+
 " ignore compiled files
 set wildignore=*.o,*~,*.pyc,*.so,*.out,*.log,*.aux,*.bak,*.swp,*.class
-if has("win16") || has("win32")
+if has("win16") || has("win32") || has("win64")
     set wildignore+=.git\*
 else
     set wildignore+=*/.git/*,*/.DS_Store
@@ -135,23 +144,16 @@ nnoremap <F9> "=strftime("%Y-%m-%d")<CR>P
 inoremap <F9> <C-R>=strftime("%Y-%m-%d")<CR>
 
 " vi.stackexchange.com/questions/2419/mapping-ctrls-does-not-work#2425
-silent! !stty -ixon
-augroup reset_default
-  autocmd VimLeave * silent !stty ixon
-augroup END
-
-" call system("stty -a | grep '\( \|^\)ixon\>' >/dev/null")
-" let g:ix_at_startup = (v:shell_error == 0)
-" 
-" if g:ix_at_startup == 1
-"   " Allow us to use Ctrl-s and Ctrl-q as keybinds
-"   !stty -ixon
-" 
-"   augroup reset_default
-"     autocmd!
-"     autocmd VimLeave * silent !stty ixon
-"   augroup END
-" endif
+silent! !stty -a | grep '\( \|^\)ixon' 1>/dev/null 2>&1
+let g:ix_at_startup = (v:shell_error == 0) 
+ 
+if g:ix_at_startup == 1
+    silent! !stty -ixon
+    augroup reset_default
+      au!
+      autocmd VimLeave * silent !stty ixon
+    augroup END
+endif
 
 
 " }}}
@@ -215,6 +217,7 @@ set pastetoggle=<F2>  " toggle insert(paste) mode
 set number          " show line numbers
 set relativenumber  " show relative line number
 set showcmd         " shows last entered command in bottom right bar, not working
+set noshowmode      " don't show mode on last line
 set cursorline      " highlight current line
 set scrolloff=5     " minimum line offset to present on screen while scrolling.
 
@@ -322,11 +325,10 @@ set statusline+=%#PmenuSel#             " set hl group to : popup menu normal li
 
 " github.com/fatih/vim-go/issues/71#issuecomment-394808485
 " set statusline+=%.15{StatuslineGit()}   " get git branch name[max width of 15]
-set statusline+=%.15{FugitiveStatusline()}" get git branch name[max width of 15]
+"set statusline+=%.15{FugitiveStatusline()}" get git branch name[max width of 15]
+set statusline+=\ %.15{fugitive#head()}\  " get git branch name[max width of 15]
 set statusline+=%#WildMenu#             " set hl group to : directory listing style
 set statusline+=\ %f                    " file name
-
-
 set statusline+=%r                      " read only flag
 set statusline+=%=                      " switching to the right side
 set statusline+=%#ErrorMsg#             " set hl group to : error message style
@@ -336,8 +338,8 @@ set statusline+=%y                      " file type
 set statusline+=[%{&fileencoding?&fileencoding:&encoding}]     " file encoding
 set statusline+=[%{&fileformat}\]       " file format[unix/dos]
 set statusline+=\ %3p%%                 " file position percentage
-set statusline+=%#CursorLineNr#
-set statusline+=\ %4l:%-3c              " line[width-4ch, padding-left]:col[width-3ch, padding-right]
+set statusline+=%#ModeMsg#
+set statusline+=\ %4l:%-3c              " line[width-4ch, pad-left]:col[width-3ch, pad-right]
 set statusline+=%*                      " switch back to normal statusline highlight
 set statusline+=\ %6L                   " number of lines in buffer[width-6ch, padding-left]
 set statusline+=%#ModeMsg#
@@ -375,6 +377,7 @@ set foldnestmax=10      " max 10 nested folds
 nnoremap <space> za
 " foldmethod values: indent, marker, manual, expr, diff, syntax
 set foldmethod=marker   " no plugin for syntax yet.
+set foldmarker={,}
 
 " }}}
 
@@ -589,7 +592,7 @@ nnoremap <leader>ggt <esc>:GitGutterToggle<cr>
 "------------------------------------------------------------
 
 " group au commands: so they won't be added when vimrc sourced again
-augroup autogroup
+augroup default_group
     " Remove all auto-commands from the group autogroup
     autocmd! 
 
@@ -601,10 +604,10 @@ augroup autogroup
     autocmd filetype c nnoremap <C-c> :w <bar> !gcc -std=c99 -lm % -o %:p:h/%:t:r.out && ./%:r.out<CR>
     autocmd filetype java nnoremap <C-c> :w <bar> !javac % && java -enableassertions %:p <CR>
     autocmd filetype python nnoremap <C-c> :w <bar> !python % <CR>
-
     autocmd filetype go nnoremap <C-c> :w <bar> !go build % && ./%:p <CR>
-    autocmd FocusLost * :wall          " Save on lost focus
-    autocmd VimEnter * redraw!
+
+    autocmd FocusLost * :silent! wall          " Save on lost focus
+    autocmd VimResized * :wincmd = " Resize splits when the window is resized
 augroup END
 
 " }}}
