@@ -267,25 +267,25 @@ set showmatch   " highlight matching [{()}]
 set laststatus=2  " status line always enabled
 
 let g:currentmode={
-      \ 'n'  : 'N ',
-      \ 'no' : 'N·Operator Pending ',
-      \ 'v'  : 'V ',
-      \ 'V'  : 'V·Line ',
-      \ '^V' : 'V·Block ',
-      \ 's'  : 'Select ',
-      \ 'S'  : 'S·Line ',
-      \ '^S' : 'S·Block ',
-      \ 'i'  : 'I ',
-      \ 'R'  : 'R ',
-      \ 'Rv' : 'V·Replace ',
-      \ 'c'  : 'Command ',
-      \ 'cv' : 'Vim Ex ',
-      \ 'ce' : 'Ex ',
-      \ 'r'  : 'Prompt ',
-      \ 'rm' : 'More ',
-      \ 'r?' : 'Confirm ',
-      \ '!'  : 'Shell ',
-      \ 't'  : 'Terminal ' }
+      \ 'n'  : ' Normal ',
+      \ 'no' : ' N·Operator Pending ',
+      \ 'v'  : ' Visual ',
+      \ 'V'  : ' V·Line ',
+      \ '^V' : ' V·Block ',
+      \ 's'  : ' Select ',
+      \ 'S'  : ' S·Line ',
+      \ '^S' : ' S·Block ',
+      \ 'i'  : ' Insert ',
+      \ 'R'  : ' Replace ',
+      \ 'Rv' : ' V·Replace ',
+      \ 'c'  : ' Command ',
+      \ 'cv' : ' Vim Ex ',
+      \ 'ce' : ' Ex ',
+      \ 'r'  : ' Prompt ',
+      \ 'rm' : ' More ',
+      \ 'r?' : ' Confirm ',
+      \ '!'  : ' Shell ',
+      \ 't'  : ' Terminal ' }
 
 " Automatically change the statusline color depending on mode
 function! ChangeStatuslineColor()
@@ -316,6 +316,16 @@ function! LinterStatus() abort
   \)
 endfunction
 
+" Function: returns paste mode. (since insert behaves different in this mode)
+function! PasteForStatusline() abort
+    let paste_status = &paste
+    if paste_status == 1
+        return " [paste] "
+    else
+        return ""
+    endif
+endfunction
+
 " General Format: %-0{minwid}.{maxwid}{item}
 " Higlight Groups: #<format-name>#  -> see :help hl for more group names
 
@@ -326,7 +336,7 @@ set statusline+=%#PmenuSel#             " set hl group to : popup menu normal li
 " github.com/fatih/vim-go/issues/71#issuecomment-394808485
 " set statusline+=%.15{StatuslineGit()}   " get git branch name[max width of 15]
 "set statusline+=%.15{FugitiveStatusline()}" get git branch name[max width of 15]
-set statusline+=\ %.15{fugitive#head()}\  " get git branch name[max width of 15]
+set statusline+=%.15{fugitive#head()}    " get git branch name[max width of 15]
 set statusline+=%#WildMenu#             " set hl group to : directory listing style
 set statusline+=\ %f                    " file name
 set statusline+=%r                      " read only flag
@@ -335,7 +345,7 @@ set statusline+=%#ErrorMsg#             " set hl group to : error message style
 set statusline+=%{LinterStatus()}       " show the error message from ALE plugin
 set statusline+=%#LineNr#
 set statusline+=%y                      " file type
-set statusline+=[%{&fileencoding?&fileencoding:&encoding}]     " file encoding
+set statusline+=[%{&fileencoding?&fileencoding:&encoding}]
 set statusline+=[%{&fileformat}\]       " file format[unix/dos]
 set statusline+=\ %3p%%                 " file position percentage
 set statusline+=%#ModeMsg#
@@ -343,7 +353,9 @@ set statusline+=\ %4l:%-3c              " line[width-4ch, pad-left]:col[width-3c
 set statusline+=%*                      " switch back to normal statusline highlight
 set statusline+=\ %6L                   " number of lines in buffer[width-6ch, padding-left]
 set statusline+=%#ModeMsg#
-set statusline+=\%3{toupper(get(g:currentmode,strtrans(mode())))} " Current mode
+" set statusline+=%#IncSearch#
+set statusline+=\%3{toupper(get(g:currentmode,strtrans(mode())))}
+set statusline+=%{PasteForStatusline()} " paste mode flag
 
 " }}}
 
