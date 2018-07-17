@@ -118,6 +118,7 @@ inoremap kj <ESC>
 
 " an attempt to prevent one key press
 noremap ; :
+noremap : ;
 
 " redraw buffer
 noremap  <F5> :redraw!<CR>
@@ -326,36 +327,113 @@ function! PasteForStatusline() abort
     endif
 endfunction
 
+function! GitBranchFugitive() abort
+  let branch=fugitive#head()
+  if branch != ''
+    return '  '.branch.' '
+  else
+    return ''
+  endif
+endfunction
+
+" User colors for gui
+hi User1 guifg=#ffdad8  guibg=#880c0e
+hi User2 guifg=#000000  guibg=#F4905C
+hi User3 guifg=#292b00  guibg=#f4f597
+hi User4 guifg=#112605  guibg=#aefe7B
+hi User5 guifg=#051d00  guibg=#7dcc7d
+hi User7 guifg=#ffffff  guibg=#880c0e gui=bold
+hi User8 guifg=#ffffff  guibg=#5b7fbb
+hi User9 guifg=#ffffff  guibg=#810085
+hi User0 guifg=#ffffff  guibg=#094afe
+
 " General Format: %-0{minwid}.{maxwid}{item}
 " Higlight Groups: #<format-name>#  -> see :help hl for more group names
 
-set statusline=                         " clear statusline
-"set statusline+=%{ChangeStatuslineColor()}               " Changing the statusline color
-set statusline+=%#PmenuSel#             " set hl group to : popup menu normal line
+function! ActiveStatus()
+  " clear statusline
+  let statusline=""
 
-" github.com/fatih/vim-go/issues/71#issuecomment-394808485
-" set statusline+=%.15{StatuslineGit()}   " get git branch name[max width of 15]
-"set statusline+=%.15{FugitiveStatusline()}" get git branch name[max width of 15]
-set statusline+=%.15{fugitive#head()}    " get git branch name[max width of 15]
-set statusline+=%#WildMenu#             " set hl group to : directory listing style
-set statusline+=\ %f                    " file name
-set statusline+=%r                      " read only flag
-set statusline+=%=                      " switching to the right side
-set statusline+=%#ErrorMsg#             " set hl group to : error message style
-set statusline+=%{LinterStatus()}       " show the error message from ALE plugin
-set statusline+=%#LineNr#
-set statusline+=%y                      " file type
-set statusline+=[%{&fileencoding?&fileencoding:&encoding}]
-set statusline+=[%{&fileformat}\]       " file format[unix/dos]
-set statusline+=\ %3p%%                 " file position percentage
-set statusline+=%#ModeMsg#
-set statusline+=\ %4l:%-3c              " line[width-4ch, pad-left]:col[width-3ch, pad-right]
-set statusline+=%*                      " switch back to normal statusline highlight
-set statusline+=\ %6L                   " number of lines in buffer[width-6ch, padding-left]
-set statusline+=%#ModeMsg#
-" set statusline+=%#IncSearch#
-set statusline+=\%3{toupper(get(g:currentmode,strtrans(mode())))}
-set statusline+=%{PasteForStatusline()} " paste mode flag
+  " Changing the statusline color
+  "let statusline+=%{ChangeStatuslineColor()}
+
+  " truncate to left
+  let statusline.="%<"
+
+  " let hl group to : popup menu normal line
+  let statusline.="%#PmenuSel#"
+
+  " get git branch name[max width of 15]
+  " github.com/fatih/vim-go/issues/71#issuecomment-394808485
+  " let statusline.="%.15{GitBranch()}"
+  let statusline.="%.15{GitBranchFugitive()}"
+
+  " let hl group to : directory listing style
+  let statusline.="%#WildMenu#"
+
+  " file name
+  let statusline.="\ %f"
+
+  " read only flag
+  let statusline.="%r"
+
+  " switching to the right side
+  let statusline.="%="
+
+  " let hl group to : error message style
+  let statusline.="%#ErrorMsg#"
+
+  " show the error message from ALE plugin
+  let statusline.="%{LinterStatus()}"
+
+  let statusline.="%#LineNr#"
+
+  " file type
+  let statusline.="%y"
+
+  let statusline.="[%{&fileencoding?&fileencoding:&encoding}]"
+  " file format[unix/dos]
+  let statusline.="[%{&fileformat}\]"
+
+  " file position percentage
+  let statusline.="\ %3p%%"
+
+  let statusline.="%#ModeMsg#"
+
+  " line[width-4ch, pad-left]:col[width-3ch, pad-right]
+  let statusline.="\ %4l:%-3c"
+
+  " switch back to normal statusline highlight
+  let statusline.="%*"
+
+  " number of lines in buffer[width-6ch, padding-left]
+  let statusline.="\ %6L"
+
+  let statusline.="%#ModeMsg#"
+  " let statusline.=%#IncSearch#
+
+  let statusline.="\%3{toupper(get(g:currentmode,strtrans(mode())))}"
+
+  " paste mode flag
+  let statusline.="%{PasteForStatusline()}"
+
+  return statusline
+endfunction
+
+function! InactiveStatus()
+  " clear statusline
+  let statusline="%3*[I]"
+  let statusline.=ActiveStatus()
+  return statusline
+endfunction
+
+setlocal statusline=%!ActiveStatus()
+
+augroup status
+  autocmd!
+  autocmd WinEnter * setlocal statusline=%!ActiveStatus()
+  autocmd WinLeave * setlocal statusline=%!InactiveStatus()
+augroup END
 
 " }}}
 
@@ -424,8 +502,8 @@ nnoremap <C-H> <C-W><C-H>
 "------------------------------------------------------------
 
 " toggle line numbers
-nnoremap <leader>tn :set number!<CR>
-nnoremap <leader>trn :set relativenumber!<CR>
+nnoremap <leader>nn :set number!<CR>
+nnoremap <leader>rn :set relativenumber!<CR>
 
 " <leader>k is move right one space
 inoremap <leader>k <right>
