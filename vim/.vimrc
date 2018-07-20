@@ -537,6 +537,9 @@ nnoremap <leader>s :set spell!<cr>
 " paste in insert mode without auto-formatting
 inoremap <leader>p <F2><esc>pa<F2>
 
+" markdown style link paste from os clipboard
+nnoremap <leader>l mk:read !curl --silent <C-R>+ <bar> grep -P '<title>.*<\/title>' <bar> sed -E -e 's@<title>(.*)</title>@\1@' -e 's/^[[:space:]]*//g'<CR>i[<esc>A]( <C-R>+ )<esc>0v$h"zydd`k"zp
+
 " }}}
 
 "------------------------------------------------------------
