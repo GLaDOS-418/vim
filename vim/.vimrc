@@ -232,6 +232,11 @@ set scrolloff=5     " minimum line offset to present on screen while scrolling.
 set splitright
 set splitbelow
 
+if has('gui_running')
+  set guioptions-=T  " no toolbar
+  set guioptions-=m  " no menubar
+endif
+
 "matching pair of braces
 inoremap {      {}<Left>
 inoremap {<CR>  {<CR>}<Esc>O
