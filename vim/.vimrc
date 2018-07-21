@@ -26,6 +26,18 @@ if empty(glob('~/.vim/autoload/plug.vim')) && executable('curl')
   autocmd VimEnter * PlugInstall | source $MYVIMRC
 endif
 
+" build function req for vim-markdown-composer
+" cargo is rust package mangaer
+function! BuildComposer(info)
+  if a:info.status != 'unchanged' || a:info.force
+    if has('nvim')
+      !cargo build --release
+    else
+      !cargo build --release --no-default-features --features json-rpc
+    endif
+  endif
+endfunction
+
 " plug plugin setup.
 call plug#begin('~/.vim/plugged')
 
@@ -60,6 +72,15 @@ Plug 'ctrlpvim/ctrlp.vim', has('ruby')?{'on':[]}:{}
 Plug 'w0rp/ale'                 " asynchronous linting engine
 Plug 'scrooloose/vim-slumlord'  " inline previews for plantuml acitvity dia
 Plug 'aklt/plantuml-syntax'     " syntax/linting for plantuml
+
+" markdown plugins {{{
+
+" async markdown preview
+Plug 'euclio/vim-markdown-composer', executable('cargo')?{ 
+      \ 'do': function('BuildComposer')
+      \ }:{'on': [] }
+
+" }}}
 
 " considerable plugins
 " deoplete.nvim (async completion for nvim/vim8)(ycm alter)
@@ -134,7 +155,7 @@ inoremap OF \
 
 " ignore compiled files
 set wildignore=*.o,*~,*.pyc,*.so,*.out,*.log,*.aux,*.bak,*.swp,*.class
-if has("win16") || has("win32") || has("win64")
+if has("win32") || has("win64")
     set wildignore+=.git\*
 else
     set wildignore+=*/.git/*,*/.DS_Store
@@ -150,7 +171,7 @@ let g:ix_at_startup = (v:shell_error == 0)
 
 if g:ix_at_startup == 1
     silent! !stty -ixon
-    augroup reset_default
+    augroup term_stty 
       au!
       autocmd VimLeave * silent !stty ixon
     augroup END
@@ -356,88 +377,93 @@ hi User0 guifg=#ffffff  guibg=#094afe
 " Higlight Groups: #<format-name>#  -> see :help hl for more group names
 
 function! ActiveStatus()
-  " clear statusline
-  let statusline=""
-
-  " Changing the statusline color
-  "let statusline+=%{ChangeStatuslineColor()}
-
-  " truncate to left
-  let statusline.="%<"
-
-  " let hl group to : popup menu normal line
-  let statusline.="%#PmenuSel#"
-
-  " get git branch name[max width of 15]
-  " github.com/fatih/vim-go/issues/71#issuecomment-394808485
-  " let statusline.="%.15{GitBranch()}"
-  let statusline.="%.15{GitBranchFugitive()}"
-
-  " let hl group to : directory listing style
-  let statusline.="%#WildMenu#"
-
-  " file name
-  let statusline.="\ %f"
-
-  " read only flag
-  let statusline.="%r"
-
-  " switching to the right side
-  let statusline.="%="
-
-  " let hl group to : error message style
-  let statusline.="%#ErrorMsg#"
-
-  " show the error message from ALE plugin
-  let statusline.="%{LinterStatus()}"
-
+  let statusline=""                           " clear statusline
+  "let statusline+=%{ChangeStatuslineColor()} " Changing the statusline color
+  let statusline.="%<"                        " truncate to left
+  let statusline.="%#PmenuSel#"               " let hl group to : popup menu normal line
+  " let statusline.="%.15{GitBranch()}"       " github.com/vim/vim/issues/3197
+  let statusline.="%.15{GitBranchFugitive()}" " get git branch name[max width of 15]
+  let statusline.="%#WildMenu#"               " let hl group to : directory listing style
+  let statusline.="\ %f"                      " file name
+  let statusline.="%r"                        " read only flag
+  let statusline.="%="                        " switching to the right side
+  let statusline.="%#ErrorMsg#"               " let hl group to : error message style
+  let statusline.="%{LinterStatus()}"         " show the error message from ALE plugin
   let statusline.="%#LineNr#"
-
-  " file type
-  let statusline.="%y"
-
+  let statusline.="%y"                        " file type
   let statusline.="[%{&fileencoding?&fileencoding:&encoding}]"
-  " file format[unix/dos]
-  let statusline.="[%{&fileformat}\]"
-
-  " file position percentage
-  let statusline.="\ %3p%%"
-
+  let statusline.="[%{&fileformat}\]"         " file format[unix/dos]
+  let statusline.="\ %3p%%"                   " file position percentage
   let statusline.="%#ModeMsg#"
-
-  " line[width-4ch, pad-left]:col[width-3ch, pad-right]
-  let statusline.="\ %4l:%-3c"
-
-  " switch back to normal statusline highlight
-  let statusline.="%*"
-
-  " number of lines in buffer[width-6ch, padding-left]
-  let statusline.="\ %6L"
-
+  let statusline.="\ %4l:%-3c"                " line[width-4ch, pad-left]:col[width-3ch, pad-right]
+  let statusline.="%*"                        " switch back to normal statusline highlight
+  let statusline.="\ %6L"                     " number of lines in buffer[width-6ch, padding-left]
   let statusline.="%#ModeMsg#"
   " let statusline.=%#IncSearch#
-
   let statusline.="\%3{toupper(get(g:currentmode,strtrans(mode())))}"
-
-  " paste mode flag
-  let statusline.="%{PasteForStatusline()}"
+  let statusline.="%{PasteForStatusline()}"   " paste mode flag
 
   return statusline
 endfunction
 
 function! InactiveStatus()
-  " clear statusline
-  let statusline="%3*[I]"
-  let statusline.=ActiveStatus()
+  " same as active status without colors
+  let statusline="%<%#StatusLineNC#"
+  let statusline.="%.15{GitBranchFugitive()}\ %f%r%=%{LinterStatus()}%y"
+  let statusline.="[%{&fileencoding?&fileencoding:&encoding}][%{&fileformat}\]"
+  let statusline.="\ %3p%%\ %4l:%-3c\ %6L\%3{toupper(get(g:currentmode,strtrans(mode())))}"
+  let statusline.="%{PasteForStatusline()}"
   return statusline
 endfunction
 
+function! TestColors()
+  let statusline=""
+  let statusline.="%#SpecialKey# 36"
+  let statusline.="%#EndOfBuffer#  35"
+  let statusline.="%#NonText#  34"
+  let statusline.="%#Directory#  33"
+  let statusline.="%#ErrorMsg#  32"
+  let statusline.="%#IncSearch#  31"
+  let statusline.="%#Search#  30"
+  let statusline.="%#MoreMsg#  29"
+  let statusline.="%#ModeMsg#  28"
+  let statusline.="%#LineNr#  27"
+  let statusline.="%#CursorLineNr#  26"
+  let statusline.="%#Question#  25"
+  let statusline.="%#StatusLine#  24"
+  let statusline.="%#StatusLineNC#  23"
+  let statusline.="%#Title#  22"
+  let statusline.="%#VertSplit#  21"
+  let statusline.="%#Visual#  20"
+  let statusline.="%#VisualNOS#  19"
+  let statusline.="%#WarningMsg#  18"
+  let statusline.="%#WildMenu#  17"
+  let statusline.="%#Folded#  16"
+  let statusline.="%#FoldColumn#  15"
+  let statusline.="%#DiffAdd#  14"
+  let statusline.="%#DiffChange#  13"
+  let statusline.="%#DiffDelete#  12"
+  let statusline.="%#DiffText#  11"
+  let statusline.="%#SignColumn#  10"
+  let statusline.="%#SpellBad#  9"
+  let statusline.="%#SpellCap#  8"
+  let statusline.="%#SpellRare#  7"
+  let statusline.="%#SpellLocal#  6"
+  let statusline.="%#Conceal#  5"
+  let statusline.="%#Pmenu#  4"
+  let statusline.="%#PmenuSel#  3"
+  let statusline.="%#PmenuSbar#  2"
+  let statusline.="%#PmenuThumb#  1"
+  return statusline
+endfunction
+"setlocal statusline=%!TestColors()
+
 setlocal statusline=%!ActiveStatus()
 
-augroup status
+augroup vim_statusline
   autocmd!
-  autocmd WinEnter * setlocal statusline=%!ActiveStatus()
-  autocmd WinLeave * setlocal statusline=%!InactiveStatus()
+  autocmd WinEnter,BufEnter * setlocal statusline=%!ActiveStatus()
+  autocmd WinLeave,BufLeave * setlocal statusline=%!InactiveStatus()
 augroup END
 
 " }}}
@@ -644,6 +670,16 @@ else
 endif
 
 "}}}
+
+" vim-markdown-composer - plugin config {{{
+
+let g:markdown_composer_browser = '/usr/bin/firefox'
+let g:markdown_composer_open_browser = 1
+let g:markdown_composer_refresh_rate = 500 "ms
+let g:markdown_composer_autostart = 1
+
+" }}}
+
 
 " }}}
 
