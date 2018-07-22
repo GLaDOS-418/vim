@@ -347,7 +347,7 @@ endfunction
 function! PasteForStatusline() abort
     let paste_status = &paste
     if paste_status == 1
-        return " [paste] "
+        return "[paste] "
     else
         return ""
     endif
@@ -362,17 +362,6 @@ function! GitBranchFugitive() abort
   endif
 endfunction
 
-" User colors for gui
-hi User1 guifg=#ffdad8  guibg=#880c0e
-hi User2 guifg=#000000  guibg=#F4905C
-hi User3 guifg=#292b00  guibg=#f4f597
-hi User4 guifg=#112605  guibg=#aefe7B
-hi User5 guifg=#051d00  guibg=#7dcc7d
-hi User7 guifg=#ffffff  guibg=#880c0e gui=bold
-hi User8 guifg=#ffffff  guibg=#5b7fbb
-hi User9 guifg=#ffffff  guibg=#810085
-hi User0 guifg=#ffffff  guibg=#094afe
-
 " General Format: %-0{minwid}.{maxwid}{item}
 " Higlight Groups: #<format-name>#  -> see :help hl for more group names
 
@@ -386,6 +375,7 @@ function! ActiveStatus()
   let statusline.="%#WildMenu#"               " let hl group to : directory listing style
   let statusline.="\ %f"                      " file name
   let statusline.="%r"                        " read only flag
+  let statusline.="\ %m"                      " modifi(ed|able) flag
   let statusline.="%="                        " switching to the right side
   let statusline.="%#ErrorMsg#"               " let hl group to : error message style
   let statusline.="%{LinterStatus()}"         " show the error message from ALE plugin
@@ -416,44 +406,67 @@ function! InactiveStatus()
   return statusline
 endfunction
 
+"Black DarkBlue DarkGreen DarkCyan DarkRed DarkMagenta Brown, DarkYellow LightGray, LightGrey, Gray, Grey DarkGray, DarkGrey Blue, LightBlue Green, LightGreen Cyan, LightCyan Red, LightRed Magenta, LightMagenta Yellow, LightYellow White
+
+hi User1 ctermfg=black ctermbg=white cterm=bold
+hi User2 ctermfg=black ctermbg=yellow cterm=bold
+hi User3 ctermfg=white ctermbg=DarkRed cterm=bold
+hi User4 ctermfg=white ctermbg=brown cterm=bold
+hi User5 ctermfg=lightgray ctermbg=black cterm=bold
+hi User6 ctermfg=darkblue ctermbg=white cterm=bold
+hi User7 ctermfg=black ctermbg=cyan cterm=bold
+hi User8 ctermfg=black ctermbg=darkyellow cterm=bold
+hi User9 ctermbg=216 ctermfg=240 cterm=bold
+hi User0 ctermfg=black ctermbg=white cterm=bold
+
 function! TestColors()
-  let statusline=""
-  let statusline.="%#SpecialKey# 36"
-  let statusline.="%#EndOfBuffer#  35"
-  let statusline.="%#NonText#  34"
-  let statusline.="%#Directory#  33"
-  let statusline.="%#ErrorMsg#  32"
-  let statusline.="%#IncSearch#  31"
-  let statusline.="%#Search#  30"
-  let statusline.="%#MoreMsg#  29"
-  let statusline.="%#ModeMsg#  28"
-  let statusline.="%#LineNr#  27"
-  let statusline.="%#CursorLineNr#  26"
-  let statusline.="%#Question#  25"
-  let statusline.="%#StatusLine#  24"
-  let statusline.="%#StatusLineNC#  23"
-  let statusline.="%#Title#  22"
-  let statusline.="%#VertSplit#  21"
-  let statusline.="%#Visual#  20"
-  let statusline.="%#VisualNOS#  19"
-  let statusline.="%#WarningMsg#  18"
-  let statusline.="%#WildMenu#  17"
-  let statusline.="%#Folded#  16"
-  let statusline.="%#FoldColumn#  15"
-  let statusline.="%#DiffAdd#  14"
-  let statusline.="%#DiffChange#  13"
-  let statusline.="%#DiffDelete#  12"
-  let statusline.="%#DiffText#  11"
-  let statusline.="%#SignColumn#  10"
-  let statusline.="%#SpellBad#  9"
-  let statusline.="%#SpellCap#  8"
-  let statusline.="%#SpellRare#  7"
-  let statusline.="%#SpellLocal#  6"
-  let statusline.="%#Conceal#  5"
-  let statusline.="%#Pmenu#  4"
-  let statusline.="%#PmenuSel#  3"
-  let statusline.="%#PmenuSbar#  2"
-  let statusline.="%#PmenuThumb#  1"
+ let statusline=""
+ let statusline.="%1* 46"
+ let statusline.="%2* 45"
+ let statusline.="%3* 44"
+ let statusline.="%4* 43"
+ let statusline.="%5* 42"
+ let statusline.="%6* 41"
+ let statusline.="%7* 40"
+ let statusline.="%8* 39"
+ let statusline.="%9* 38"
+ let statusline.="%0* 37"
+ let statusline.="%#SpecialKey# 36"
+ let statusline.="%#EndOfBuffer# 35"
+ let statusline.="%#NonText# 34"
+ let statusline.="%#Directory# 33"
+ let statusline.="%#ErrorMsg# 32"
+ let statusline.="%#IncSearch# 31"
+ let statusline.="%#Search# 30"
+ let statusline.="%#MoreMsg# 29"
+ let statusline.="%#ModeMsg# 28"
+ let statusline.="%#LineNr# 27"
+ let statusline.="%#CursorLineNr# 26"
+ let statusline.="%#Question# 25"
+ let statusline.="%#StatusLine# 24"
+ let statusline.="%#StatusLineNC# 23"
+ let statusline.="%#Title# 22"
+ let statusline.="%#VertSplit# 21"
+ let statusline.="%#Visual# 20"
+ let statusline.="%#VisualNOS# 19"
+ let statusline.="%#WarningMsg# 18"
+ let statusline.="%#WildMenu# 17"
+ let statusline.="%#Folded# 16"
+ let statusline.="%#FoldColumn# 15"
+ let statusline.="%#DiffAdd# 14"
+ let statusline.="%#DiffChange# 13"
+ let statusline.="%#DiffDelete# 12"
+ let statusline.="%#DiffText# 11"
+ let statusline.="%#SignColumn# 10"
+ let statusline.="%#SpellBad# 9"
+ let statusline.="%#SpellCap# 8"
+ let statusline.="%#SpellRare# 7"
+ let statusline.="%#SpellLocal# 6"
+ let statusline.="%#Conceal# 05"
+ let statusline.="%#Pmenu# 04"
+ let statusline.="%#PmenuSel# 03"
+ let statusline.="%#PmenuSbar# 02"
+ let statusline.="%#PmenuThumb# 01"
   return statusline
 endfunction
 "setlocal statusline=%!TestColors()
