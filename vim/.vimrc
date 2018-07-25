@@ -121,7 +121,7 @@ set noerrorbells                " don't beep
 set colorcolumn=100             " highlight on col 100
 set backspace=indent,eol,start  " allow backspacing over everything in insert mode
 set diffopt+=vertical           " vim-fugitive vertical split on diff
-set mouse+=a                    " use mouse to place cursor and copy w/o line num
+"set mouse+=a                    " use mouse to place cursor and copy w/o line num
 syntax enable                   " enable syntax processing
 
 " clearing the t_vb variable deactivates flashing
