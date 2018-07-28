@@ -82,14 +82,8 @@ Plug 'euclio/vim-markdown-composer', executable('cargo')?{
 
 " }}}
 
-" considerable plugins
-" deoplete.nvim (async completion for nvim/vim8)(ycm alter)
 " vimwiki (alternative of vim-notes)
-" Plug 'ying17zi/vim-live-latex-preview'
-" Plug 'LaTeX-Box-Team/LaTeX-Box'
 " ultisnips
-" markdown
-" indentmarkers
 " vinegar
 
 call plug#end()
@@ -419,7 +413,7 @@ hi User8 ctermfg=black ctermbg=darkyellow cterm=bold
 hi User9 ctermbg=216 ctermfg=240 cterm=bold
 hi User0 ctermfg=black ctermbg=white cterm=bold
 
-function! TestColors()
+function! SetColors()
  let statusline=""
  let statusline.="%1* 46"
  let statusline.="%2* 45"
@@ -469,7 +463,10 @@ function! TestColors()
  let statusline.="%#PmenuThumb# 01"
   return statusline
 endfunction
-"setlocal statusline=%!TestColors()
+
+function! TestColors()
+  setlocal statusline=%!SetColors()
+endfunction
 
 setlocal statusline=%!ActiveStatus()
 
