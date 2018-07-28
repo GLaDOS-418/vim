@@ -76,7 +76,7 @@ Plug 'aklt/plantuml-syntax'     " syntax/linting for plantuml
 " markdown plugins {{{
 
 " async markdown preview
-Plug 'euclio/vim-markdown-composer', executable('cargo')?{ 
+Plug 'euclio/vim-markdown-composer', executable('cargo')?{
       \ 'do': function('BuildComposer')
       \ }:{'on': [] }
 
@@ -165,7 +165,7 @@ let g:ix_at_startup = (v:shell_error == 0)
 
 if g:ix_at_startup == 1
     silent! !stty -ixon
-    augroup term_stty 
+    augroup term_stty
       au!
       autocmd VimLeave * silent !stty ixon
     augroup END
@@ -223,6 +223,11 @@ set shiftwidth=2      " when (un)indenting lines shift with 1unit shiftwidth
 set softtabstop=2     " number of spaces in TAB when editing
 set pastetoggle=<F2>  " toggle insert(paste) mode
 
+" handle jump markers
+inoremap <tab><space> <esc>/<++><CR>:nohl<CR>4xa
+inoremap <leader><tab><space> <++><esc>4h?<++><CR>:nohl<CR>4xa
+nnoremap <tab><tab><space> :%s/<++>//<CR>
+
 
 " }}}
 
@@ -252,29 +257,39 @@ if has('gui_running')
   set guioptions-=m  " no menubar
 endif
 
-"matching pair of braces
-inoremap {      {}<Left>
-inoremap {<CR>  {<CR>}<Esc>O
-" inoremap {{     {
-inoremap {}     {}
+" angular brackets
+inoremap <leader>< <> <++><esc>5hi
 
-"matching pair of square brackets
-inoremap [      []<Left>
-inoremap [<CR>  [<CR>]<Esc>O
-" inoremap [[     [
+" brackets
+inoremap [      [] <++><esc>5hi
 inoremap []     []
 
-"handling paranthesis
-inoremap (      ()<Left>
-inoremap (<CR>  (<CR>)<Esc>O
-" inoremap ((     (
+" braces
+inoremap {      {} <++><esc>5hi
+inoremap {<CR>  {<CR>}<++><Esc>O
+inoremap {}     {}
+
+" paranthesis
+inoremap (      () <++><esc>5hi
+inoremap (<CR>  (<CR>)<++><Esc>O
 inoremap ()     ()
 
-" "handling angular brackets
-" inoremap <      <><Left>
-" inoremap <<CR>  <<CR>><Esc>O
-" inoremap <<     <
-" inoremap <>     <>
+" quotes and backtick
+inoremap '      '' <++><esc>5hi
+inoremap "      "" <++><esc>5hi
+inoremap `      `` <++><esc>5hi
+inoremap '''      '''   ''' <++><esc>9hi
+inoremap """      """   """ <++><esc>9hi
+inoremap ```      ```   ``` <++><esc>9hi
+inoremap '<CR>  '<CR>'<++><Esc>O
+inoremap "<CR>  "<CR>"<++><Esc>O
+inoremap `<CR>  `<CR>`<++><Esc>O
+inoremap '''<CR>  '''<CR>'''<++><Esc>O
+inoremap """<CR>  """<CR>"""<++><Esc>O
+inoremap ```<CR>  ```<++><CR>```<++><Esc>O
+inoremap ''     ''
+inoremap ""     ""
+inoremap ``     ``
 
 set wildmode=longest,list,full
 set wildmenu    " visual autocomplete for command menu
