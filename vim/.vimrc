@@ -82,6 +82,8 @@ Plug 'euclio/vim-markdown-composer', executable('cargo')?{
 
 " }}}
 
+" Plug 'junegunn/goyo.vim'
+" ycm/deoplete
 " vimwiki (alternative of vim-notes)
 " ultisnips
 " vinegar
@@ -351,7 +353,7 @@ endfunction
 function! GitBranchFugitive() abort
   let branch=fugitive#head()
   if branch != ''
-    return '  '.branch.' '
+    return ' '.branch.' '
   else
     return ''
   endif
@@ -505,9 +507,13 @@ set foldlevelstart=10   " open most folds by default
 set foldnestmax=10      " max 10 nested folds
 " space open/closes folds in current block
 nnoremap <space> za
-" foldmethod values: indent, marker, manual, expr, diff, syntax
-set foldmethod=marker   " no plugin for syntax yet.
-set foldmarker={,}
+
+augroup ft_markers
+  au!
+  autocmd filetype cpp,c,js set foldmethod=marker foldmarker={,}
+  autocmd filetype python   set foldmethod=indent
+  autocmd filetype vim      set foldmethod=marker foldmaerker='{{{','}}}'
+augroup END
 
 " }}}
 
@@ -574,6 +580,9 @@ inoremap <leader>p <F2><esc>pa<F2>
 
 " markdown style link paste from os clipboard
 nnoremap <leader>l mk:read !curl --silent --location "<C-R>+" <bar> grep -P '<title>.*<\/title>' <bar> sed -E -e 's@.*<title>[[:space:]]*(.*)[[:space:]]*</title>.*@\1@'<CR>i[<esc>A]( <C-R>+ )<esc>0v$h"zydd`k"zp
+
+" get file name w/o ext
+inoremap <leader>f <esc>mk:put =expand('%:t:r')<cr>v$hx`kpa
 
 " }}}
 
@@ -747,11 +756,12 @@ augroup default_group
     autocmd filetype tex nnoremap <buffer> <leader>t :!pdflatex % <CR>
     autocmd filetype tex nnoremap <buffer> <leader>x :!xelatex % <CR>
 
-    autocmd filetype cpp nnoremap <C-c> :w <bar> !clear && g++ -std=gnu++14 -g -D fio -O2 % -o %:p:h/%:t:r.out && ./%:r.out<CR>
-    autocmd filetype c nnoremap <C-c> :w <bar> !gcc -std=c99 -lm % -o %:p:h/%:t:r.out && ./%:r.out<CR>
+    autocmd filetype cpp nnoremap <C-c> :w <bar> !clear && g++ -std=gnu++14 -g -D fio % -o %:p:h/%:t:r.out && time ./%:r.out<CR>
+    autocmd filetype cpp inoremap <leader>e :%s/\(std::\)\?endl/"\\n"/<cr>
+    autocmd filetype cpp inoremap <leader>i <esc>:r ~/.vim/personal_snips/cpp_fast_io.cpp<CR>i
+    autocmd filetype cpp inoremap <leader>r <esc>:r ~/.vim/personal_snips/cpp_algo_start.cpp<CR>i
     autocmd filetype java nnoremap <C-c> :w <bar> !javac % && java -enableassertions %:p <CR>
     autocmd filetype python nnoremap <C-c> :w <bar> !python % <CR>
-    autocmd filetype go nnoremap <C-c> :w <bar> !go build % && ./%:p <CR>
 
     autocmd FocusLost * :silent! wall          " Save on lost focus
     autocmd VimResized * :wincmd = " Resize splits when the window is resized
