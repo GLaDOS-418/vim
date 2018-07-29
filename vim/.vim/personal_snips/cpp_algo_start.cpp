@@ -25,6 +25,9 @@
 #define sf2ll(a,b)      scanf("%I64d %I64d",&a,&b)
 #define sf3ll(a,b,c)    scanf("%I64d %I64d %I64d",&a,&b,&c)
 #define sf4ll(a,b,c, d) scanf("%I64d %I64d %I64d %I64d",&a,&b,&c,&d)
+#define par(i) (i-1) >> 1
+#define lt(i) i<<1 + 1
+#define rt(i) i<<1 + 2
 
 using ll=int64_t;
 using ull=uint64_t;

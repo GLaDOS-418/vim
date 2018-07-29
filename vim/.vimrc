@@ -82,7 +82,7 @@ Plug 'euclio/vim-markdown-composer', executable('cargo')?{
 
 " }}}
 
-" Plug 'junegunn/goyo.vim'
+Plug 'junegunn/goyo.vim'
 " ycm/deoplete
 " vimwiki (alternative of vim-notes)
 " ultisnips
@@ -411,61 +411,6 @@ function! InactiveStatus()
   return statusline
 endfunction
 
-function! SetColors()
- let statusline=""
- let statusline.="%1* 46"
- let statusline.="%2* 45"
- let statusline.="%3* 44"
- let statusline.="%4* 43"
- let statusline.="%5* 42"
- let statusline.="%6* 41"
- let statusline.="%7* 40"
- let statusline.="%8* 39"
- let statusline.="%9* 38"
- let statusline.="%0* 37"
- let statusline.="%#SpecialKey# 36"
- let statusline.="%#EndOfBuffer# 35"
- let statusline.="%#NonText# 34"
- let statusline.="%#Directory# 33"
- let statusline.="%#ErrorMsg# 32"
- let statusline.="%#IncSearch# 31"
- let statusline.="%#Search# 30"
- let statusline.="%#MoreMsg# 29"
- let statusline.="%#ModeMsg# 28"
- let statusline.="%#LineNr# 27"
- let statusline.="%#CursorLineNr# 26"
- let statusline.="%#Question# 25"
- let statusline.="%#StatusLine# 24"
- let statusline.="%#StatusLineNC# 23"
- let statusline.="%#Title# 22"
- let statusline.="%#VertSplit# 21"
- let statusline.="%#Visual# 20"
- let statusline.="%#VisualNOS# 19"
- let statusline.="%#WarningMsg# 18"
- let statusline.="%#WildMenu# 17"
- let statusline.="%#Folded# 16"
- let statusline.="%#FoldColumn# 15"
- let statusline.="%#DiffAdd# 14"
- let statusline.="%#DiffChange# 13"
- let statusline.="%#DiffDelete# 12"
- let statusline.="%#DiffText# 11"
- let statusline.="%#SignColumn# 10"
- let statusline.="%#SpellBad# 9"
- let statusline.="%#SpellCap# 8"
- let statusline.="%#SpellRare# 7"
- let statusline.="%#SpellLocal# 6"
- let statusline.="%#Conceal# 05"
- let statusline.="%#Pmenu# 04"
- let statusline.="%#PmenuSel# 03"
- let statusline.="%#PmenuSbar# 02"
- let statusline.="%#PmenuThumb# 01"
- return statusline
-endfunction
-
-function! TestColors()
-  setlocal statusline=%!SetColors()
-endfunction
-
 setlocal statusline=%!ActiveStatus()
 
 augroup vim_statusline
@@ -510,9 +455,9 @@ nnoremap <space> za
 
 augroup ft_markers
   au!
-  autocmd filetype cpp,c,js set foldmethod=marker foldmarker={,}
-  autocmd filetype python   set foldmethod=indent
-  autocmd filetype vim      set foldmethod=marker foldmaerker='{{{','}}}'
+  autocmd filetype cpp,c,js setlocal foldmethod=marker foldmarker={,}
+  autocmd filetype python   setlocal foldmethod=indent
+  autocmd filetype vim      setlocal foldmethod=marker foldmarker='{{{','}}}'
 augroup END
 
 " }}}
@@ -758,7 +703,7 @@ augroup default_group
 
     autocmd filetype cpp nnoremap <C-c> :w <bar> !clear && g++ -std=gnu++14 -g -D fio % -o %:p:h/%:t:r.out && time ./%:r.out<CR>
     autocmd filetype cpp inoremap <leader>e :%s/\(std::\)\?endl/"\\n"/<cr>
-    autocmd filetype cpp inoremap <leader>i <esc>:r ~/.vim/personal_snips/cpp_fast_io.cpp<CR>i
+    autocmd filetype cpp inoremap <leader>io <esc>:r ~/.vim/personal_snips/cpp_fast_io.cpp<CR>i
     autocmd filetype cpp inoremap <leader>r <esc>:r ~/.vim/personal_snips/cpp_algo_start.cpp<CR>i
     autocmd filetype java nnoremap <C-c> :w <bar> !javac % && java -enableassertions %:p <CR>
     autocmd filetype python nnoremap <C-c> :w <bar> !python % <CR>
@@ -851,6 +796,61 @@ function! ShowColorSchemeName()
     catch /^Vim:E121/
         echo "default
     endtry
+endfunction
+
+function! SetColors()
+ let statusline=""
+ let statusline.="%1* 46"
+ let statusline.="%2* 45"
+ let statusline.="%3* 44"
+ let statusline.="%4* 43"
+ let statusline.="%5* 42"
+ let statusline.="%6* 41"
+ let statusline.="%7* 40"
+ let statusline.="%8* 39"
+ let statusline.="%9* 38"
+ let statusline.="%0* 37"
+ let statusline.="%#SpecialKey# 36"
+ let statusline.="%#EndOfBuffer# 35"
+ let statusline.="%#NonText# 34"
+ let statusline.="%#Directory# 33"
+ let statusline.="%#ErrorMsg# 32"
+ let statusline.="%#IncSearch# 31"
+ let statusline.="%#Search# 30"
+ let statusline.="%#MoreMsg# 29"
+ let statusline.="%#ModeMsg# 28"
+ let statusline.="%#LineNr# 27"
+ let statusline.="%#CursorLineNr# 26"
+ let statusline.="%#Question# 25"
+ let statusline.="%#StatusLine# 24"
+ let statusline.="%#StatusLineNC# 23"
+ let statusline.="%#Title# 22"
+ let statusline.="%#VertSplit# 21"
+ let statusline.="%#Visual# 20"
+ let statusline.="%#VisualNOS# 19"
+ let statusline.="%#WarningMsg# 18"
+ let statusline.="%#WildMenu# 17"
+ let statusline.="%#Folded# 16"
+ let statusline.="%#FoldColumn# 15"
+ let statusline.="%#DiffAdd# 14"
+ let statusline.="%#DiffChange# 13"
+ let statusline.="%#DiffDelete# 12"
+ let statusline.="%#DiffText# 11"
+ let statusline.="%#SignColumn# 10"
+ let statusline.="%#SpellBad# 9"
+ let statusline.="%#SpellCap# 8"
+ let statusline.="%#SpellRare# 7"
+ let statusline.="%#SpellLocal# 6"
+ let statusline.="%#Conceal# 05"
+ let statusline.="%#Pmenu# 04"
+ let statusline.="%#PmenuSel# 03"
+ let statusline.="%#PmenuSbar# 02"
+ let statusline.="%#PmenuThumb# 01"
+ return statusline
+endfunction
+
+function! TestColors()
+  setlocal statusline=%!SetColors()
 endfunction
 
 " }}}
