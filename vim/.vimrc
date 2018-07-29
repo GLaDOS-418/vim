@@ -257,24 +257,23 @@ if has('gui_running')
   set guioptions-=m  " no menubar
 endif
 
-" angular brackets
+" pair handles {{{
+
+" square,angular brackets, braces, paranthesis
 inoremap <leader>< <> <++><esc>F>i
-
-" brackets
 inoremap [      [] <++><esc>F]i
-inoremap []     []
-
-" braces
 inoremap {      {} <++><esc>F}i
 inoremap {<CR>  {<CR>}<++><esc>O
-inoremap {}     {}
-
-" paranthesis
 inoremap (      () <++><esc>F)i
 inoremap (<CR>  (<CR>)<++><esc>O
-inoremap ()     ()
+inoremap <C-e>[ [
+inoremap <C-e>( (
+inoremap <C-e>{ {
 
 " quotes and backtick
+inoremap <C-e>' '
+inoremap <C-e>" "
+inoremap <C-e>` `
 inoremap '      '' <++><esc>F'i
 inoremap "      "" <++><esc>F"i
 inoremap `      `` <++><esc>F`i
@@ -287,13 +286,13 @@ inoremap `<CR>  `<CR>`<++><esc>O
 inoremap '''<CR>  '''<CR>'''<++><esc>O
 inoremap """<CR>  """<CR>"""<++><esc>O
 inoremap ```<CR>  ```<++><CR>```<++><esc>O
-inoremap ''     ''
-inoremap ""     ""
-inoremap ``     ``
 
 " misc
+inoremap <C-e> /* /*
 inoremap /*  /*  */<++><esc>F<space>i
 inoremap /*<CR>  /*<CR>*/<++><esc>O
+
+" }}}
 
 set wildmode=longest,list,full
 set wildmenu    " visual autocomplete for command menu
