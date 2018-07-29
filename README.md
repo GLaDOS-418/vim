@@ -2,8 +2,8 @@
 * .vimrc
 
 ### SOURCE
-|\
-* [A Good Vimrc]( https://dougblack.io/words/a-good-vimrc.html )
+
+* [A Good Vimrc]( https://web.archive.org/web/20180603131820/https://dougblack.io/words/a-good-vimrc.html )
 * [VIM and Python – A Match Made in Heaven – Real Python]( https://realpython.com/blog/python/vim-and-python-a-match-made-in-heaven/ )
 * [Gitgutter Vim plugin - Anselmos Blog]( https://witkowskibartosz.com/blog/gitgutter-vim-plugin.html )
 * [vimrc/vimrcs at master · amix/vimrc · GitHub]( https://github.com/amix/vimrc/tree/master/vimrcs )

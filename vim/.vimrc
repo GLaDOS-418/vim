@@ -224,9 +224,9 @@ set softtabstop=2     " number of spaces in TAB when editing
 set pastetoggle=<F2>  " toggle insert(paste) mode
 
 " handle jump markers
-inoremap <tab><space> <esc>/<++><CR>:nohl<CR>4xa
-inoremap <leader><tab><space> <++><esc>4h?<++><CR>:nohl<CR>4xa
-nnoremap <tab><tab><space> :%s/<++>//<CR>
+inoremap <space><tab> <esc>/<++><CR>:nohl<CR>"_c4l
+inoremap <leader><space><tab> <++><esc>4h?<++><CR>:nohl<CR>"_c4l
+nnoremap <space><tab><tab> :%s/<++>//<CR>
 
 
 " }}}
@@ -258,38 +258,42 @@ if has('gui_running')
 endif
 
 " angular brackets
-inoremap <leader>< <> <++><esc>5hi
+inoremap <leader>< <> <++><esc>F>i
 
 " brackets
-inoremap [      [] <++><esc>5hi
+inoremap [      [] <++><esc>F]i
 inoremap []     []
 
 " braces
-inoremap {      {} <++><esc>5hi
-inoremap {<CR>  {<CR>}<++><Esc>O
+inoremap {      {} <++><esc>F}i
+inoremap {<CR>  {<CR>}<++><esc>O
 inoremap {}     {}
 
 " paranthesis
-inoremap (      () <++><esc>5hi
-inoremap (<CR>  (<CR>)<++><Esc>O
+inoremap (      () <++><esc>F)i
+inoremap (<CR>  (<CR>)<++><esc>O
 inoremap ()     ()
 
 " quotes and backtick
-inoremap '      '' <++><esc>5hi
-inoremap "      "" <++><esc>5hi
-inoremap `      `` <++><esc>5hi
-inoremap '''      '''   ''' <++><esc>9hi
-inoremap """      """   """ <++><esc>9hi
-inoremap ```      ```   ``` <++><esc>9hi
-inoremap '<CR>  '<CR>'<++><Esc>O
-inoremap "<CR>  "<CR>"<++><Esc>O
-inoremap `<CR>  `<CR>`<++><Esc>O
-inoremap '''<CR>  '''<CR>'''<++><Esc>O
-inoremap """<CR>  """<CR>"""<++><Esc>O
-inoremap ```<CR>  ```<++><CR>```<++><Esc>O
+inoremap '      '' <++><esc>F'i
+inoremap "      "" <++><esc>F"i
+inoremap `      `` <++><esc>F`i
+inoremap '''      '''  '''<++><esc>F<space>i
+inoremap """      """  """<++><esc>F<space>i
+inoremap ```      ```  ```<++><esc>F<space>i
+inoremap '<CR>  '<CR>'<++><esc>O
+inoremap "<CR>  "<CR>"<++><esc>O
+inoremap `<CR>  `<CR>`<++><esc>O
+inoremap '''<CR>  '''<CR>'''<++><esc>O
+inoremap """<CR>  """<CR>"""<++><esc>O
+inoremap ```<CR>  ```<++><CR>```<++><esc>O
 inoremap ''     ''
 inoremap ""     ""
 inoremap ``     ``
+
+" misc
+inoremap /*  /*  */<++><esc>F<space>i
+inoremap /*<CR>  /*<CR>*/<++><esc>O
 
 set wildmode=longest,list,full
 set wildmenu    " visual autocomplete for command menu
@@ -303,42 +307,25 @@ set showmatch   " highlight matching [{()}]
 set laststatus=2  " status line always enabled
 
 let g:currentmode={
-      \ 'n'  : ' Normal ',
-      \ 'no' : ' N·Operator Pending ',
-      \ 'v'  : ' Visual ',
-      \ 'V'  : ' V·Line ',
-      \ '^V' : ' V·Block ',
-      \ 's'  : ' Select ',
-      \ 'S'  : ' S·Line ',
-      \ '^S' : ' S·Block ',
-      \ 'i'  : ' Insert ',
-      \ 'R'  : ' Replace ',
-      \ 'Rv' : ' V·Replace ',
-      \ 'c'  : ' Command ',
-      \ 'cv' : ' Vim Ex ',
-      \ 'ce' : ' Ex ',
-      \ 'r'  : ' Prompt ',
-      \ 'rm' : ' More ',
-      \ 'r?' : ' Confirm ',
-      \ '!'  : ' Shell ',
-      \ 't'  : ' Terminal ' }
-
-" Automatically change the statusline color depending on mode
-function! ChangeStatuslineColor()
-  if (mode() =~# '\v(n|no)')
-    exe 'hi! StatusLine ctermfg=008'
-  elseif (mode() =~# '\v(v|V)'
-        \ || g:currentmode[mode()] ==# 'V·Block'
-        \ || get(g:currentmode, mode(), '') ==# 't')
-    exe 'hi! StatusLine ctermfg=005'
-  elseif (mode() ==# 'i')
-    exe 'hi! StatusLine ctermfg=004'
-  else
-    exe 'hi! StatusLine ctermfg=006'
-  endif
-
-  return ''
-endfunction
+      \'n'  :'Normal',
+      \'no' :'N·Operator Pending',
+      \'v'  :'Visual',
+      \'V'  :'V·Line',
+      \'^V' :'V·Block',
+      \'s'  :'Select',
+      \'S'  :'S·Line',
+      \'^S' :'S·Block',
+      \'i'  :'Insert',
+      \'R'  :'Replace',
+      \'Rv' :'V·Replace',
+      \'c'  :'Command',
+      \'cv' :'Vim Ex',
+      \'ce' :'Ex',
+      \'r'  :'Prompt',
+      \'rm' :'More',
+      \'r?' :'Confirm',
+      \'!'  :'Shell',
+      \'t'  :'Terminal' }
 
 " Function: display errors from Ale in statusline
 function! LinterStatus() abort
@@ -356,7 +343,7 @@ endfunction
 function! PasteForStatusline() abort
     let paste_status = &paste
     if paste_status == 1
-        return "[paste] "
+        return "(p) "
     else
         return ""
     endif
@@ -371,12 +358,25 @@ function! GitBranchFugitive() abort
   endif
 endfunction
 
+hi User1 ctermfg=black ctermbg=yellow cterm=bold
+hi User2 ctermfg=black ctermbg=white cterm=bold
+hi User3 ctermfg=white ctermbg=DarkRed cterm=bold
+hi User4 ctermfg=white ctermbg=brown cterm=bold
+hi User5 ctermfg=lightgray ctermbg=black cterm=bold
+hi User6 ctermfg=darkblue ctermbg=white cterm=bold
+hi User7 ctermfg=black ctermbg=cyan cterm=bold
+hi User8 ctermfg=black ctermbg=darkyellow cterm=bold
+hi User9 ctermbg=216 ctermfg=240 cterm=bold
+hi User0 ctermfg=black ctermbg=white cterm=bold
+
 " General Format: %-0{minwid}.{maxwid}{item}
 " Higlight Groups: #<format-name>#  -> see :help hl for more group names
 
 function! ActiveStatus()
   let statusline=""                           " clear statusline
   "let statusline+=%{ChangeStatuslineColor()} " Changing the statusline color
+  let statusline.="%1* %3{toupper(get(g:currentmode,strtrans(mode())))} "
+  let statusline.="%{PasteForStatusline()}"   " paste mode flag
   let statusline.="%<"                        " truncate to left
   let statusline.="%#PmenuSel#"               " let hl group to : popup menu normal line
   " let statusline.="%.15{GitBranch()}"       " github.com/vim/vim/issues/3197
@@ -392,41 +392,23 @@ function! ActiveStatus()
   let statusline.="%y"                        " file type
   let statusline.="[%{&fileencoding?&fileencoding:&encoding}]"
   let statusline.="[%{&fileformat}\]"         " file format[unix/dos]
-  let statusline.="\ %3p%%"                   " file position percentage
+  "let statusline.="\ %3p%%"                  " file position percentage
   let statusline.="%#ModeMsg#"
   let statusline.="\ %4l:%-3c"                " line[width-4ch, pad-left]:col[width-3ch, pad-right]
   let statusline.="%*"                        " switch back to normal statusline highlight
   let statusline.="\ %6L"                     " number of lines in buffer[width-6ch, padding-left]
-  let statusline.="%#ModeMsg#"
-  " let statusline.=%#IncSearch#
-  let statusline.="\%3{toupper(get(g:currentmode,strtrans(mode())))}"
-  let statusline.="%{PasteForStatusline()}"   " paste mode flag
-
   return statusline
 endfunction
 
 function! InactiveStatus()
   " same as active status without colors
   let statusline="%<%#StatusLineNC#"
+  let statusline.=" %3{toupper(get(g:currentmode,strtrans(mode())))} %{PasteForStatusline()}"
   let statusline.="%.15{GitBranchFugitive()}\ %f%r%=%{LinterStatus()}%y"
   let statusline.="[%{&fileencoding?&fileencoding:&encoding}][%{&fileformat}\]"
-  let statusline.="\ %3p%%\ %4l:%-3c\ %6L\%3{toupper(get(g:currentmode,strtrans(mode())))}"
-  let statusline.="%{PasteForStatusline()}"
+  let statusline.="\ %4l:%-3c\ %6L"
   return statusline
 endfunction
-
-"Black DarkBlue DarkGreen DarkCyan DarkRed DarkMagenta Brown, DarkYellow LightGray, LightGrey, Gray, Grey DarkGray, DarkGrey Blue, LightBlue Green, LightGreen Cyan, LightCyan Red, LightRed Magenta, LightMagenta Yellow, LightYellow White
-
-hi User1 ctermfg=black ctermbg=white cterm=bold
-hi User2 ctermfg=black ctermbg=yellow cterm=bold
-hi User3 ctermfg=white ctermbg=DarkRed cterm=bold
-hi User4 ctermfg=white ctermbg=brown cterm=bold
-hi User5 ctermfg=lightgray ctermbg=black cterm=bold
-hi User6 ctermfg=darkblue ctermbg=white cterm=bold
-hi User7 ctermfg=black ctermbg=cyan cterm=bold
-hi User8 ctermfg=black ctermbg=darkyellow cterm=bold
-hi User9 ctermbg=216 ctermfg=240 cterm=bold
-hi User0 ctermfg=black ctermbg=white cterm=bold
 
 function! SetColors()
  let statusline=""
@@ -476,7 +458,7 @@ function! SetColors()
  let statusline.="%#PmenuSel# 03"
  let statusline.="%#PmenuSbar# 02"
  let statusline.="%#PmenuThumb# 01"
-  return statusline
+ return statusline
 endfunction
 
 function! TestColors()
@@ -511,6 +493,9 @@ nnoremap <leader><space> :nohlsearch<CR>
 " visual selection is custom function. [see the section]
 vnoremap <silent> * :<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
 vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
+
+" replace all
+nnoremap S :%s//g<Left><Left>
 
 " highlight last inserted text *not working
 " nnoremap gV `[v`]
