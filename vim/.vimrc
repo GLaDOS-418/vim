@@ -701,12 +701,15 @@ augroup default_group
     autocmd filetype tex nnoremap <buffer> <leader>t :!pdflatex % <CR>
     autocmd filetype tex nnoremap <buffer> <leader>x :!xelatex % <CR>
 
+    autocmd BufNewFile,BufRead *.uml,*.pu,*.plantuml,.*puml set filetype=plantuml
+
     autocmd filetype cpp nnoremap <C-c> :w <bar> !clear && g++ -std=gnu++14 -g -D fio % -o %:p:h/%:t:r.out && time ./%:r.out<CR>
     autocmd filetype cpp inoremap <leader>e :%s/\(std::\)\?endl/"\\n"/<cr>
     autocmd filetype cpp inoremap <leader>io <esc>:r ~/.vim/personal_snips/cpp_fast_io.cpp<CR>i
     autocmd filetype cpp inoremap <leader>r <esc>:r ~/.vim/personal_snips/cpp_algo_start.cpp<CR>i
     autocmd filetype java nnoremap <C-c> :w <bar> !javac % && java -enableassertions %:p <CR>
     autocmd filetype python nnoremap <C-c> :w <bar> !python % <CR>
+    autocmd filetype plantuml nnoremap <C-c> :call BuildUml() <cr>
 
     autocmd FocusLost * :silent! wall          " Save on lost focus
     autocmd VimResized * :wincmd = " Resize splits when the window is resized
@@ -718,6 +721,14 @@ augroup END
 " CUSTOM FUNCTIONS {{{
 "------------------------------------------------------------
 
+function! BuildUml()
+  if $PLANTUML != ''
+    execute "w"
+    execute "!java -jar $PLANTUML -tsvg %"
+  else
+    echo 'PLANTUML env variable not set!!'
+  endif
+endfunction
 
 function! GitBranch()
   return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
