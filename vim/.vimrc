@@ -137,10 +137,6 @@ inoremap kj <ESC>
 noremap ; :
 noremap : ;
 
-" redraw buffer
-noremap  <F5> :redraw!<CR>
-inoremap <F5> :redraw!<CR>
-
 " backslash key not working.
 " home to pipe
 noremap OH \|
@@ -160,6 +156,13 @@ endif
 "insert datetime in the format specified on <F9>
 nnoremap <F9> "=strftime("%Y-%m-%d")<CR>P
 inoremap <F9> <C-R>=strftime("%Y-%m-%d")<CR>
+
+" redraw buffer
+noremap  <F5> :redraw!<CR>
+inoremap <F5> :redraw!<CR>
+
+" toggle mouse
+nnoremap <F3> :call MouseToggle()<cr>
 
 " vi.stackexchange.com/questions/2419/mapping-ctrls-does-not-work#2425
 silent! !stty -a | grep '\( \|^\)ixon' 1>/dev/null 2>&1
@@ -241,7 +244,7 @@ nnoremap <space><tab><tab> :%s/<++>//<CR>
 "------------------------------------------------------------
 
 set number          " show line numbers
-set relativenumber  " show relative line number
+"set relativenumber " show relative line number
 set showcmd         " shows last entered command in bottom right bar, not working
 set noshowmode      " don't show mode on last line
 set cursorline      " highlight current line
@@ -867,6 +870,14 @@ endfunction
 function! TestColors()
   setlocal statusline=%!SetColors()
 endfunction
+
+function! MouseToggle()
+    if &mouse == 'a'
+        set mouse=
+    else
+        set mouse=a
+    endif
+endfunc
 
 " }}}
 
