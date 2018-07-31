@@ -211,6 +211,9 @@ endtry
 " gruvbox - plugin config
 let g:gruvbox_contrast_dark='soft'
 
+" user highlight group colors
+hi User1 ctermfg=black ctermbg=yellow cterm=bold guifg=black guibg=yellow gui=bold
+
 " }}}
 
 "------------------------------------------------------------
@@ -257,6 +260,10 @@ set splitbelow
 if has('gui_running')
   set guioptions-=T  " no toolbar
   set guioptions-=m  " no menubar
+  set guioptions-=r  " no scrollbar
+  set guioptions-=R  " no scrollbar
+  set guioptions-=l  " no scrollbar
+  set guioptions-=L  " no scrollbar
 endif
 
 " pair handles {{{
@@ -358,17 +365,6 @@ function! GitBranchFugitive() abort
     return ''
   endif
 endfunction
-
-hi User1 ctermfg=black ctermbg=yellow cterm=bold
-hi User2 ctermfg=black ctermbg=white cterm=bold
-hi User3 ctermfg=white ctermbg=DarkRed cterm=bold
-hi User4 ctermfg=white ctermbg=brown cterm=bold
-hi User5 ctermfg=lightgray ctermbg=black cterm=bold
-hi User6 ctermfg=darkblue ctermbg=white cterm=bold
-hi User7 ctermfg=black ctermbg=cyan cterm=bold
-hi User8 ctermfg=black ctermbg=darkyellow cterm=bold
-hi User9 ctermbg=216 ctermfg=240 cterm=bold
-hi User0 ctermfg=black ctermbg=white cterm=bold
 
 " General Format: %-0{minwid}.{maxwid}{item}
 " Higlight Groups: #<format-name>#  -> see :help hl for more group names
