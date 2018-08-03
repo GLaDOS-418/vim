@@ -83,6 +83,8 @@ Plug 'euclio/vim-markdown-composer', executable('cargo')?{
 " }}}
 
 Plug 'junegunn/goyo.vim'
+
+" yuttie/comfortable-motion.vim
 " ycm/deoplete
 " vimwiki (alternative of vim-notes)
 " ultisnips
@@ -117,7 +119,7 @@ set noerrorbells                " don't beep
 set colorcolumn=100             " highlight on col 100
 set backspace=indent,eol,start  " allow backspacing over everything in insert mode
 set diffopt+=vertical           " vim-fugitive vertical split on diff
-"set mouse+=a                    " use mouse to place cursor and copy w/o line num
+"set mouse+=a                   " use mouse to place cursor and copy w/o line num
 syntax enable                   " enable syntax processing
 
 " clearing the t_vb variable deactivates flashing
@@ -215,7 +217,11 @@ endtry
 let g:gruvbox_contrast_dark='soft'
 
 " user highlight group colors
-hi User1 ctermfg=black ctermbg=yellow cterm=bold guifg=black guibg=yellow gui=bold
+hi! User1 ctermfg=black ctermbg=yellow cterm=bold guifg=black guibg=yellow gui=bold
+hi! User2 ctermfg=black ctermbg=green  cterm=bold guifg=black guibg=green  gui=bold
+hi! User3 ctermfg=black ctermbg=cyan   cterm=bold guifg=black guibg=cyan   gui=bold
+hi! User4 ctermfg=white ctermbg=blue   cterm=bold guifg=white guibg=blue   gui=bold
+hi! User5 ctermfg=white ctermbg=red    cterm=bold guifg=white guibg=red    gui=bold
 
 " }}}
 
@@ -326,25 +332,25 @@ set showmatch   " highlight matching [{()}]
 set laststatus=2  " status line always enabled
 
 let g:currentmode={
-      \'n'  :'Normal',
-      \'no' :'N·Operator Pending',
-      \'v'  :'Visual',
-      \'V'  :'V·Line',
-      \'^V' :'V·Block',
-      \'s'  :'Select',
-      \'S'  :'S·Line',
-      \'^S' :'S·Block',
-      \'i'  :'Insert',
-      \'R'  :'Replace',
-      \'Rv' :'V·Replace',
-      \'c'  :'Command',
-      \'cv' :'Vim Ex',
-      \'ce' :'Ex',
-      \'r'  :'Prompt',
-      \'rm' :'More',
-      \'r?' :'Confirm',
-      \'!'  :'Shell',
-      \'t'  :'Terminal' }
+      \'n'  :'normal',
+      \'no' :'n·operator pending',
+      \'v'  :'visual',
+      \'V'  :'v·line',
+      \'^V' :'v·block',
+      \'s'  :'select',
+      \'S'  :'s·line',
+      \'^S' :'s·block',
+      \'i'  :'insert',
+      \'R'  :'replace',
+      \'Rv' :'v·replace',
+      \'c'  :'command',
+      \'cv' :'vim ex',
+      \'ce' :'ex',
+      \'r'  :'prompt',
+      \'rm' :'more',
+      \'r?' :'confirm',
+      \'!'  :'shell',
+      \'t'  :'terminal' }
 
 " Function: display errors from Ale in statusline
 function! LinterStatus() abort
@@ -368,6 +374,7 @@ function! PasteForStatusline() abort
     endif
 endfunction
 
+" Function: return git branch name from vim-fugitive plugin
 function! GitBranchFugitive() abort
   let branch=fugitive#head()
   if branch != ''
@@ -377,13 +384,32 @@ function! GitBranchFugitive() abort
   endif
 endfunction
 
+" Function: change color of a user higlight group based on mode
+function! ChangeModeColor()
+  " \v means 'very magic'
+  if (mode() =~# '\v(n|no)')
+    exe 'hi! User1 ctermfg=black ctermbg=yellow cterm=bold guifg=black guibg=yellow gui=bold'
+  elseif (mode() =~# '\v(v|V)' || get(g:currentmode,strtrans(mode())) ==# 'v·block' )
+    " visual block needed special handling because it is <c-v>
+    exe 'hi! User1 ctermfg=white ctermbg=blue cterm=bold guifg=white guibg=blue gui=bold'
+  elseif (mode() ==# 'i')
+    exe 'hi! User1 ctermfg=white ctermbg=red cterm=bold guifg=white guibg=red gui=bold'
+  elseif (mode() ==# 'c'|| mode() ==# 't')
+    exe 'hi! User1 ctermfg=black ctermbg=cyan cterm=bold guifg=black guibg=cyan gui=bold'
+  else
+    exe 'hi! User1 ctermfg=black ctermbg=green cterm=bold guifg=black guibg=green gui=bold'
+  endif
+  return ''
+endfunction
+
 " General Format: %-0{minwid}.{maxwid}{item}
 " Higlight Groups: #<format-name>#  -> see :help hl for more group names
 
 function! ActiveStatus()
   let statusline=""                           " clear statusline
-  "let statusline+=%{ChangeStatuslineColor()} " Changing the statusline color
-  let statusline.="%1* %3{toupper(get(g:currentmode,strtrans(mode())))} "
+  let statusline.="%{ChangeModeColor()}"      " Changing the statusline color
+  let statusline.="%#User1#"
+  let statusline.="\ %3{toupper(get(g:currentmode,strtrans(mode())))} "
   let statusline.="%{PasteForStatusline()}"   " paste mode flag
   let statusline.="%<"                        " truncate to left
   let statusline.="%#PmenuSel#"               " let hl group to : popup menu normal line
@@ -404,7 +430,7 @@ function! ActiveStatus()
   let statusline.="%#ModeMsg#"
   let statusline.="\ %4l:%-3c"                " line[width-4ch, pad-left]:col[width-3ch, pad-right]
   let statusline.="%*"                        " switch back to normal statusline highlight
-  let statusline.="\ %6L"                     " number of lines in buffer[width-6ch, padding-left]
+  let statusline.="\ %6L "                     " number of lines in buffer[width-6ch, padding-left]
   return statusline
 endfunction
 
@@ -414,7 +440,7 @@ function! InactiveStatus()
   let statusline.=" %3{toupper(get(g:currentmode,strtrans(mode())))} %{PasteForStatusline()}"
   let statusline.="%.15{GitBranchFugitive()}\ %f%r%=%{LinterStatus()}%y"
   let statusline.="[%{&fileencoding?&fileencoding:&encoding}][%{&fileformat}\]"
-  let statusline.="\ %4l:%-3c\ %6L"
+  let statusline.="\ %4l:%-3c\ %6L "
   return statusline
 endfunction
 
