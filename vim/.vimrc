@@ -50,42 +50,28 @@ Plug 'tomasr/molokai'
 Plug 'ajh17/Spacegray.vim'
 Plug 'morhetz/gruvbox'          " currently in use
 
-Plug 'xolox/vim-notes'| Plug 'xolox/vim-misc'
+Plug 'tpope/vim-fugitive'       " handle git commands
+Plug 'airblade/vim-gitgutter'   " see git diff
+Plug 'tpope/vim-surround'       " surround text with tags
+Plug 'junegunn/goyo.vim'        " distraction free mode
 
-Plug 'tpope/vim-fugitive'       " to handle git commands
-Plug 'airblade/vim-gitgutter'   " to see git diff
-
-Plug 'alvan/vim-closetag'       " to close markup lang tags
-Plug 'tpope/vim-surround'       " to surround text with tags
-
-Plug 'mileszs/ack.vim'          " ag.vim is no longer maintained.
-Plug 'sjl/gundo.vim'            " to see vim history-tree
-" {{{ command-t when ruby support available else ctrlp
-Plug 'wincent/command-t', has('ruby') ? {
-    \ 'do': 'cd ruby/command-t/ext/command-t && ruby extconf.rb && make'
-    \ }:{ 'on': [] }
-" install 'the_silver_searcher for speeding up ack and ctrlp.
-" github.com/ggreer/the_silver_searcher
-Plug 'ctrlpvim/ctrlp.vim', has('ruby')?{'on':[]}:{}
-" }}}
+Plug 'mileszs/ack.vim'          " text search in files
+Plug 'sjl/gundo.vim'            " see vim history-tree
+Plug 'ctrlpvim/ctrlp.vim'       " fuzzy file search
 
 Plug 'w0rp/ale'                 " asynchronous linting engine
 Plug 'scrooloose/vim-slumlord'  " inline previews for plantuml acitvity dia
 Plug 'aklt/plantuml-syntax'     " syntax/linting for plantuml
+Plug 'alvan/vim-closetag'       " to close markup lang tags
 
-" markdown plugins {{{
-
-" async markdown preview
+Plug 'xolox/vim-notes'| Plug 'xolox/vim-misc'
+" async markdown live preview
 Plug 'euclio/vim-markdown-composer', executable('cargo')?{
       \ 'do': function('BuildComposer')
       \ }:{'on': [] }
 
-" }}}
-
-Plug 'junegunn/goyo.vim'
-
 " yuttie/comfortable-motion.vim
-" ycm/deoplete
+" ycm|deoplete
 " vimwiki (alternative of vim-notes)
 " ultisnips
 " vinegar
@@ -100,6 +86,7 @@ call plug#end()
 
 " set nocompatible              " commented: r/vim/wiki/vimrctips
 let mapleader=','               " leader is comma
+let maplocalleader="\<space>"   " localleader is space
 set nostartofline               " Make j/k respect the columns
 set clipboard=unnamedplus       " to use operating system clipboard
 set clipboard+=unnamed          " to use operating system clipboard
@@ -121,6 +108,7 @@ set backspace=indent,eol,start  " allow backspacing over everything in insert mo
 set diffopt+=vertical           " vim-fugitive vertical split on diff
 "set mouse+=a                   " use mouse to place cursor and copy w/o line num
 syntax enable                   " enable syntax processing
+set nogdefault                  " don't set default 'g' flag during :substitute
 
 " clearing the t_vb variable deactivates flashing
 set t_vb=
@@ -141,10 +129,8 @@ noremap : ;
 
 " backslash key not working.
 " home to pipe
-noremap OH \|
 inoremap OH \|
 " end to backslash
-noremap OF \
 inoremap OF \
 
 " ignore compiled files
@@ -190,8 +176,8 @@ set background=dark
 " :call ShowColorSchemeName() to show the current colorscheme that vim is using[custom fn]
 if $TERM == "xterm-256color" || $TERM == "screen-256color" || $COLORTERM == "gnome-terminal"
   " github.com/neovim/neovim/issues/7722
-  " setting term blindly might be the issue with garbage rendering
-  " was easily reproducibe using ctrl+i in vim 8.1
+  " setting incompatible term might result in garbage rendering in buffer
+  " reproducibe using ctrl+i in vim 8.1 with $TERM=xterm
   " set term=screen-256color "set teminal color to support 256 colors
 endif
 
@@ -240,7 +226,7 @@ set pastetoggle=<F2>  " toggle insert(paste) mode
 " handle jump markers
 inoremap <space><tab> <esc>/<++><CR>:nohl<CR>"_c4l
 inoremap <leader><space><tab> <++><esc>4h?<++><CR>:nohl<CR>"_c4l
-nnoremap <space><tab><tab> :%s/<++>//<CR>
+nnoremap <space><tab><tab> :%s/<++>//g<CR>
 
 
 " }}}
@@ -286,37 +272,43 @@ endif
 " pair handles {{{
 
 " square,angular brackets, braces, paranthesis
-inoremap <leader>< <> <++><esc>F>i
-inoremap [      [] <++><esc>F]i
-inoremap {      {} <++><esc>F}i
-inoremap {<CR>  {<CR>}<++><esc>O
-inoremap (      () <++><esc>F)i
-inoremap (<CR>  (<CR>)<++><esc>O
-inoremap <C-e>[ [
-inoremap <C-e>( (
-inoremap <C-e>{ {
+inoremap <leader>< <><++><esc>F>i
+inoremap [      []<++><esc>F]i
+inoremap (      ()<++><esc>F)i
+inoremap {      {}<++><esc>F}i
+inoremap {<cr>  {<esc>mko}<cr><++><esc>`ko
+inoremap (<cr>  (<esc>mko)<cr><++><esc>`ko
+inoremap <localleader>[ [
+inoremap <localleader>( (
+inoremap <localleader>{ {
+inoremap [] []
+inoremap () ()
+inoremap {} {}
 
 " quotes and backtick
-inoremap <C-e>' '
-inoremap <C-e>" "
-inoremap <C-e>` `
-inoremap '      '' <++><esc>F'i
-inoremap "      "" <++><esc>F"i
-inoremap `      `` <++><esc>F`i
-inoremap '''      '''  '''<++><esc>F<space>i
+inoremap <localleader>' '
+inoremap <localleader>" "
+inoremap <localleader>` `
+inoremap '      ''<++><esc>F'i
+inoremap "      ""<++><esc>F"i
+inoremap `      ``<++><esc>F`i
+inoremap '' ''
+inoremap "" ""
+inoremap `` ``
+inoremap '''      '''  '''<esc>F<space>i
 inoremap """      """  """<++><esc>F<space>i
 inoremap ```      ```  ```<++><esc>F<space>i
-inoremap '<CR>  '<CR>'<++><esc>O
-inoremap "<CR>  "<CR>"<++><esc>O
-inoremap `<CR>  `<CR>`<++><esc>O
-inoremap '''<CR>  '''<CR>'''<++><esc>O
-inoremap """<CR>  """<CR>"""<++><esc>O
-inoremap ```<CR>  ```<++><CR>```<++><esc>O
+inoremap '<cr>  '<esc>mko'<cr><++><esc>`ko
+inoremap "<cr>  "<esc>mko"<cr><++><esc>`ko
+inoremap `<cr>  `<esc>mko`<cr><++><esc>`ko
+inoremap '''<cr>  '''<esc>mko'''<cr><++><esc>`ko
+inoremap """<cr>  """<esc>mko"""<cr><++><esc>`ko
+inoremap ```<cr>  ```<esc>mko```<cr><++><esc>`ko
 
 " misc
-inoremap <C-e> /* /*
+inoremap <localleader>/* /*
 inoremap /*  /*  */<++><esc>F<space>i
-inoremap /*<CR>  /*<CR>*/<++><esc>O
+inoremap /*<cr>  /*<esc>mko*/<cr><++><esc>`ko<tab>
 
 " }}}
 
@@ -388,16 +380,16 @@ endfunction
 function! ChangeModeColor()
   " \v means 'very magic'
   if (mode() =~# '\v(n|no)')
-    exe 'hi! User1 ctermfg=black ctermbg=yellow cterm=bold guifg=black guibg=yellow gui=bold'
+    exe 'hi! User9 ctermfg=black ctermbg=yellow cterm=bold guifg=black guibg=yellow gui=bold'
   elseif (mode() =~# '\v(v|V)' || get(g:currentmode,strtrans(mode())) ==# 'v·block' )
     " visual block needed special handling because it is <c-v>
-    exe 'hi! User1 ctermfg=white ctermbg=blue cterm=bold guifg=white guibg=blue gui=bold'
+    exe 'hi! User9 ctermfg=white ctermbg=blue cterm=bold guifg=white guibg=blue gui=bold'
   elseif (mode() ==# 'i')
-    exe 'hi! User1 ctermfg=white ctermbg=red cterm=bold guifg=white guibg=red gui=bold'
+    exe 'hi! User9 ctermfg=white ctermbg=red cterm=bold guifg=white guibg=red gui=bold'
   elseif (mode() ==# 'c'|| mode() ==# 't')
-    exe 'hi! User1 ctermfg=black ctermbg=cyan cterm=bold guifg=black guibg=cyan gui=bold'
+    exe 'hi! User9 ctermfg=black ctermbg=cyan cterm=bold guifg=black guibg=cyan gui=bold'
   else
-    exe 'hi! User1 ctermfg=black ctermbg=green cterm=bold guifg=black guibg=green gui=bold'
+    exe 'hi! User9 ctermfg=black ctermbg=green cterm=bold guifg=black guibg=green gui=bold'
   endif
   return ''
 endfunction
@@ -408,20 +400,20 @@ endfunction
 function! ActiveStatus()
   let statusline=""                           " clear statusline
   let statusline.="%{ChangeModeColor()}"      " Changing the statusline color
-  let statusline.="%#User1#"
+  let statusline.="%#User9#"
   let statusline.="\ %3{toupper(get(g:currentmode,strtrans(mode())))} "
   let statusline.="%{PasteForStatusline()}"   " paste mode flag
   let statusline.="%<"                        " truncate to left
   let statusline.="%#PmenuSel#"               " let hl group to : popup menu normal line
   " let statusline.="%.15{GitBranch()}"       " github.com/vim/vim/issues/3197
-  let statusline.="%.15{GitBranchFugitive()}" " get git branch name[max width of 15]
-  let statusline.="%#WildMenu#"               " let hl group to : directory listing style
+  let statusline.="%.15{GitBranchFugitive()}" " git branch[max width=15]
+  let statusline.="%#WildMenu#"               " hl group style: dir listing
   let statusline.="\ %f"                      " file name
   let statusline.="%r"                        " read only flag
   let statusline.="\ %m"                      " modifi(ed|able) flag
   let statusline.="%="                        " switching to the right side
-  let statusline.="%#ErrorMsg#"               " let hl group to : error message style
-  let statusline.="%{LinterStatus()}"         " show the error message from ALE plugin
+  let statusline.="%#ErrorMsg#"               " hl group style: error message
+  let statusline.="%{LinterStatus()}"         " error message from ALE plugin
   let statusline.="%#LineNr#"
   let statusline.="%y"                        " file type
   let statusline.="[%{&fileencoding?&fileencoding:&encoding}]"
@@ -429,8 +421,8 @@ function! ActiveStatus()
   "let statusline.="\ %3p%%"                  " file position percentage
   let statusline.="%#ModeMsg#"
   let statusline.="\ %4l:%-3c"                " line[width-4ch, pad-left]:col[width-3ch, pad-right]
-  let statusline.="%*"                        " switch back to normal statusline highlight
-  let statusline.="\ %6L "                     " number of lines in buffer[width-6ch, padding-left]
+  let statusline.="%*"                        " switch to normal statusline hl
+  let statusline.="\ %6L "                     " number of lines in buffer
   return statusline
 endfunction
 
