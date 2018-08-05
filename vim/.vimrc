@@ -26,55 +26,83 @@ if empty(glob('~/.vim/autoload/plug.vim')) && executable('curl')
   autocmd VimEnter * PlugInstall | source $MYVIMRC
 endif
 
+" helper function to check for conditions and load plugins
+function! Cond(cond, ...)
+  let opts = get(a:000, 0, {})
+  return (a:cond) ? opts : extend(opts, { 'on': [], 'for': [] })
+endfunction
+
 " build function req for vim-markdown-composer
 " cargo is rust package mangaer
 function! BuildComposer(info)
-  if a:info.status != 'unchanged' || a:info.force
-    if has('nvim')
-      !cargo build --release
-    else
-      !cargo build --release --no-default-features --features json-rpc
+  if executable('cargo')
+    if a:info.status != 'unchanged' || a:info.force
+      if has('nvim')
+        !cargo build --release
+      else
+        !cargo build --release --no-default-features --features json-rpc
+      endif
     endif
+  else
+    echom "you don't 've cargo installed to build previewer!!!"
+  endif
+endfunction
+
+" post update hook to build YCM
+function! BuildYCM(info)
+  " info is a dictionary with 3 fields
+  " - name:   name of the plugin
+  " - status: 'installed', 'updated', or 'unchanged'
+  " - force:  set on PlugInstall! or PlugUpdate!
+  if has('python')||has('python3')
+    if a:info.status == 'installed' || a:info.force
+      !./install.py
+    endif
+  else
+    echom "you don't 've python support in vim to build YCM!!!"
   endif
 endfunction
 
 " plug plugin setup.
 call plug#begin('~/.vim/plugged')
 
-" Automatically install missing plugins on startup. [commented to improve startup]
-if !empty(filter(copy(g:plugs), '!isdirectory(v:val.dir)'))
-  autocmd VimEnter * PlugInstall | q
-endif
+" Automatically install plugins on startup.
+" if !empty(filter(copy(g:plugs), '!isdirectory(v:val.dir)'))
+"   autocmd VimEnter * PlugInstall | q
+" endif
 
 Plug 'tomasr/molokai'
 Plug 'ajh17/Spacegray.vim'
-Plug 'morhetz/gruvbox'          " currently in use
+Plug 'morhetz/gruvbox'          		" current colorscheme
 
-Plug 'tpope/vim-fugitive'       " handle git commands
-Plug 'airblade/vim-gitgutter'   " see git diff
-Plug 'tpope/vim-surround'       " surround text with tags
-Plug 'junegunn/goyo.vim'        " distraction free mode
+Plug 'tpope/vim-fugitive'       		" handle git commands
+Plug 'airblade/vim-gitgutter'   		" see git diff in buffer
+Plug 'tpope/vim-surround'       		" surround text with tags
+Plug 'junegunn/goyo.vim'        		" distraction free mode
 
-Plug 'mileszs/ack.vim'          " text search in files
-Plug 'sjl/gundo.vim'            " see vim history-tree
-Plug 'ctrlpvim/ctrlp.vim'       " fuzzy file search
+Plug 'mileszs/ack.vim'          		" text search in files
+Plug 'sjl/gundo.vim'            		" see vim history-tree
+Plug 'ctrlpvim/ctrlp.vim'       		" fuzzy file search
 
-Plug 'w0rp/ale'                 " asynchronous linting engine
-Plug 'scrooloose/vim-slumlord'  " inline previews for plantuml acitvity dia
-Plug 'aklt/plantuml-syntax'     " syntax/linting for plantuml
-Plug 'alvan/vim-closetag'       " to close markup lang tags
+Plug 'Valloric/YouCompleteMe',
+  \ {'do':function('BuildYCM'),
+  \  'for':['c','cpp','python','java']
+  \ }                           		" code completion engine
+Plug 'w0rp/ale'                 		" asynchronous linting engine
+Plug 'scrooloose/vim-slumlord'  		" inline previews for plantuml acitvity dia
+Plug 'aklt/plantuml-syntax'     		" syntax/linting for plantuml
+Plug 'alvan/vim-closetag'       		" to close markup lang tags
 
-Plug 'xolox/vim-notes'| Plug 'xolox/vim-misc'
-" async markdown live preview
-Plug 'euclio/vim-markdown-composer', executable('cargo')?{
-      \ 'do': function('BuildComposer')
-      \ }:{'on': [] }
+Plug 'xolox/vim-notes'| Plug 'xolox/vim-misc'   " note taking in vim
+Plug 'euclio/vim-markdown-composer',
+  \{'do': function('BuildComposer')}            " async markdown live preview
 
 " yuttie/comfortable-motion.vim
 " ycm|deoplete
 " vimwiki (alternative of vim-notes)
 " ultisnips
 " vinegar
+" netrw config
 
 call plug#end()
 
@@ -136,14 +164,17 @@ inoremap OF \
 " ignore compiled files
 set wildignore=*.o,*~,*.pyc,*.so,*.out,*.log,*.aux,*.bak,*.swp,*.class
 if has("win32") || has("win64")
-    set wildignore+=.git\*
+    set wildignore+=*\.git\*
 else
-    set wildignore+=*/.git/*,*/.DS_Store
+    set wildignore+=*/.git/*,*/.DS_Store,*/tmp/*
 endif
 
 "insert datetime in the format specified on <F9>
 nnoremap <F9> "=strftime("%Y-%m-%d")<CR>P
 inoremap <F9> <C-R>=strftime("%Y-%m-%d")<CR>
+
+" spell check toggle
+nnoremap <F6> :set spell!<cr>
 
 " redraw buffer
 noremap  <F5> :redraw!<CR>
@@ -278,17 +309,17 @@ inoremap (      ()<++><esc>F)i
 inoremap {      {}<++><esc>F}i
 inoremap {<cr>  {<esc>mko}<cr><++><esc>`ko
 inoremap (<cr>  (<esc>mko)<cr><++><esc>`ko
-inoremap <localleader>[ [
-inoremap <localleader>( (
-inoremap <localleader>{ {
+inoremap (- (
+inoremap [- [
+inoremap {- {
 inoremap [] []
 inoremap () ()
 inoremap {} {}
 
 " quotes and backtick
-inoremap <localleader>' '
-inoremap <localleader>" "
-inoremap <localleader>` `
+inoremap '- '
+inoremap "- "
+inoremap `- `
 inoremap '      ''<++><esc>F'i
 inoremap "      ""<++><esc>F"i
 inoremap `      ``<++><esc>F`i
@@ -306,7 +337,7 @@ inoremap """<cr>  """<esc>mko"""<cr><++><esc>`ko
 inoremap ```<cr>  ```<esc>mko```<cr><++><esc>`ko
 
 " misc
-inoremap <localleader>/* /*
+inoremap /*- /*
 inoremap /*  /*  */<++><esc>F<space>i
 inoremap /*<cr>  /*<esc>mko*/<cr><++><esc>`ko<tab>
 
@@ -635,27 +666,28 @@ nnoremap <leader>a :Ack!<space>
 
 " }}}
 
-"command-t - plugin config {{{
+" ctrlp - plugin config {{{
 
-" change pwd to root git dir
-nnoremap <leader>gr :call CD_Git_Root()<cr>
-" add wildignore filetypes from .gitignore
-nnoremap <leader>cti :call WildignoreFromGitignore()<cr>
-
-if has('ruby')
-  " open cmd-t window
-  nnoremap <leader>t :CommandT<CR>
-  nnoremap <leader>tp :CommandT
-  " with ruby support use command-t
-  " start command-t to find files in notes directory.
-  nnoremap <leader>fn :CommandT /mnt/windows/projects/notes<cr>
-else
-  " with no ruby support in vim, use ctrl-p + ag(silver search for vim)
-  let g:ctrlp_match_window = 'bottom,order:ttb'                  " top-to-bottom filename matching
-  let g:ctrlp_switch_buffer = 0                                  " always open file in new buffer
-  let g:ctrlp_working_path_mode = 0                              " ability to change pwd in vim session
-  let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""' " use ag to search
-endif
+  let g:ctrlp_map = ''
+  nnoremap <c-p> :call CD_Git_Root()<cr>:CtrlP<cr>
+  let g:ctrlp_cmd = 'CtrlP :Git_Repo_Cdup()'
+  let g:ctrlp_use_caching = 1
+  let g:ctrlp_clear_cache_on_exit = 0
+  let g:ctrlp_show_hidden = 0
+  let g:ctrlp_cache_dir = $HOME.'/.cache/ctrlp'
+  let g:ctrlp_follow_symlinks = 0
+  let g:ctrlp_match_current_file = 1
+  let g:ctrlp_working_path_mode = 'ra'          " pwd as current git root
+  let g:ctrlp_root_markers = ['.root']          " add .root as project root
+  let g:ctrlp_switch_buffer = 'E'               " jmp to file if already opened
+  let g:ctrlp_tabpage_position = 'ac'           " put new page after current
+  let g:ctrlp_match_window = 'bottom,order:ttb' " top-to-bottom filename matching
+  let g:ctrlp_switch_buffer = 1                 " always open file in new buffer
+  let g:ctrlp_working_path_mode = 1             " ability to change pwd in vim session
+  if executable('rg')
+    set grepprg=rg\ --color=never
+    let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
+  endif
 
 "}}}
 
@@ -674,6 +706,12 @@ let g:markdown_composer_autostart = 1
 "------------------------------------------------------------
 " LEADER SHORTCUTS  {{{
 "------------------------------------------------------------
+
+" change pwd to root git dir
+nnoremap <leader>gr :call CD_Git_Root()<cr>
+
+" add wildignore filetypes from .gitignore
+nnoremap <leader>cti :call WildignoreFromGitignore()<cr>
 
 " toggle line numbers
 nnoremap <leader>tn :set number!<CR>
@@ -695,9 +733,6 @@ noremap <leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 
 " stage current file in git
 nnoremap <leader>ga :!git add %<CR>
-
-" spell check toggle
-nnoremap <leader>s :set spell!<cr>
 
 " paste in insert mode without auto-formatting
 inoremap <leader>p <F2><esc>pa<F2>
@@ -727,6 +762,7 @@ augroup default_group
     autocmd filetype tex nnoremap <buffer> <leader>x :!xelatex % <CR>
 
     autocmd BufNewFile,BufRead *.uml,*.pu,*.plantuml,.*puml set filetype=plantuml
+    autocmd BufNewFile,BufRead *.md,*.mdown,*.markdown,.*mkd set filetype=markdown
 
     autocmd filetype cpp nnoremap <C-c> :w <bar> !clear && g++ -std=gnu++14 -g -D fio % -o %:p:h/%:t:r.out && time ./%:r.out<CR>
     autocmd filetype cpp inoremap <leader>e :%s/\(std::\)\?endl/"\\n"/<cr>
