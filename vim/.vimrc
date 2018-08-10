@@ -56,7 +56,7 @@ function! BuildYCM(info)
   " - force:  set on PlugInstall! or PlugUpdate!
   if has('python')||has('python3')
     if a:info.status == 'installed' || a:info.force
-      !./install.py
+      !./install.py --clang-completer --rust-completer --go-completer --rust-completer --java-completer
     endif
   else
     echom "you don't 've python support in vim to build YCM!!!"
@@ -86,7 +86,7 @@ Plug 'ctrlpvim/ctrlp.vim'       		" fuzzy file search
 
 Plug 'Valloric/YouCompleteMe',
   \ {'do':function('BuildYCM'),
-  \  'for':['c','cpp','python','java']
+  \  'for':['c','cpp','python','rust']
   \ }                           		" code completion engine
 Plug 'w0rp/ale'                 		" asynchronous linting engine
 Plug 'scrooloose/vim-slumlord'  		" inline previews for plantuml acitvity dia
@@ -239,6 +239,7 @@ hi! User2 ctermfg=black ctermbg=green  cterm=bold guifg=black guibg=green  gui=b
 hi! User3 ctermfg=black ctermbg=cyan   cterm=bold guifg=black guibg=cyan   gui=bold
 hi! User4 ctermfg=white ctermbg=blue   cterm=bold guifg=white guibg=blue   gui=bold
 hi! User5 ctermfg=white ctermbg=red    cterm=bold guifg=white guibg=red    gui=bold
+hi! User6 ctermfg=black ctermbg=white  cterm=bold guifg=black guibg=white  gui=bold
 
 " }}}
 
@@ -273,6 +274,9 @@ set noshowmode      " don't show mode on last line
 set cursorline      " highlight current line
 set scrolloff=5     " minimum line offset to present on screen while scrolling.
 
+nnoremap + <C-W>+   " increase window size
+nnoremap - <C-W>-   " decrease window size
+
 " removed the below filetype plugin block as vim-plug handles it internally
 " filetype on "required
 " filetype plugin indent on    " required
@@ -300,6 +304,18 @@ if has('gui_running')
   endif
 endif
 
+
+set wildmode=longest,list,full
+set wildmenu    " visual autocomplete for command menu
+set lazyredraw  " redraw only when needed
+set showmatch   " highlight matching [{()}]
+
+" }}}
+
+"------------------------------------------------------------
+" ABBREVIATIONS {{{
+"------------------------------------------------------------
+
 " pair handles {{{
 
 " square,angular brackets, braces, paranthesis
@@ -307,8 +323,8 @@ inoremap <leader>< <><++><esc>F>i
 inoremap [      []<++><esc>F]i
 inoremap (      ()<++><esc>F)i
 inoremap {      {}<++><esc>F}i
-inoremap {<cr>  {<esc>mko}<cr><++><esc>`ko
-inoremap (<cr>  (<esc>mko)<cr><++><esc>`ko
+inoremap {<cr>  {<esc>mko}<++><esc>`ko
+inoremap (<cr>  (<esc>mko)<++><esc>`ko
 inoremap (- (
 inoremap [- [
 inoremap {- {
@@ -341,12 +357,9 @@ inoremap /*- /*
 inoremap /*  /*  */<++><esc>F<space>i
 inoremap /*<cr>  /*<esc>mko*/<cr><++><esc>`ko<tab>
 
-" }}}
+" }}}}}}
 
-set wildmode=longest,list,full
-set wildmenu    " visual autocomplete for command menu
-set lazyredraw  " redraw only when needed
-set showmatch   " highlight matching [{()}]
+" }}}
 
 "------------------------------------------------------------
 " STATUSLINE {{{
@@ -445,15 +458,16 @@ function! ActiveStatus()
   let statusline.="%="                        " switching to the right side
   let statusline.="%#ErrorMsg#"               " hl group style: error message
   let statusline.="%{LinterStatus()}"         " error message from ALE plugin
-  let statusline.="%#LineNr#"
+  let statusline.="%#StatusLineNC#"
   let statusline.="%y"                        " file type
   let statusline.="[%{&fileencoding?&fileencoding:&encoding}]"
   let statusline.="[%{&fileformat}\]"         " file format[unix/dos]
   "let statusline.="\ %3p%%"                  " file position percentage
-  let statusline.="%#ModeMsg#"
+  let statusline.="[r:%{v:register}]"
+  let statusline.="%#Title#"
   let statusline.="\ %4l:%-3c"                " line[width-4ch, pad-left]:col[width-3ch, pad-right]
   let statusline.="%*"                        " switch to normal statusline hl
-  let statusline.="\ %6L "                     " number of lines in buffer
+  let statusline.="\ %4L "                    " number of lines in buffer
   return statusline
 endfunction
 
@@ -542,6 +556,11 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
+" buffer movements and delete
+nnoremap <c-n> :bn<cr>
+nnoremap <c-p> :bp<cr>
+nnoremap <c-q> :bd<cr>
+
 " }}}
 
 "------------------------------------------------------------
@@ -592,98 +611,74 @@ inoremap <leader>f <esc>mk:put =expand('%:t:r')<cr>v$hx`kpa
 "------------------------------------------------------------
 
 " ale - plugin config {{{
+  nnoremap <silent> <localleader>k <Plug>(ale_previous_wrap)
+  nnoremap <silent> <localleader>j <Plug>(ale_next_wrap)
 
-let g:ale_linters = {
-  \ 'javascript': ['eslint'],
-  \ 'python': ['flake8']
-  \ }
-
-let g:ale_fixers = {
-  \ 'javascript': ['prettier', 'eslint'],
-  \ 'python': ['autopep8']
-  \ }
-
-let g:ale_sign_error = '>>'
-let g:ale_sign_info = '--'
-let g:ale_lint_on_text_changed = 0
-let g:ale_lint_on_save = 1
-let g:ale_lint_on_text_changed = 'never'      " lint only when file saved
-let g:ale_lint_on_enter = 0                   " don't run linters on opening a file
-let g:ale_lint_on_filetype_changed = 1
-let g:ale_completion_enabled = 0              " overrides omnicompletion if enabled
-let g:ale_fix_on_save = 1                     " fix files when you save them.
-let g:ale_warn_about_trailing_whitespace = 0  " disable for python files
-let g:ale_warn_about_trailing_blank_lines = 0 " disable for python files
-
+  let g:ale_lint_on_text_changed = 0
+  let g:ale_warn_about_trailing_whitespace = 0  " disable for python files
+  let g:ale_warn_about_trailing_blank_lines = 0 " disable for python files
 " }}}
 
 " gitgutter - plugin config {{{
+  set updatetime=1000                 "wait how much time to detect file update
+  let g:gitgutter_max_signs = 500     "threshold upto which gitgutter shows sign
+  let g:gitgutter_highlight_lines = 1
 
-set updatetime=1000                 "wait how much time to detect file update
-let g:gitgutter_max_signs = 500     "threshold upto which gitgutter shows sign
-let g:gitgutter_highlight_lines = 1
+  nnoremap gn :GitGutterNextHunk<CR>
+  nnoremap gp :GitGutterPrevHunk<CR>
+  nnoremap <leader>hs :GitGutterStageHunk<CR>
+  nnoremap <leader>hu :GitGutterUndoHunk<CR>
+  nnoremap <leader>hp :GitGutterPreviewHunk<CR>
 
-nnoremap gn :GitGutterNextHunk<CR>
-nnoremap gp :GitGutterPrevHunk<CR>
-nnoremap <leader>hs :GitGutterStageHunk<CR>
-nnoremap <leader>hu :GitGutterUndoHunk<CR>
-nnoremap <leader>hp :GitGutterPreviewHunk<CR>
+  nnoremap <leader>ggt <esc>:GitGutterToggle<cr>
 
-nnoremap <leader>ggt <esc>:GitGutterToggle<cr>
-
-if exists('&signcolumn')  " vim 7.4.2201+
-  set signcolumn=yes
-else
-  let g:gitgutter_sign_column_always = 1
-endif
+  if exists('&signcolumn')  " vim 7.4.2201+
+    set signcolumn=yes
+  else
+    let g:gitgutter_sign_column_always = 1
+  endif
 "}}}
 
 " vim-closetag - plugin config {{{
-let g:closetag_filenames = '*.html,*.xhtml,*.phtml'
-let g:closetag_xhtml_filenames = '*.xhtml,*.jsx'
-let g:closetag_emptyTags_caseSensitive = 1
-let g:closetag_shortcut = '>'               " Shortcut for closing tags, default is '>'
-let g:closetag_close_shortcut = '<leader>>' " Add > at current position without closing the current tag, default is ''
+  let g:closetag_filenames = '*.html,*.xhtml,*.phtml'
+  let g:closetag_xhtml_filenames = '*.xslt,*.xml,*.xhtml,*.jsx'
+  let g:closetag_emptyTags_caseSensitive = 1
+  let g:closetag_shortcut = '>'               " Shortcut for closing tags, default is '>'
+  let g:closetag_close_shortcut = '<leader>>' " Add > at current position without closing the current tag, default is ''
 "}}}
 
-"vim notes - plugin config {{{
-let g:notes_directories = ['~/dotfiles/vim/notes']
-let g:notes_list_bullets = ['*', '-', '+']
-let g:notes_unicode_enabled = 0
-" let g:notes_suffix = '.md'
-let g:notes_title_sync='change-title'
-vnoremap <leader>ns :NoteFromSelectedText<CR>
-nnoremap <C-e> :edit note:
+" vim notes - plugin config {{{
+  let g:notes_directories = ['~/dotfiles/vim/notes']
+  let g:notes_list_bullets = ['*', '-', '+']
+  let g:notes_unicode_enabled = 0
+  " let g:notes_suffix = '.md'
+  let g:notes_title_sync='change-title'
+  vnoremap <leader>ns :NoteFromSelectedText<CR>
+  nnoremap <C-e> :edit note:
 "}}}
 
 " ack.vim - plugin config {{{
-if executable('ag')
-  let g:ackprg = 'ag --nogroup --nocolor --column --heading --follow --smart-case'
-  "search in pwd. [!] if not given, the first occurence is jumped to.
-endif
+  if executable('ag')
+    let g:ackprg = 'ag --nogroup --nocolor --column --heading --follow --smart-case'
+    "search in pwd. [!] if not given, the first occurence is jumped to.
+  endif
 
-nnoremap <leader>a :Ack!<space>
+  nnoremap <leader>a :Ack!<space>
 
 " }}}
 
 " ctrlp - plugin config {{{
 
-  let g:ctrlp_map = ''
-  nnoremap <c-p> :call CD_Git_Root()<cr>:CtrlP<cr>
-  let g:ctrlp_cmd = 'CtrlP :Git_Repo_Cdup()'
+  let g:ctrlp_map = '<c-p>'
+  let g:ctrlp_cmd = 'CtrlP Git_Repo_Cdup()'
   let g:ctrlp_use_caching = 1
   let g:ctrlp_clear_cache_on_exit = 0
-  let g:ctrlp_show_hidden = 0
   let g:ctrlp_cache_dir = $HOME.'/.cache/ctrlp'
-  let g:ctrlp_follow_symlinks = 0
   let g:ctrlp_match_current_file = 1
   let g:ctrlp_working_path_mode = 'ra'          " pwd as current git root
   let g:ctrlp_root_markers = ['.root']          " add .root as project root
   let g:ctrlp_switch_buffer = 'E'               " jmp to file if already opened
-  let g:ctrlp_tabpage_position = 'ac'           " put new page after current
   let g:ctrlp_match_window = 'bottom,order:ttb' " top-to-bottom filename matching
-  let g:ctrlp_switch_buffer = 1                 " always open file in new buffer
-  let g:ctrlp_working_path_mode = 1             " ability to change pwd in vim session
   if executable('rg')
     set grepprg=rg\ --color=never
     let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
@@ -693,13 +688,21 @@ nnoremap <leader>a :Ack!<space>
 
 " vim-markdown-composer - plugin config {{{
 
-let g:markdown_composer_browser = '/usr/bin/firefox'
-let g:markdown_composer_open_browser = 1
-let g:markdown_composer_refresh_rate = 500 "ms
-let g:markdown_composer_autostart = 1
+  let g:markdown_composer_browser = '/usr/bin/firefox'
+  let g:markdown_composer_open_browser = 1
+  let g:markdown_composer_refresh_rate = 500 "ms
+  let g:markdown_composer_autostart = 1
 
 " }}}
 
+" YouCompleteMe - plugin config{{{
+  let g:ycm_enable_diagnostic_signs = 0                                 " only ale linting
+  let g:ycm_enable_diagnostic_highlighting = 0                          " only ale linting
+  let g:ycm_echo_current_diagnostic = 0                                 " only ale linting
+  let g:ycm_key_list_select_completion = ['<tab>', '<down>','<c-j>']
+  let g:ycm_key_list_previous_completion = ['<s-tab>', '<up>','<c-k>']
+  let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
+" }}}
 
 " }}}
 
@@ -737,9 +740,6 @@ nnoremap <leader>ga :!git add %<CR>
 " paste in insert mode without auto-formatting
 inoremap <leader>p <F2><esc>pa<F2>
 
-" }}}
-
-
 nnoremap gn :GitGutterNextHunk<CR>
 nnoremap gp :GitGutterPrevHunk<CR>
 nnoremap <leader>hs :GitGutterStageHunk<CR>
@@ -748,6 +748,7 @@ nnoremap <leader>hp :GitGutterPreviewHunk<CR>
 
 nnoremap <leader>ggt <esc>:GitGutterToggle<cr>
 
+" }}}
 "------------------------------------------------------------
 " AUTO COMMANDS   {{{
 "------------------------------------------------------------

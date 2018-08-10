@@ -25,6 +25,10 @@
 ### USEFUL LINKS
 
 * [r/vim]( https://reddit.com/r/vim )
+* [Learn Vimscript the Hard Way]( http://learnvimscriptthehardway.stevelosh.com/ )
+* [How I Vim]( http://howivim.com/ ) - interviews
+* [Vimcasts - Free screencasts about the text editor Vim]( http://vimcasts.org/ )
+* [usevim – Medium]( https://medium.com/usevim ) 
 * [Why do Vim experts prefer buffers over tabs? - Stack Overflow]( https://stackoverflow.com/questions/26708822/why-do-vim-experts-prefer-buffers-over-tabs/26745051 )
 * [How I Take Notes With Vim, Markdown, and Pandoc   - things james does]( https://jamesbvaughan.com/markdown-pandoc-notes/ )
 * [Building vim from source]( https://github.com/Valloric/YouCompleteMe/wiki/Building-Vim-from-source )

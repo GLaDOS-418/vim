@@ -47,12 +47,13 @@ using vpll=std::vector<pll>;
 using namespace std;
 
 inline bool eq(double a, double b) { return fabs(a-b) < 1e-9; }
+inline bool toggle(bool& flag){flag=!flag; return flag;}
 
 //fast io <++>
 
 int main() {
   ios_base::sync_with_stdio(false);
-  cin.tie(0);
+  cin.tie(nullptr);
 
   #ifdef fio
     freopen("<++>","r" ,stdin ) ;
