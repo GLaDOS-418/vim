@@ -1,8 +1,11 @@
+" contents -
+"   - PAIR HANDLING
+"   - SPELLING
+"   - EXTRA
 
 "------------------------------------------------------------
-" ABBREVIATIONS {{{
+" PAIR HANDLING {{{
 "------------------------------------------------------------
-" pair handles {{{
 
 " square,angular brackets, braces, paranthesis
 inoremap <leader>< <><++><esc>F>i
@@ -43,6 +46,9 @@ inoremap /*- /*
 inoremap /*  /*  */<++><esc>F<space>i
 inoremap /*<cr>  /*<cr>*/<cr><++><esc>kO<tab>
 
-" }}}}}}
+" }}}
 " }}}
 
+"------------------------------------------------------------
+" END
+"------------------------------------------------------------

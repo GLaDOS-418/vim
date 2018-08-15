@@ -1,3 +1,6 @@
+" contents -
+"   - statusline
+"   - autocommand handling
 
 "------------------------------------------------------------
 " STATUSLINE {{{
@@ -122,6 +125,9 @@ endfunction
 
 setlocal statusline=%!ActiveStatus()
 
+"------------------------------------------------------------
+" AUTOCOMMAND HANDLING {{{
+"------------------------------------------------------------
 augroup vim_statusline
   autocmd!
   autocmd WinEnter,BufEnter * setlocal statusline=%!ActiveStatus()
@@ -130,3 +136,6 @@ augroup END
 
 " }}}
 
+"------------------------------------------------------------
+" END
+"------------------------------------------------------------
