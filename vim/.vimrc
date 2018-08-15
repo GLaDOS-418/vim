@@ -71,35 +71,35 @@ call plug#begin('~/.vim/plugged')
 "   autocmd VimEnter * PlugInstall | q
 " endif
 
-Plug 'tomasr/molokai'
-Plug 'ajh17/Spacegray.vim'
-Plug 'morhetz/gruvbox'          		" current colorscheme
+Plug 'morhetz/gruvbox'                 " current colorscheme
 
-Plug 'tpope/vim-fugitive'       		" handle git commands
-Plug 'airblade/vim-gitgutter'   		" see git diff in buffer
-Plug 'tpope/vim-surround'       		" surround text with tags
-Plug 'junegunn/goyo.vim'        		" distraction free mode
-
-Plug 'mileszs/ack.vim'          		" text search in files
-Plug 'sjl/gundo.vim'            		" see vim history-tree
-Plug 'ctrlpvim/ctrlp.vim'       		" fuzzy file search
+Plug 'tpope/vim-fugitive'              " handle git commands
+Plug 'airblade/vim-gitgutter'          " see git diff in buffer
+Plug 'tpope/vim-surround'              " surround text with tags
+Plug 'junegunn/goyo.vim'               " distraction free mode
+Plug 'godlygeek/tabular'               " text alignment
+Plug 'itchyny/calendar.vim'            " crazy calendar plugin that can sync tasks
+Plug 'sjl/gundo.vim'                   " see vim history-tree
+Plug 'ctrlpvim/ctrlp.vim'              " fuzzy file search
+Plug 'ervandew/supertab'               " use tab for all insert mode completions
+Plug 'majutsushi/tagbar'               " show tags in sidebar using ctags
 
 Plug 'Valloric/YouCompleteMe',
   \ {'do':function('BuildYCM'),
   \  'for':['c','cpp','python','rust']
-  \ }                           		" code completion engine
-Plug 'w0rp/ale'                 		" asynchronous linting engine
-Plug 'scrooloose/vim-slumlord'  		" inline previews for plantuml acitvity dia
-Plug 'aklt/plantuml-syntax'     		" syntax/linting for plantuml
-Plug 'alvan/vim-closetag'       		" to close markup lang tags
+  \ }                                  " code completion engine
+Plug 'w0rp/ale'                        " asynchronous linting engine
+Plug 'sirver/ultisnips'                " custom snippets
+Plug 'scrooloose/vim-slumlord'         " inline previews for plantuml acitvity dia
+Plug 'aklt/plantuml-syntax'            " syntax/linting for plantuml
+Plug 'alvan/vim-closetag'              " to close markup lang tags
 
-Plug 'xolox/vim-notes'| Plug 'xolox/vim-misc'   " note taking in vim
+Plug 'vimwiki/vimwiki'                 " note taking in vim
 Plug 'euclio/vim-markdown-composer',
-  \{'do': function('BuildComposer')}            " async markdown live preview
+  \{'do': function('BuildComposer')}   " async markdown live preview
 
 " yuttie/comfortable-motion.vim
 " ycm|deoplete
-" vimwiki (alternative of vim-notes)
 " ultisnips
 " vinegar
 " netrw config
@@ -136,7 +136,6 @@ set backspace=indent,eol,start  " allow backspacing over everything in insert mo
 set diffopt+=vertical           " vim-fugitive vertical split on diff
 "set mouse+=a                   " use mouse to place cursor and copy w/o line num
 syntax enable                   " enable syntax processing
-set nogdefault                  " don't set default 'g' flag during :substitute
 
 " clearing the t_vb variable deactivates flashing
 set t_vb=
@@ -147,9 +146,8 @@ set t_vb=
 " set t_RS=
 " set t_SH=
 
-" jk/kj is escape
+" jk is escape
 inoremap jk <ESC>
-inoremap kj <ESC>
 
 " an attempt to prevent one key press
 noremap ; :
@@ -204,31 +202,11 @@ endif
 
 set background=dark
 
-" :call ShowColorSchemeName() to show the current colorscheme that vim is using[custom fn]
-if $TERM == "xterm-256color" || $TERM == "screen-256color" || $COLORTERM == "gnome-terminal"
-  " github.com/neovim/neovim/issues/7722
-  " setting incompatible term might result in garbage rendering in buffer
-  " reproducibe using ctrl+i in vim 8.1 with $TERM=xterm
-  " set term=screen-256color "set teminal color to support 256 colors
-endif
-
 try
-  "colorscheme molokai
-  "colorscheme spacegray
   colorscheme gruvbox
 catch
   colorscheme desert
 endtry
-
-
-" molokai theme - plugin config
-" let g:molokai_original=1
-
-
-" spacegray theme - plugin config
-" let g:spacegray_low_contrast = 1
-" let g:spacegray_use_italics = 1
-" let g:spacegray_underline_search = 1
 
 " gruvbox - plugin config
 let g:gruvbox_contrast_dark='soft'
@@ -259,6 +237,7 @@ set pastetoggle=<F2>  " toggle insert(paste) mode
 inoremap <space><tab> <esc>/<++><CR>:nohl<CR>"_c4l
 inoremap <leader><space><tab> <++><esc>4h?<++><CR>:nohl<CR>"_c4l
 nnoremap <space><tab><tab> :%s/<++>//g<CR>
+inoremap <leader>m <++><esc>
 
 
 " }}}
@@ -274,8 +253,12 @@ set noshowmode      " don't show mode on last line
 set cursorline      " highlight current line
 set scrolloff=5     " minimum line offset to present on screen while scrolling.
 
-nnoremap + <C-W>+   " increase window size
-nnoremap - <C-W>-   " decrease window size
+" increase window size
+nnoremap + <C-W>+
+nnoremap > <C-W>>
+" decrease window size
+nnoremap - <C-W>-
+nnoremap < <C-W><
 
 " removed the below filetype plugin block as vim-plug handles it internally
 " filetype on "required
@@ -323,8 +306,8 @@ inoremap <leader>< <><++><esc>F>i
 inoremap [      []<++><esc>F]i
 inoremap (      ()<++><esc>F)i
 inoremap {      {}<++><esc>F}i
-inoremap {<cr>  {<esc>mko}<++><esc>`ko
-inoremap (<cr>  (<esc>mko)<++><esc>`ko
+inoremap {<cr>  {<cr>}<++><esc>O
+inoremap (<cr>  (<cr>)<++><esc>O
 inoremap (- (
 inoremap [- [
 inoremap {- {
@@ -345,17 +328,17 @@ inoremap `` ``
 inoremap '''      '''  '''<esc>F<space>i
 inoremap """      """  """<++><esc>F<space>i
 inoremap ```      ```  ```<++><esc>F<space>i
-inoremap '<cr>  '<esc>mko'<cr><++><esc>`ko
-inoremap "<cr>  "<esc>mko"<cr><++><esc>`ko
-inoremap `<cr>  `<esc>mko`<cr><++><esc>`ko
-inoremap '''<cr>  '''<esc>mko'''<cr><++><esc>`ko
-inoremap """<cr>  """<esc>mko"""<cr><++><esc>`ko
-inoremap ```<cr>  ```<esc>mko```<cr><++><esc>`ko
+inoremap '<cr>  '<cr>'<cr><++><esc>kO
+inoremap "<cr>  "<cr>"<cr><++><esc>kO
+inoremap `<cr>  `<cr>`<cr><++><esc>kO
+inoremap '''<cr>  '''<cr>'''<cr><++><esc>kO
+inoremap """<cr>  """<cr>"""<cr><++><esc>kO
+inoremap ```<cr>  ```<cr>```<cr><++><esc>kO
 
 " misc
 inoremap /*- /*
 inoremap /*  /*  */<++><esc>F<space>i
-inoremap /*<cr>  /*<esc>mko*/<cr><++><esc>`ko<tab>
+inoremap /*<cr>  /*<cr>*/<cr><++><esc>kO<tab>
 
 " }}}}}}
 
@@ -432,15 +415,16 @@ function! ChangeModeColor()
     exe 'hi! User9 ctermfg=white ctermbg=red cterm=bold guifg=white guibg=red gui=bold'
   elseif (mode() ==# 'c'|| mode() ==# 't')
     exe 'hi! User9 ctermfg=black ctermbg=cyan cterm=bold guifg=black guibg=cyan gui=bold'
-  else
+  elseif (mode() ==# '\v(R|Rv)')
     exe 'hi! User9 ctermfg=black ctermbg=green cterm=bold guifg=black guibg=green gui=bold'
+  else
+    exe 'hi! User9 ctermfg=black ctermbg=white cterm=bold guifg=black guibg=white gui=bold'
   endif
   return ''
 endfunction
 
 " General Format: %-0{minwid}.{maxwid}{item}
 " Higlight Groups: #<format-name>#  -> see :help hl for more group names
-
 function! ActiveStatus()
   let statusline=""                           " clear statusline
   let statusline.="%{ChangeModeColor()}"      " Changing the statusline color
@@ -499,7 +483,7 @@ set ignorecase    " use case insensitive search
 set smartcase     " except when using capital letters
 set incsearch     " incremental search. search as chars are enetered
 set hlsearch      " highlight matches
-set gdefault      " RegExp global by default
+set nogdefault    " don't set default 'g' flag during :s
 set magic         " Enable extended regexes.
 
 " turn off search highlight
@@ -557,8 +541,8 @@ nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
 " buffer movements and delete
-nnoremap <c-n> :bn<cr>
-nnoremap <c-p> :bp<cr>
+nnoremap <c-f> :bn<cr>
+nnoremap <c-b> :bp<cr>
 nnoremap <c-q> :bd<cr>
 
 " }}}
@@ -599,7 +583,7 @@ nnoremap <leader>s :set spell!<cr>
 inoremap <leader>p <F2><esc>pa<F2>
 
 " markdown style link paste from os clipboard
-nnoremap <leader>l mk:read !curl --silent --location "<C-R>+" <bar> tr --delete '\n' <bar> grep -P '<title>.*<\/title>' <bar> sed -E -e 's@.*<title>[[:space:]]*(.*)[[:space:]]*</title>.*@\1@'<CR>i[<esc>A]( <C-R>+ )<esc>0v$h"zydd`k"zp
+nnoremap <leader>l mk:read !curl --silent --location <C-R>=shellescape(@+)<cr> <bar> tr --delete '\n' <bar> grep -P '<title>.*<\/title>' <bar> sed -E -e 's@.*<title>[[:space:]]*(.*)[[:space:]]*</title>.*@\1@'<CR>i[<esc>A]( <C-R>+ )<esc>0v$h"zydd`k"zp
 
 " get file name w/o ext
 inoremap <leader>f <esc>mk:put =expand('%:t:r')<cr>v$hx`kpa
@@ -647,23 +631,22 @@ inoremap <leader>f <esc>mk:put =expand('%:t:r')<cr>v$hx`kpa
   let g:closetag_close_shortcut = '<leader>>' " Add > at current position without closing the current tag, default is ''
 "}}}
 
-" vim notes - plugin config {{{
-  let g:notes_directories = ['~/dotfiles/vim/notes']
-  let g:notes_list_bullets = ['*', '-', '+']
-  let g:notes_unicode_enabled = 0
-  " let g:notes_suffix = '.md'
-  let g:notes_title_sync='change-title'
-  vnoremap <leader>ns :NoteFromSelectedText<CR>
-  nnoremap <C-e> :edit note:
+" vimwiki- plugin config {{{
+  let g:vimwiki_list = [{'path': '~/repos/personal_notes/', 'syntax': 'markdown', 'ext': '.md'},
+                       \{'path': '~/repos/work_notes/',     'syntax': 'markdown', 'ext': '.md'},
+                       \]
+
+let g:vimwiki_use_mouse = 1
+
 "}}}
 
-" ack.vim - plugin config {{{
-  if executable('ag')
-    let g:ackprg = 'ag --nogroup --nocolor --column --heading --follow --smart-case'
-    "search in pwd. [!] if not given, the first occurence is jumped to.
-  endif
+" tabular - plugin config {{{
 
-  nnoremap <leader>a :Ack!<space>
+if exists(":Tabularize")
+  noremap <leader>a= :Tabularize /=<cr>
+  noremap <leader>a" :Tabularize /"<cr>
+  noremap <leader>a: :Tabularize /:<cr>
+endif
 
 " }}}
 
@@ -691,7 +674,7 @@ inoremap <leader>f <esc>mk:put =expand('%:t:r')<cr>v$hx`kpa
   let g:markdown_composer_browser = '/usr/bin/firefox'
   let g:markdown_composer_open_browser = 1
   let g:markdown_composer_refresh_rate = 500 "ms
-  let g:markdown_composer_autostart = 1
+  let g:markdown_composer_autostart = 0
 
 " }}}
 
@@ -699,9 +682,24 @@ inoremap <leader>f <esc>mk:put =expand('%:t:r')<cr>v$hx`kpa
   let g:ycm_enable_diagnostic_signs = 0                                 " only ale linting
   let g:ycm_enable_diagnostic_highlighting = 0                          " only ale linting
   let g:ycm_echo_current_diagnostic = 0                                 " only ale linting
-  let g:ycm_key_list_select_completion = ['<tab>', '<down>','<c-j>']
-  let g:ycm_key_list_previous_completion = ['<s-tab>', '<up>','<c-k>']
+  let g:ycm_key_list_select_completion = ['<down>','<c-n>']
+  let g:ycm_key_list_previous_completion = ['<up>','<c-p>']
   let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
+" }}}
+
+" supertab - plugin config{{{
+  " mapped with down of YCM
+  let g:SuperTabDefaultCompletionType = '<c-n>'
+" }}}
+          
+" ultisnips - plugin config{{{
+  let g:UltiSnipsExpandTrigger="<tab>"
+  let g:UltiSnipsJumpForwardTrigger="<c-j>"
+  let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+" }}}
+
+" tagbar - plugin config{{{
+  nnoremap <F8> :TagbarOpen fj<cr>
 " }}}
 
 " }}}
@@ -935,7 +933,6 @@ function! MouseToggle()
 endfunc
 
 " }}}
-
 
 "------------------------------------------------------------
 " END
