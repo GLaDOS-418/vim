@@ -7,13 +7,13 @@
 " COLORS
 " SPACES AND TABS
 " UI CONFIG
-" STATUSLINE
+" SOURCES
 " SEARCHING
 " MOVEMENTS
 " LEADER SHORTCUTS
 " PLUGIN SETTINGS
 " AUTO COMMANDS
-" CUSTOM FUNCTIONS
+
 " }}}
 "------------------------------------------------------------
 " PLUGIN MANAGER {{{
@@ -99,8 +99,6 @@ Plug 'euclio/vim-markdown-composer',
   \{'do': function('BuildComposer')}   " async markdown live preview
 
 " yuttie/comfortable-motion.vim
-" ycm|deoplete
-" ultisnips
 " vinegar
 " netrw config
 
@@ -296,182 +294,12 @@ set showmatch   " highlight matching [{()}]
 " }}}
 
 "------------------------------------------------------------
-" ABBREVIATIONS {{{
+" SOURCES {{{
 "------------------------------------------------------------
 
-" pair handles {{{
-
-" square,angular brackets, braces, paranthesis
-inoremap <leader>< <><++><esc>F>i
-inoremap [      []<++><esc>F]i
-inoremap (      ()<++><esc>F)i
-inoremap {      {}<++><esc>F}i
-inoremap {<cr>  {<cr>}<++><esc>O
-inoremap (<cr>  (<cr>)<++><esc>O
-inoremap (- (
-inoremap [- [
-inoremap {- {
-inoremap [] []
-inoremap () ()
-inoremap {} {}
-
-" quotes and backtick
-inoremap '- '
-inoremap "- "
-inoremap `- `
-inoremap '      ''<++><esc>F'i
-inoremap "      ""<++><esc>F"i
-inoremap `      ``<++><esc>F`i
-inoremap '' ''
-inoremap "" ""
-inoremap `` ``
-inoremap '''      '''  '''<esc>F<space>i
-inoremap """      """  """<++><esc>F<space>i
-inoremap ```      ```  ```<++><esc>F<space>i
-inoremap '<cr>  '<cr>'<cr><++><esc>kO
-inoremap "<cr>  "<cr>"<cr><++><esc>kO
-inoremap `<cr>  `<cr>`<cr><++><esc>kO
-inoremap '''<cr>  '''<cr>'''<cr><++><esc>kO
-inoremap """<cr>  """<cr>"""<cr><++><esc>kO
-inoremap ```<cr>  ```<cr>```<cr><++><esc>kO
-
-" misc
-inoremap /*- /*
-inoremap /*  /*  */<++><esc>F<space>i
-inoremap /*<cr>  /*<cr>*/<cr><++><esc>kO<tab>
-
-" }}}}}}
-
-" }}}
-
-"------------------------------------------------------------
-" STATUSLINE {{{
-"------------------------------------------------------------
-
-set laststatus=2  " status line always enabled
-
-let g:currentmode={
-      \'n'  :'normal',
-      \'no' :'n·operator pending',
-      \'v'  :'visual',
-      \'V'  :'v·line',
-      \'^V' :'v·block',
-      \'s'  :'select',
-      \'S'  :'s·line',
-      \'^S' :'s·block',
-      \'i'  :'insert',
-      \'R'  :'replace',
-      \'Rv' :'v·replace',
-      \'c'  :'command',
-      \'cv' :'vim ex',
-      \'ce' :'ex',
-      \'r'  :'prompt',
-      \'rm' :'more',
-      \'r?' :'confirm',
-      \'!'  :'shell',
-      \'t'  :'terminal' }
-
-" Function: display errors from Ale in statusline
-function! LinterStatus() abort
-  let l:counts = ale#statusline#Count(bufnr(''))
-  let l:all_errors = l:counts.error + l:counts.style_error
-  let l:all_non_errors = l:counts.total - l:all_errors
-  return l:counts.total == 0 ? '' : printf(
-  \ 'W:%d E:%d',
-  \ l:all_non_errors,
-  \ l:all_errors
-  \)
-endfunction
-
-" Function: returns paste mode. (since insert behaves different in this mode)
-function! PasteForStatusline() abort
-    let paste_status = &paste
-    if paste_status == 1
-        return "(p) "
-    else
-        return ""
-    endif
-endfunction
-
-" Function: return git branch name from vim-fugitive plugin
-function! GitBranchFugitive() abort
-  let branch=fugitive#head()
-  if branch != ''
-    return ' '.branch.' '
-  else
-    return ''
-  endif
-endfunction
-
-" Function: change color of a user higlight group based on mode
-function! ChangeModeColor()
-  " \v means 'very magic'
-  if (mode() =~# '\v(n|no)')
-    exe 'hi! User9 ctermfg=black ctermbg=yellow cterm=bold guifg=black guibg=yellow gui=bold'
-  elseif (mode() =~# '\v(v|V)' || get(g:currentmode,strtrans(mode())) ==# 'v·block' )
-    " visual block needed special handling because it is <c-v>
-    exe 'hi! User9 ctermfg=white ctermbg=blue cterm=bold guifg=white guibg=blue gui=bold'
-  elseif (mode() ==# 'i')
-    exe 'hi! User9 ctermfg=white ctermbg=red cterm=bold guifg=white guibg=red gui=bold'
-  elseif (mode() ==# 'c'|| mode() ==# 't')
-    exe 'hi! User9 ctermfg=black ctermbg=cyan cterm=bold guifg=black guibg=cyan gui=bold'
-  elseif (mode() ==# '\v(R|Rv)')
-    exe 'hi! User9 ctermfg=black ctermbg=green cterm=bold guifg=black guibg=green gui=bold'
-  else
-    exe 'hi! User9 ctermfg=black ctermbg=white cterm=bold guifg=black guibg=white gui=bold'
-  endif
-  return ''
-endfunction
-
-" General Format: %-0{minwid}.{maxwid}{item}
-" Higlight Groups: #<format-name>#  -> see :help hl for more group names
-function! ActiveStatus()
-  let statusline=""                           " clear statusline
-  let statusline.="%{ChangeModeColor()}"      " Changing the statusline color
-  let statusline.="%#User9#"
-  let statusline.="\ %3{toupper(get(g:currentmode,strtrans(mode())))} "
-  let statusline.="%{PasteForStatusline()}"   " paste mode flag
-  let statusline.="%<"                        " truncate to left
-  let statusline.="%#PmenuSel#"               " let hl group to : popup menu normal line
-  " let statusline.="%.15{GitBranch()}"       " github.com/vim/vim/issues/3197
-  let statusline.="%.15{GitBranchFugitive()}" " git branch[max width=15]
-  let statusline.="%#WildMenu#"               " hl group style: dir listing
-  let statusline.="\ %f"                      " file name
-  let statusline.="%r"                        " read only flag
-  let statusline.="\ %m"                      " modifi(ed|able) flag
-  let statusline.="%="                        " switching to the right side
-  let statusline.="%#ErrorMsg#"               " hl group style: error message
-  let statusline.="%{LinterStatus()}"         " error message from ALE plugin
-  let statusline.="%#StatusLineNC#"
-  let statusline.="%y"                        " file type
-  let statusline.="[%{&fileencoding?&fileencoding:&encoding}]"
-  let statusline.="[%{&fileformat}\]"         " file format[unix/dos]
-  "let statusline.="\ %3p%%"                  " file position percentage
-  let statusline.="[r:%{v:register}]"
-  let statusline.="%#Title#"
-  let statusline.="\ %4l:%-3c"                " line[width-4ch, pad-left]:col[width-3ch, pad-right]
-  let statusline.="%*"                        " switch to normal statusline hl
-  let statusline.="\ %4L "                    " number of lines in buffer
-  return statusline
-endfunction
-
-function! InactiveStatus()
-  " same as active status without colors
-  let statusline="%<%#StatusLineNC#"
-  let statusline.=" %3{toupper(get(g:currentmode,strtrans(mode())))} %{PasteForStatusline()}"
-  let statusline.="%.15{GitBranchFugitive()}\ %f%r%=%{LinterStatus()}%y"
-  let statusline.="[%{&fileencoding?&fileencoding:&encoding}][%{&fileformat}\]"
-  let statusline.="\ %4l:%-3c\ %6L "
-  return statusline
-endfunction
-
-setlocal statusline=%!ActiveStatus()
-
-augroup vim_statusline
-  autocmd!
-  autocmd WinEnter,BufEnter * setlocal statusline=%!ActiveStatus()
-  autocmd WinLeave,BufLeave * setlocal statusline=%!InactiveStatus()
-augroup END
+source ~/.vim/sources/abbreviations.vim
+source ~/.vim/sources/statusline.vim
+source ~/.vim/sources/custom_functions.vim
 
 " }}}
 
@@ -774,163 +602,6 @@ augroup default_group
     autocmd FocusLost * :silent! wall          " Save on lost focus
     autocmd VimResized * :wincmd = " Resize splits when the window is resized
 augroup END
-
-" }}}
-
-"------------------------------------------------------------
-" CUSTOM FUNCTIONS {{{
-"------------------------------------------------------------
-
-function! BuildUml()
-  if $PLANTUML != ''
-    execute "w"
-    execute "!java -jar $PLANTUML -tsvg %"
-  else
-    echo 'PLANTUML env variable not set!!'
-  endif
-endfunction
-
-function! GitBranch()
-  return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
-endfunction
-
-function! StatuslineGit()
-  let l:branchname = GitBranch()
-  return strlen(l:branchname) > 0?'  '.l:branchname.' ':''
-endfunction
-
-
-function! VisualSelection(direction, extra_filter) range
-    let l:saved_reg = @"
-    execute "normal! vgvy"
-
-    let l:pattern = escape(@", "\\/.*'$^~[]")
-    let l:pattern = substitute(l:pattern, "\n$", "", "")
-
-    if a:direction == 'gv'
-        call CmdLine("Ack '" . l:pattern . "' " )
-    elseif a:direction == 'replace'
-        call CmdLine("%s" . '/'. l:pattern . '/')
-    endif
-
-    let @/ = l:pattern
-    let @" = l:saved_reg
-endfunction
-
-
-function! Git_Repo_Cdup() " Get the relative path to repo root
-    "Ask git for the root of the git repo (as a relative '../../' path)
-    let git_top = system('git rev-parse --show-cdup')
-    let git_fail = 'fatal: Not a git repository'
-    if strpart(git_top, 0, strlen(git_fail)) == git_fail
-        " Above line says we are not in git repo. Ugly. Better version?
-        return ''
-    else
-        " Return the cdup path to the root. If already in root,
-        " path will be empty, so add './'
-        return './' . git_top
-    endif
-endfunction
-
-function! CD_Git_Root()
-    execute 'cd '.Git_Repo_Cdup()
-    let curdir = getcwd()
-    echo 'CWD now set to: '.curdir
-endfunction
-
-
-" Define the wildignore from gitignore. Primarily for CommandT
-function! WildignoreFromGitignore()
-    silent call CD_Git_Root()
-    let gitignore = '.gitignore'
-    if filereadable(gitignore)
-        let igstring = ''
-        for oline in readfile(gitignore)
-            let line = substitute(oline, '\s|\n|\r', '', "g")
-            if line =~ '^#' | con | endif
-            if line == '' | con  | endif
-            if line =~ '^!' | con  | endif
-            if line =~ '/$' | let igstring .= "," . line . "*" | con | endif
-            let igstring .= "," . line
-        endfor
-        let execstring = "set wildignore+=".substitute(igstring,'^,','',"g")
-        execute execstring
-        echo 'Wildignore defined from gitignore in: '.getcwd()
-    else
-        echo 'Unable to find gitignore'
-    endif
-endfunction
-
-function! ShowColorSchemeName()
-    try
-        echo g:colors_name
-    catch /^Vim:E121/
-        echo "default
-    endtry
-endfunction
-
-function! SetColors()
- let statusline=""
- let statusline.="%1* 46"
- let statusline.="%2* 45"
- let statusline.="%3* 44"
- let statusline.="%4* 43"
- let statusline.="%5* 42"
- let statusline.="%6* 41"
- let statusline.="%7* 40"
- let statusline.="%8* 39"
- let statusline.="%9* 38"
- let statusline.="%0* 37"
- let statusline.="%#SpecialKey# 36"
- let statusline.="%#EndOfBuffer# 35"
- let statusline.="%#NonText# 34"
- let statusline.="%#Directory# 33"
- let statusline.="%#ErrorMsg# 32"
- let statusline.="%#IncSearch# 31"
- let statusline.="%#Search# 30"
- let statusline.="%#MoreMsg# 29"
- let statusline.="%#ModeMsg# 28"
- let statusline.="%#LineNr# 27"
- let statusline.="%#CursorLineNr# 26"
- let statusline.="%#Question# 25"
- let statusline.="%#StatusLine# 24"
- let statusline.="%#StatusLineNC# 23"
- let statusline.="%#Title# 22"
- let statusline.="%#VertSplit# 21"
- let statusline.="%#Visual# 20"
- let statusline.="%#VisualNOS# 19"
- let statusline.="%#WarningMsg# 18"
- let statusline.="%#WildMenu# 17"
- let statusline.="%#Folded# 16"
- let statusline.="%#FoldColumn# 15"
- let statusline.="%#DiffAdd# 14"
- let statusline.="%#DiffChange# 13"
- let statusline.="%#DiffDelete# 12"
- let statusline.="%#DiffText# 11"
- let statusline.="%#SignColumn# 10"
- let statusline.="%#SpellBad# 9"
- let statusline.="%#SpellCap# 8"
- let statusline.="%#SpellRare# 7"
- let statusline.="%#SpellLocal# 6"
- let statusline.="%#Conceal# 05"
- let statusline.="%#Pmenu# 04"
- let statusline.="%#PmenuSel# 03"
- let statusline.="%#PmenuSbar# 02"
- let statusline.="%#PmenuThumb# 01"
- return statusline
-endfunction
-
-function! TestColors()
-  setlocal statusline=%!SetColors()
-endfunction
-
-function! MouseToggle()
-    if &mouse == 'a'
-        set mouse=
-    else
-        set mouse=a
-    endif
-endfunc
 
 " }}}
 
