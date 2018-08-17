@@ -71,12 +71,6 @@ inoremap jk <ESC>
 noremap ; :
 noremap : ;
 
-" backslash key not working.
-" home to pipe
-inoremap OH \|
-" end to backslash
-inoremap OF \
-
 " ignore compiled files
 set wildignore=*.o,*~,*.pyc,*.so,*.out,*.log,*.aux,*.bak,*.swp,*.class
 if has("win32") || has("win64")
@@ -267,10 +261,6 @@ noremap k gk
 " move to end/beginning of line(normal/visual  mode)
 noremap E $
 noremap B ^
-
-" $/^ doesn't do anything(normal/visual mode)
-noremap $ <nop>
-noremap ^ <nop>
 
 " split navigations
 nnoremap <C-J> <C-W><C-J>
