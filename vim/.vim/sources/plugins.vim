@@ -3,7 +3,7 @@
 "   - PLUGIN SETTINGS
 
 "------------------------------------------------------------
-" PLUGIN MANAGER {{{
+" PLUGIN MANAGER {{{1
 "------------------------------------------------------------
 
 " download vim-plug and install plugins if vim started without plug.
@@ -14,14 +14,14 @@ if empty(glob('~/.vim/autoload/plug.vim')) && executable('curl')
 endif
 
 " helper function to check for conditions and load plugins
-function! Cond(cond, ...)
+function! Cond(cond, ...) "{{{2
   let opts = get(a:000, 0, {})
   return (a:cond) ? opts : extend(opts, { 'on': [], 'for': [] })
 endfunction
 
 " build function req for vim-markdown-composer
 " cargo is rust package mangaer
-function! BuildComposer(info)
+function! BuildComposer(info) "{{{2
   if executable('cargo')
     if a:info.status != 'unchanged' || a:info.force
       if has('nvim')
@@ -36,7 +36,7 @@ function! BuildComposer(info)
 endfunction
 
 " post update hook to build YCM
-function! BuildYCM(info)
+function! BuildYCM(info) "{{{2
   " info is a dictionary with 3 fields
   " - name:   name of the plugin
   " - status: 'installed', 'updated', or 'unchanged'
@@ -49,6 +49,7 @@ function! BuildYCM(info)
     echom "you don't 've python support in vim to build YCM!!!"
   endif
 endfunction
+" }}}
 
 " plug plugin setup.
 call plug#begin('~/.vim/plugged')
@@ -91,70 +92,59 @@ Plug 'euclio/vim-markdown-composer',
 
 call plug#end()
 
-" }}}
-
 "------------------------------------------------------------
-" PLUGIN SETTINGS {{{
+" PLUGIN SETTINGS {{{1
 "------------------------------------------------------------
 
-" ale - plugin config {{{
+" ale - plugin config {{{2
   nnoremap <silent> <localleader>k <Plug>(ale_previous_wrap)
   nnoremap <silent> <localleader>j <Plug>(ale_next_wrap)
-
   let g:ale_lint_on_text_changed = 0
   let g:ale_warn_about_trailing_whitespace = 0  " disable for python files
   let g:ale_warn_about_trailing_blank_lines = 0 " disable for python files
-" }}}
 
-" gitgutter - plugin config {{{
+
+" gitgutter - plugin config {{{2
   set updatetime=1000                 "wait how much time to detect file update
   let g:gitgutter_max_signs = 500     "threshold upto which gitgutter shows sign
   let g:gitgutter_highlight_lines = 1
-
   nnoremap gn :GitGutterNextHunk<CR>
   nnoremap gp :GitGutterPrevHunk<CR>
   nnoremap <leader>hs :GitGutterStageHunk<CR>
   nnoremap <leader>hu :GitGutterUndoHunk<CR>
   nnoremap <leader>hp :GitGutterPreviewHunk<CR>
-
   nnoremap <leader>ggt <esc>:GitGutterToggle<cr>
-
   if exists('&signcolumn')  " vim 7.4.2201+
     set signcolumn=yes
   else
     let g:gitgutter_sign_column_always = 1
   endif
-"}}}
 
-" vim-closetag - plugin config {{{
+
+" vim-closetag - plugin config {{{2
   let g:closetag_filenames = '*.html,*.xhtml,*.phtml'
   let g:closetag_xhtml_filenames = '*.xslt,*.xml,*.xhtml,*.jsx'
   let g:closetag_emptyTags_caseSensitive = 1
   let g:closetag_shortcut = '>'               " Shortcut for closing tags, default is '>'
   let g:closetag_close_shortcut = '<leader>>' " Add > at current position without closing the current tag, default is ''
-"}}}
 
-" vimwiki- plugin config {{{
+
+" vimwiki- plugin config {{{2
   let g:vimwiki_list = [{'path': '~/repos/personal_notes/', 'syntax': 'markdown', 'ext': '.md'},
                        \{'path': '~/repos/work_notes/',     'syntax': 'markdown', 'ext': '.md'},
                        \]
+  let g:vimwiki_use_mouse = 1
 
-let g:vimwiki_use_mouse = 1
 
-"}}}
+" tabular - plugin config {{{2
+  if exists(":Tabularize")
+    noremap <leader>a= :Tabularize /=<cr>
+    noremap <leader>a" :Tabularize /"<cr>
+    noremap <leader>a: :Tabularize /:<cr>
+  endif
 
-" tabular - plugin config {{{
 
-if exists(":Tabularize")
-  noremap <leader>a= :Tabularize /=<cr>
-  noremap <leader>a" :Tabularize /"<cr>
-  noremap <leader>a: :Tabularize /:<cr>
-endif
-
-" }}}
-
-" ctrlp - plugin config {{{
-
+" ctrlp - plugin config {{{2
   let g:ctrlp_map = '<c-p>'
   let g:ctrlp_cmd = 'CtrlP Git_Repo_Cdup()'
   let g:ctrlp_use_caching = 1
@@ -170,43 +160,37 @@ endif
     let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
   endif
 
-"}}}
 
-" vim-markdown-composer - plugin config {{{
-
+" vim-markdown-composer - plugin config {{{2
   let g:markdown_composer_browser = '/usr/bin/firefox'
   let g:markdown_composer_open_browser = 1
   let g:markdown_composer_refresh_rate = 500 "ms
   let g:markdown_composer_autostart = 0
 
-" }}}
 
-" YouCompleteMe - plugin config{{{
+" YouCompleteMe - plugin config{{{2
   let g:ycm_enable_diagnostic_signs = 0                                 " only ale linting
   let g:ycm_enable_diagnostic_highlighting = 0                          " only ale linting
   let g:ycm_echo_current_diagnostic = 0                                 " only ale linting
   let g:ycm_key_list_select_completion = ['<down>','<c-n>']
   let g:ycm_key_list_previous_completion = ['<up>','<c-p>']
   let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
-" }}}
 
-" supertab - plugin config{{{
+
+" supertab - plugin config{{{2
   " mapped with down of YCM
   let g:SuperTabDefaultCompletionType = '<c-n>'
-" }}}
 
-" ultisnips - plugin config{{{
+
+" ultisnips - plugin config{{{2
   let g:UltiSnipsExpandTrigger="<tab>"
   let g:UltiSnipsJumpForwardTrigger="<c-j>"
   let g:UltiSnipsJumpBackwardTrigger="<c-k>"
-" }}}
 
-" tagbar - plugin config{{{
+
+" tagbar - plugin config{{{2
   nnoremap <F8> :TagbarOpen fj<cr>
-" }}}
-
-" }}}
 
 "------------------------------------------------------------
-" END
+" END {{{1
 "------------------------------------------------------------

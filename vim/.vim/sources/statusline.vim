@@ -3,11 +3,12 @@
 "   - autocommand handling
 
 "------------------------------------------------------------
-" STATUSLINE {{{
+" STATUSLINE {{{1
 "------------------------------------------------------------
 
 set laststatus=2  " status line always enabled
 
+" {{{2 - mode mapping
 let g:currentmode={
       \'n'  :'normal',
       \'no' :'n·operator pending',
@@ -30,7 +31,7 @@ let g:currentmode={
       \'t'  :'terminal' }
 
 " Function: display errors from Ale in statusline
-function! LinterStatus() abort
+function! LinterStatus() abort " {{{2
   let l:counts = ale#statusline#Count(bufnr(''))
   let l:all_errors = l:counts.error + l:counts.style_error
   let l:all_non_errors = l:counts.total - l:all_errors
@@ -42,7 +43,7 @@ function! LinterStatus() abort
 endfunction
 
 " Function: returns paste mode. (since insert behaves different in this mode)
-function! PasteForStatusline() abort
+function! PasteForStatusline() abort " {{{2
     let paste_status = &paste
     if paste_status == 1
         return "(p) "
@@ -52,7 +53,7 @@ function! PasteForStatusline() abort
 endfunction
 
 " Function: return git branch name from vim-fugitive plugin
-function! GitBranchFugitive() abort
+function! GitBranchFugitive() abort " {{{2
   let branch=fugitive#head()
   if branch != ''
     return ' '.branch.' '
@@ -62,7 +63,7 @@ function! GitBranchFugitive() abort
 endfunction
 
 " Function: change color of a user higlight group based on mode
-function! ChangeModeColor()
+function! ChangeModeColor() " {{{2
   " \v means 'very magic'
   if (mode() =~# '\v(n|no)')
     exe 'hi! User9 ctermfg=black ctermbg=yellow cterm=bold guifg=black guibg=yellow gui=bold'
@@ -83,7 +84,7 @@ endfunction
 
 " General Format: %-0{minwid}.{maxwid}{item}
 " Higlight Groups: #<format-name>#  -> see :help hl for more group names
-function! ActiveStatus()
+function! ActiveStatus() " {{{2
   let statusline=""                           " clear statusline
   let statusline.="%{ChangeModeColor()}"      " Changing the statusline color
   let statusline.="%#User9#"
@@ -113,7 +114,7 @@ function! ActiveStatus()
   return statusline
 endfunction
 
-function! InactiveStatus()
+function! InactiveStatus() " {{{2
   " same as active status without colors
   let statusline="%<%#StatusLineNC#"
   let statusline.=" %3{toupper(get(g:currentmode,strtrans(mode())))} %{PasteForStatusline()}"
@@ -126,7 +127,7 @@ endfunction
 setlocal statusline=%!ActiveStatus()
 
 "------------------------------------------------------------
-" AUTOCOMMAND HANDLING {{{
+" AUTOCOMMAND HANDLING {{{1
 "------------------------------------------------------------
 augroup vim_statusline
   autocmd!
@@ -134,8 +135,6 @@ augroup vim_statusline
   autocmd WinLeave,BufLeave * setlocal statusline=%!InactiveStatus()
 augroup END
 
-" }}}
-
 "------------------------------------------------------------
-" END
+" END {{{1
 "------------------------------------------------------------

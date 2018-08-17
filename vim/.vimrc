@@ -1,21 +1,5 @@
 "------------------------------------------------------------
-" CATEGORIES {{{
-"------------------------------------------------------------
-
-" SOURCES
-" MISC
-" COLORS
-" SPACES AND TABS
-" UI CONFIG
-" SEARCHING
-" MOVEMENTS
-" LEADER SHORTCUTS
-" AUTO COMMANDS
-
-" }}}
-
-"------------------------------------------------------------
-" SOURCES {{{
+" SOURCES {{{1
 "------------------------------------------------------------
 
 source ~/.vim/sources/plugins.vim
@@ -23,11 +7,9 @@ source ~/.vim/sources/statusline.vim
 source ~/.vim/sources/abbreviations.vim
 source ~/.vim/sources/custom_functions.vim
 
-" }}}
-
 
 "------------------------------------------------------------
-" MISC {{{
+" MISC {{{1
 "------------------------------------------------------------
 
 " set nocompatible              " commented: r/vim/wiki/vimrctips
@@ -106,10 +88,8 @@ if g:ix_at_startup == 1
 endif
 
 
-" }}}
-
 "------------------------------------------------------------
-" COLORS    {{{
+" COLORS    {{{1
 "------------------------------------------------------------
 
 set background=dark
@@ -131,10 +111,8 @@ hi! User4 ctermfg=white ctermbg=blue   cterm=bold guifg=white guibg=blue   gui=b
 hi! User5 ctermfg=white ctermbg=red    cterm=bold guifg=white guibg=red    gui=bold
 hi! User6 ctermfg=black ctermbg=white  cterm=bold guifg=black guibg=white  gui=bold
 
-" }}}
-
 "------------------------------------------------------------
-" SPACES AND TABS  {{{
+" SPACES AND TABS  {{{1
 "------------------------------------------------------------
 
 set autoindent
@@ -152,10 +130,8 @@ nnoremap <space><tab><tab> :%s/<++>//g<CR>
 inoremap <leader>m <++><esc>
 
 
-" }}}
-
 "------------------------------------------------------------
-" UI CONFIG  {{{
+" UI CONFIG  {{{1
 "------------------------------------------------------------
 
 set number          " show line numbers
@@ -176,8 +152,6 @@ nnoremap < <C-W><
 " filetype on "required
 " filetype plugin indent on    " required
 
-
-"filetype indent on " load filetype-specific indent files ~/.vim/indent/python.vim
 
 set splitright
 set splitbelow
@@ -205,10 +179,8 @@ set wildmenu    " visual autocomplete for command menu
 set lazyredraw  " redraw only when needed
 set showmatch   " highlight matching [{()}]
 
-" }}}
-
 "------------------------------------------------------------
-" SEARCHING  {{{
+" SEARCHING  {{{1
 "------------------------------------------------------------
 
 set ignorecase    " use case insensitive search
@@ -232,7 +204,7 @@ nnoremap S :%s//g<Left><Left>
 " highlight last inserted text
 " nnoremap gV `[v`]
 
-" Folding {{{
+" Folding {{{2
 set foldenable          " enable folding
 set foldlevelstart=10   " open most folds by default
 set foldnestmax=10      " max 10 nested folds
@@ -243,15 +215,11 @@ augroup ft_markers
   au!
   autocmd filetype cpp,c,js setlocal foldmethod=marker foldmarker={,}
   autocmd filetype python   setlocal foldmethod=indent
-  autocmd filetype vim      setlocal foldmethod=marker foldmarker='{{{','}}}'
+  autocmd filetype vim      setlocal foldmethod=marker
 augroup END
 
-" }}}
-
-" }}}
-
 "------------------------------------------------------------
-" MOVEMENTS  {{{
+" MOVEMENTS  {{{1
 "------------------------------------------------------------
 
 " move vertically by visual line(normal/visual mode)
@@ -273,10 +241,8 @@ nnoremap <c-f> :bn<cr>
 nnoremap <c-b> :bp<cr>
 nnoremap <c-q> :bd<cr>
 
-" }}}
-
 "------------------------------------------------------------
-" LEADER SHORTCUTS  {{{
+" LEADER SHORTCUTS  {{{1
 "------------------------------------------------------------
 
 " toggle line numbers
@@ -316,12 +282,6 @@ nnoremap <leader>l mk:read !curl --silent --location <C-R>=shellescape(@+)<cr> <
 " get file name w/o ext
 inoremap <leader>f <esc>mk:put =expand('%:t:r')<cr>v$hx`kpa
 
-" }}}
-
-"------------------------------------------------------------
-" LEADER SHORTCUTS  {{{
-"------------------------------------------------------------
-
 " change pwd to root git dir
 nnoremap <leader>gr :call CD_Git_Root()<cr>
 
@@ -360,9 +320,8 @@ nnoremap <leader>hp :GitGutterPreviewHunk<CR>
 
 nnoremap <leader>ggt <esc>:GitGutterToggle<cr>
 
-" }}}
 "------------------------------------------------------------
-" AUTO COMMANDS   {{{
+" AUTO COMMANDS   {{{1
 "------------------------------------------------------------
 
 " group au commands: so they won't be added when vimrc sourced again
@@ -389,8 +348,6 @@ augroup default_group
     autocmd VimResized * :wincmd = " Resize splits when the window is resized
 augroup END
 
-" }}}
-
 "------------------------------------------------------------
-" END
+" END {{{1
 "------------------------------------------------------------

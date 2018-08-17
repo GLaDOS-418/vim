@@ -2,10 +2,10 @@
 "   - CUSTOM FUNCTIONS
 
 "------------------------------------------------------------
-" CUSTOM FUNCTIONS {{{
+" CUSTOM FUNCTIONS {{{1
 "------------------------------------------------------------
 
-function! BuildUml()
+function! BuildUml() " {{{2
   if $PLANTUML != ''
     execute "w"
     execute "!java -jar $PLANTUML -tsvg %"
@@ -24,7 +24,7 @@ function! StatuslineGit()
 endfunction
 
 
-function! VisualSelection(direction, extra_filter) range
+function! VisualSelection(direction, extra_filter) range " {{{2
     let l:saved_reg = @"
     execute "normal! vgvy"
 
@@ -42,7 +42,7 @@ function! VisualSelection(direction, extra_filter) range
 endfunction
 
 
-function! Git_Repo_Cdup() " Get the relative path to repo root
+function! Git_Repo_Cdup() " Get the relative path to repo root {{{2
     "Ask git for the root of the git repo (as a relative '../../' path)
     let git_top = system('git rev-parse --show-cdup')
     let git_fail = 'fatal: Not a git repository'
@@ -56,15 +56,15 @@ function! Git_Repo_Cdup() " Get the relative path to repo root
     endif
 endfunction
 
-function! CD_Git_Root()
+function! CD_Git_Root() " {{{2
     execute 'cd '.Git_Repo_Cdup()
     let curdir = getcwd()
     echo 'CWD now set to: '.curdir
 endfunction
 
 
-" Define the wildignore from gitignore. Primarily for CommandT
-function! WildignoreFromGitignore()
+" Define the wildignore from gitignore
+function! WildignoreFromGitignore() " {{{2
     silent call CD_Git_Root()
     let gitignore = '.gitignore'
     if filereadable(gitignore)
@@ -85,7 +85,7 @@ function! WildignoreFromGitignore()
     endif
 endfunction
 
-function! ShowColorSchemeName()
+function! ShowColorSchemeName() " {{{2
     try
         echo g:colors_name
     catch /^Vim:E121/
@@ -93,7 +93,7 @@ function! ShowColorSchemeName()
     endtry
 endfunction
 
-function! SetColors()
+function! SetColors() " {{{2
  let statusline=""
  let statusline.="%1* 46"
  let statusline.="%2* 45"
@@ -144,11 +144,11 @@ function! SetColors()
  return statusline
 endfunction
 
-function! TestColors()
+function! TestColors() " {{{2
   setlocal statusline=%!SetColors()
 endfunction
 
-function! MouseToggle()
+function! MouseToggle() " {{{2
     if &mouse == 'a'
         set mouse=
     else
@@ -156,8 +156,6 @@ function! MouseToggle()
     endif
 endfunc
 
-" }}}
-
 "------------------------------------------------------------
-" END
+" END {{{1
 "------------------------------------------------------------
