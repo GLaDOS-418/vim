@@ -147,7 +147,7 @@ call plug#end()
 
 " ctrlp - plugin config {{{2
   let g:ctrlp_map = '<c-p>'
-  let g:ctrlp_cmd = 'CtrlP Git_Repo_Cdup()'
+  let g:ctrlp_cmd = 'CtrlP'
   let g:ctrlp_use_caching = 1
   let g:ctrlp_clear_cache_on_exit = 0
   let g:ctrlp_cache_dir = $HOME.'/.cache/ctrlp'
@@ -159,6 +159,8 @@ call plug#end()
   if executable('rg')
     set grepprg=rg\ --color=never
     let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
+  else
+    call WildignoreFromGitignore()
   endif
 
 

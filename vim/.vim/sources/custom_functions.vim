@@ -79,9 +79,9 @@ function! WildignoreFromGitignore() " {{{2
         endfor
         let execstring = "set wildignore+=".substitute(igstring,'^,','',"g")
         execute execstring
-        echo 'Wildignore defined from gitignore in: '.getcwd()
+        silent !echom 'Wildignore defined from gitignore in: '.getcwd()
     else
-        echo 'Unable to find gitignore'
+        silent !echom 'Unable to find gitignore'
     endif
 endfunction
 
