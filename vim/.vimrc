@@ -237,25 +237,25 @@ nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
 " buffer movements and delete
-nnoremap <c-f> :bn<cr>
-nnoremap <c-b> :bp<cr>
-nnoremap <c-q> :bd<cr>
+nnoremap <silent> <c-f> :bn<cr>
+nnoremap <silent> <c-b> :bp<cr>
+nnoremap <silent> <c-q> :bd<cr>
 
 "------------------------------------------------------------
 " LEADER SHORTCUTS  {{{1
 "------------------------------------------------------------
 
 " toggle line numbers
-nnoremap <leader>nn :set number!<CR>
-nnoremap <leader>rn :set relativenumber!<CR>
+nnoremap <silent> <leader>nn :set number!<CR>
+nnoremap <silent> <leader>rn :set relativenumber!<CR>
 
 " <leader>k is move right one space
 inoremap <leader>k <right>
 
 " edit/load vimrc/bashrc
-nnoremap <leader>ev :vsp $MYVIMRC<CR>
-nnoremap <leader>eb :vsp ~/.bashrc<CR>
-nnoremap <leader>sv :source $MYVIMRC<CR>
+nnoremap <silent> <leader>ev :e $MYVIMRC<CR>
+nnoremap <silent> <leader>eb :e ~/.bashrc<CR>
+nnoremap <silent> <leader>sv :source $MYVIMRC<CR>
 
 " save session.
 " nnoremap <leader>s :mksession<CR>
@@ -270,14 +270,12 @@ vnoremap <leader>ts :s/\s\+$//ge<cr>
 " stage current file in git
 nnoremap <leader>ga :!git add %<CR>
 
-" spell check toggle
-nnoremap <leader>s :set spell!<cr>
-
 " paste in insert mode without auto-formatting
 inoremap <leader>p <F2><esc>pa<F2>
 
 " markdown style link paste from os clipboard
 nnoremap <leader>l mk:read !curl --silent --location <C-R>=shellescape(@+)<cr> <bar> tr --delete '\n' <bar> grep -P '<title>.*<\/title>' <bar> sed -E -e 's@.*<title>[[:space:]]*(.*)[[:space:]]*</title>.*@\1@'<CR>i[<esc>A]( <C-R>+ )<esc>0v$h"zydd`k"zp
+inoremap <c-l> <esc>mk:read !curl --silent --location <C-R>=shellescape(@+)<cr> <bar> tr --delete '\n' <bar> grep -P '<title>.*<\/title>' <bar> sed -E -e 's@.*<title>[[:space:]]*(.*)[[:space:]]*</title>.*@\1@'<CR>i[<esc>A]( <C-R>+ )<esc>0v$h"zydd`k"zpa
 
 " get file name w/o ext
 inoremap <leader>f <esc>mk:put =expand('%:t:r')<cr>v$hx`kpa
@@ -287,38 +285,6 @@ nnoremap <leader>gr :call CD_Git_Root()<cr>
 
 " add wildignore filetypes from .gitignore
 nnoremap <leader>cti :call WildignoreFromGitignore()<cr>
-
-" toggle line numbers
-nnoremap <leader>tn :set number!<CR>
-nnoremap <leader>trn :set relativenumber!<CR>
-
-" <leader>k is move right one space
-inoremap <leader>k <right>
-
-" edit/load vimrc/bashrc
-nnoremap <leader>ev :vsp $MYVIMRC<CR>
-nnoremap <leader>eb :vsp ~/.bashrc<CR>
-nnoremap <leader>sv :source $MYVIMRC<CR>
-
-" save session.
-" nnoremap <leader>s :mksession<CR>
-
-" Remove the Windows ^M - when the encodings gets messed up
-noremap <leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
-
-" stage current file in git
-nnoremap <leader>ga :!git add %<CR>
-
-" paste in insert mode without auto-formatting
-inoremap <leader>p <F2><esc>pa<F2>
-
-nnoremap gn :GitGutterNextHunk<CR>
-nnoremap gp :GitGutterPrevHunk<CR>
-nnoremap <leader>hs :GitGutterStageHunk<CR>
-nnoremap <leader>hu :GitGutterUndoHunk<CR>
-nnoremap <leader>hp :GitGutterPreviewHunk<CR>
-
-nnoremap <leader>ggt <esc>:GitGutterToggle<cr>
 
 "------------------------------------------------------------
 " AUTO COMMANDS   {{{1

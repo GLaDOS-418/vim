@@ -103,14 +103,14 @@ function! ActiveStatus() " {{{2
   let statusline.="%{LinterStatus()}"         " error message from ALE plugin
   let statusline.="%#StatusLineNC#"
   let statusline.="%y"                        " file type
-  let statusline.="[%{&fileencoding?&fileencoding:&encoding}]"
-  let statusline.="[%{&fileformat}\]"         " file format[unix/dos]
+  let statusline.="[%{&fileencoding?&fileencoding:&encoding}"
+  let statusline.=":%{&fileformat}\]"         " file format[unix/dos]
   "let statusline.="\ %3p%%"                  " file position percentage
   let statusline.="[r:%{v:register}]"
   let statusline.="%#Title#"
-  let statusline.="\ %4l:%-3c"                " line[width-4ch, pad-left]:col[width-3ch, pad-right]
+  let statusline.="\ %l:%-c\ "               " line[width-4ch, pad-left]:col[width-3ch, pad-right]
   let statusline.="%*"                        " switch to normal statusline hl
-  let statusline.="\ %4L "                    " number of lines in buffer
+  let statusline.="\ %3L "                    " number of lines in buffer
   return statusline
 endfunction
 

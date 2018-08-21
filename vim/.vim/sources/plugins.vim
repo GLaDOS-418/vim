@@ -59,7 +59,8 @@ call plug#begin('~/.vim/plugged')
 "   autocmd VimEnter * PlugInstall | q
 " endif
 
-Plug 'morhetz/gruvbox'                 " current colorscheme
+Plug 'morhetz/gruvbox'                  " current colorscheme
+Plug 'junegunn/rainbow_parentheses.vim' " match paranthesis pair colors
 
 Plug 'tpope/vim-fugitive'              " handle git commands
 Plug 'airblade/vim-gitgutter'          " see git diff in buffer
