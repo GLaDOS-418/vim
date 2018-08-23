@@ -27,6 +27,7 @@ set title                       " change the terminal's title
 set spelllang=en                " 'en_gb' sets region to British English. 'en' for all regions
 set noswapfile                  " stops vim from creating a .swp file
 " set nobackup                  " no error when same file being edited by multiple vim sessions
+set backupdir=~/.cache/backup   " keep backup in this folder
 set textwidth=0                 " no automatic linefeeds in insert mode
 set wrap                        " word wrap the text(normal/visual)
 set visualbell                  " don't beep
@@ -36,6 +37,14 @@ set backspace=indent,eol,start  " allow backspacing over everything in insert mo
 set diffopt+=vertical           " vim-fugitive vertical split on diff
 "set mouse+=a                   " use mouse to place cursor and copy w/o line num
 syntax enable                   " enable syntax processing
+
+augroup backup
+  au!
+  " remove all old backups on vim start
+  au VimEnter * silent execute '!rm ~/.cache/backup/*~'
+  " make sure backup dir exists
+  au VimEnter * silent execute '!mkdir ~/.cache/backup'
+augroup END
 
 " clearing the t_vb variable deactivates flashing
 set t_vb=
@@ -122,6 +131,9 @@ set expandtab         " tabs are spaces
 set shiftwidth=2      " when (un)indenting lines shift with 1unit shiftwidth
 set softtabstop=2     " number of spaces in TAB when editing
 set pastetoggle=<F2>  " toggle insert(paste) mode
+
+" Remove the Windows ^M - when the encodings gets messed up
+noremap <silent> <c-m> mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 
 " handle jump markers
 inoremap <space><tab> <esc>/<++><CR>:nohl<CR>"_c4l
@@ -260,12 +272,9 @@ nnoremap <silent> <leader>sv :source $MYVIMRC<CR>
 " save session.
 " nnoremap <leader>s :mksession<CR>
 
-" Remove the Windows ^M - when the encodings gets messed up
-noremap <leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
-
 " remove trailing space in file
-nnoremap <leader>ts :%s/\s\+$//ge<cr>
-vnoremap <leader>ts :s/\s\+$//ge<cr>
+nnoremap <silent> <leader>ts mmHmt:%s/\s\+$//ge<cr>'tzt'm
+vnoremap <silent> <leader>ts :s/\s\+$//ge<cr>
 
 " stage current file in git
 nnoremap <leader>ga :!git add %<CR>

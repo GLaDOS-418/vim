@@ -114,7 +114,7 @@ call plug#end()
   nnoremap <leader>hs :GitGutterStageHunk<CR>
   nnoremap <leader>hu :GitGutterUndoHunk<CR>
   nnoremap <leader>hp :GitGutterPreviewHunk<CR>
-  nnoremap <leader>ggt <esc>:GitGutterToggle<cr>
+  nnoremap <leader>ggt :GitGutterToggle<cr>
   if exists('&signcolumn')  " vim 7.4.2201+
     set signcolumn=yes
   else
@@ -160,7 +160,10 @@ call plug#end()
     set grepprg=rg\ --color=never
     let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
   else
-    call WildignoreFromGitignore()
+    augroup set_ignore
+    au!
+     autocmd VimEnter * call WildignoreFromGitignore()
+   augroup END
   endif
 
 
@@ -192,7 +195,7 @@ call plug#end()
 
 
 " tagbar - plugin config{{{2
-  nnoremap <F8> :TagbarOpen fj<cr>
+  nnoremap <silent> <F8> :TagbarOpen fj<cr>
 
 "------------------------------------------------------------
 " END {{{1
