@@ -72,10 +72,12 @@ Plug 'sjl/gundo.vim'                   " see vim history-tree
 Plug 'ctrlpvim/ctrlp.vim'              " fuzzy file search
 Plug 'ervandew/supertab'               " use tab for all insert mode completions
 Plug 'majutsushi/tagbar'               " show tags in sidebar using ctags
+Plug 'ludovicchabant/vim-gutentags'
+Plug 'skywind3000/gutentags_plus'
 
 Plug 'Valloric/YouCompleteMe',
   \ {'do':function('BuildYCM'),
-  \  'for':['c','cpp','python','rust']
+  \  'for':[]
   \ }                                  " code completion engine
 Plug 'w0rp/ale'                        " asynchronous linting engine
 Plug 'sirver/ultisnips'                " custom snippets
@@ -96,6 +98,13 @@ call plug#end()
 "------------------------------------------------------------
 " PLUGIN SETTINGS {{{1
 "------------------------------------------------------------
+
+" gutentags_plus {{{2
+" generate datebases in my cache directory, prevent gtags files polluting my project
+let g:gutentags_cache_dir = expand('~/.cache/tags')
+let g:gutentags_project_root = ['.root', '.git']
+    let g:gutentags_modules = ['ctags' , 'gtags_cscope']
+let g:gutentags_define_advanced_commands = 1
 
 " ale - plugin config {{{2
   nnoremap <silent> <localleader>k <Plug>(ale_previous_wrap)
@@ -123,8 +132,10 @@ call plug#end()
 
 
 " vim-closetag - plugin config {{{2
-  let g:closetag_filenames = '*.html,*.xhtml,*.phtml'
-  let g:closetag_xhtml_filenames = '*.xslt,*.xml,*.xhtml,*.jsx'
+  let g:closetag_filenames = '*.xml,*.xslt,*.htm,*.html,*.xhtml,*.phtml'
+  let g:closetag_xhtml_filenames = '*.xslt,*.xhtml,*.jsx'
+  let g:closetag_filetypes = 'html,xml,xhtml,phtml'
+  let g:closetag_xhtml_filetypes = 'xslt,xhtml,jsx'
   let g:closetag_emptyTags_caseSensitive = 1
   let g:closetag_shortcut = '>'               " Shortcut for closing tags, default is '>'
   let g:closetag_close_shortcut = '<leader>>' " Add > at current position without closing the current tag, default is ''
@@ -162,7 +173,7 @@ call plug#end()
   else
     augroup set_ignore
     au!
-     autocmd VimEnter * call WildignoreFromGitignore()
+     "autocmd VimEnter * call WildignoreFromGitignore()
    augroup END
   endif
 

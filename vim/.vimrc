@@ -41,9 +41,9 @@ syntax enable                   " enable syntax processing
 augroup backup
   au!
   " remove all old backups on vim start
-  au VimEnter * silent execute '!rm ~/.cache/backup/*~'
+  au VimEnter * silent! execute '!rm ~/.cache/backup/*~ 2>/dev/null'
   " make sure backup dir exists
-  au VimEnter * silent execute '!mkdir ~/.cache/backup'
+  au VimEnter * silent! execute '!mkdir ~/.cache/backup 2>/dev/null'
 augroup END
 
 " clearing the t_vb variable deactivates flashing
@@ -141,6 +141,9 @@ inoremap <leader><space><tab> <++><esc>4h?<++><CR>:nohl<CR>"_c4l
 nnoremap <space><tab><tab> :%s/<++>//g<CR>
 inoremap <leader>m <++><esc>
 
+" indentation control in visual mode
+vnoremap > >gv
+vnoremap < <gv
 
 "------------------------------------------------------------
 " UI CONFIG  {{{1
@@ -212,6 +215,9 @@ vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
 
 " replace all
 nnoremap S :%s//g<Left><Left>
+
+" normal modd <c-r> is redo, visual mode is replace
+vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
 
 " highlight last inserted text
 " nnoremap gV `[v`]
@@ -318,11 +324,51 @@ augroup default_group
     autocmd filetype java nnoremap <C-c> :w <bar> !javac % && java -enableassertions %:p <CR>
     autocmd filetype python nnoremap <C-c> :w <bar> !python % <CR>
     autocmd filetype plantuml nnoremap <C-c> :call BuildUml() <cr>
-
+    
+    " Set scripts to be executable from the shell
+    autocmd BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "/bin/" | silent execute "!chmod a+x <afile>" | endif | endif
     autocmd FocusLost * :silent! wall          " Save on lost focus
     autocmd VimResized * :wincmd = " Resize splits when the window is resized
+    autocmd VimEnter * redraw!
 augroup END
 
+" revisit  code navigations
+set csprg=gtags-cscope
+nmap <Leader>fd :cs f g <C-R>=expand( "<cword>" )<CR><CR>
+nmap <Leader>fr :cs f s <C-R>=expand( "<cword>" )<CR><CR>
+nmap <Leader>fc :cs f c <C-R>=expand( "<cword>" )<CR><CR>
+
+let g:gitroot =  Git_Repo_Cdup()
+"vim build tags for project"
+silent function! LoadTags( channel )
+silent! execute "cs add " . g:gitroot . "GTAGS"
+echo "GTAGS built and loaded"
+endfunction
+
+silent function! UpdateTags()
+if filereadable(g:gitroot . "GTAGS")
+   silent! execute "cs kill 0"
+   call job_start( "global -u", { "close_cb": "LoadTags" } )
+endif
+endfunction
+
+silent function! BuildTags(  )
+if !filereadable( g:gitroot . "GTAGS" )
+   silent! execute "cs kill 0"
+   call job_start( "gtags-cscope -b", { "close_cb": "LoadTags" })
+else
+   silent! execute "cs add GTAGS"
+endif
+enew
+Explore
+endfunction
+
+augroup temp
+   "au filetype cpp autocmd vimrc BufWritePost <buffer> call UpdateTags()
+augroup END
+
+" find hex value
+nnoremap <leader>h :let @@=<C-R><C-W><CR>
 "------------------------------------------------------------
 " END {{{1
 "------------------------------------------------------------
