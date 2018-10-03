@@ -101,10 +101,10 @@ call plug#end()
 
 " gutentags_plus {{{2
 " generate datebases in my cache directory, prevent gtags files polluting my project
-let g:gutentags_cache_dir = expand('~/.cache/tags')
-let g:gutentags_project_root = ['.root', '.git']
-    let g:gutentags_modules = ['ctags' , 'gtags_cscope']
-let g:gutentags_define_advanced_commands = 1
+  let g:gutentags_cache_dir = expand('~/.cache/tags')
+  let g:gutentags_project_root = ['.root', '.git']
+  let g:gutentags_modules = ['ctags' , 'gtags_cscope']
+  let g:gutentags_define_advanced_commands = 1
 
 " ale - plugin config {{{2
   nnoremap <silent> <localleader>k <Plug>(ale_previous_wrap)

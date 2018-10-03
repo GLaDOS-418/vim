@@ -2,6 +2,11 @@
 " SOURCES {{{1
 "------------------------------------------------------------
 
+" leaders before loading any plugin otherwise they remain vim
+" default and doesn't work with these bindings
+let mapleader=','               " leader is comma
+let maplocalleader="\<space>"   " localleader is space
+
 source ~/.vim/sources/custom_functions.vim
 source ~/.vim/sources/abbreviations.vim
 source ~/.vim/sources/statusline.vim
@@ -13,8 +18,6 @@ source ~/.vim/sources/plugins.vim
 "------------------------------------------------------------
 
 " set nocompatible              " commented: r/vim/wiki/vimrctips
-let mapleader=','               " leader is comma
-let maplocalleader="\<space>"   " localleader is space
 set nostartofline               " Make j/k respect the columns
 set clipboard=unnamedplus       " to use operating system clipboard
 set clipboard+=unnamed          " to use operating system clipboard
