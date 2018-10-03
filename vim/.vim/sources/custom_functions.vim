@@ -154,7 +154,7 @@ function! MouseToggle() " {{{2
     else
         set mouse=a
     endif
-endfunc
+endfunction
 
 "------------------------------------------------------------
 " END {{{1

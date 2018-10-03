@@ -7,10 +7,10 @@
 let mapleader=','               " leader is comma
 let maplocalleader="\<space>"   " localleader is space
 
-source ~/.vim/sources/custom_functions.vim
-source ~/.vim/sources/abbreviations.vim
-source ~/.vim/sources/statusline.vim
 source ~/.vim/sources/plugins.vim
+source ~/.vim/sources/statusline.vim
+source ~/.vim/sources/abbreviations.vim
+source ~/.vim/sources/custom_functions.vim
 
 
 "------------------------------------------------------------

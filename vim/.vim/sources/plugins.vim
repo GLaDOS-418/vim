@@ -13,7 +13,8 @@ if empty(glob('~/.vim/autoload/plug.vim')) && executable('curl')
   autocmd VimEnter * PlugInstall | source $MYVIMRC
 endif
 
-" helper function to check for conditions and load plugins
+" helper function to check for conditions and load plugins. Follow below pattern:
+" Cond( condition1, Cond(condition2, ,Cond(condition2, {dictionary}) ) )
 function! Cond(cond, ...) "{{{2
   let opts = get(a:000, 0, {})
   return (a:cond) ? opts : extend(opts, { 'on': [], 'for': [] })
@@ -72,8 +73,7 @@ Plug 'sjl/gundo.vim'                   " see vim history-tree
 Plug 'ctrlpvim/ctrlp.vim'              " fuzzy file search
 Plug 'ervandew/supertab'               " use tab for all insert mode completions
 Plug 'majutsushi/tagbar'               " show tags in sidebar using ctags
-Plug 'ludovicchabant/vim-gutentags'
-Plug 'skywind3000/gutentags_plus'
+Plug 'tpope/vim-abolish'
 
 Plug 'Valloric/YouCompleteMe',
   \ {'do':function('BuildYCM'),
@@ -84,6 +84,10 @@ Plug 'sirver/ultisnips'                " custom snippets
 Plug 'scrooloose/vim-slumlord'         " inline previews for plantuml acitvity dia
 Plug 'aklt/plantuml-syntax'            " syntax/linting for plantuml
 Plug 'alvan/vim-closetag'              " to close markup lang tags
+Plug 'ludovicchabant/vim-gutentags'
+  \ ,Cond(executable('ctags'),Cond(executable('gtags-cscope')))
+Plug 'skywind3000/gutentags_plus'
+  \ ,Cond(executable('ctags'),Cond(executable('gtags-cscope')))
 
 Plug 'vimwiki/vimwiki'                 " note taking in vim
 Plug 'euclio/vim-markdown-composer',
