@@ -7,11 +7,23 @@
 let mapleader=','               " leader is comma
 let maplocalleader="\<space>"   " localleader is space
 
-source ~/.vim/sources/plugins.vim
-source ~/.vim/sources/statusline.vim
-source ~/.vim/sources/abbreviations.vim
-source ~/.vim/sources/custom_functions.vim
+if has('win32') ||  has('win64')
+  let g:sep = '\'
+  let g:vim_home = fnamemodify(expand("$MYVIMRC"), ":p:h") . sep . 'vimfiles'
+else
+  let g:sep = '/'
+  let g:vim_home = fnamemodify(expand("$MYVIMRC"), ":p:h") . sep . '.vim'
+endif
 
+function! SourceFileName(fsep, ...)
+   return join(a:000, a:fsep)
+endfunction
+
+let source_file_names=['plugins', 'statusline', 'abbreviations', 'custom_functions']
+
+for file_name in  source_file_names
+  exe 'source' . SourceFileName(sep, vim_home, 'sources', file_name . '.vim')
+endfor
 
 "------------------------------------------------------------
 " MISC {{{1

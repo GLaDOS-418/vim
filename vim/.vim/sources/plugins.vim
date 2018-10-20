@@ -171,6 +171,7 @@ call plug#end()
   let g:ctrlp_root_markers = ['.root']          " add .root as project root
   let g:ctrlp_switch_buffer = 'E'               " jmp to file if already opened
   let g:ctrlp_match_window = 'bottom,order:ttb' " top-to-bottom filename matching
+  let g:ctrlp_max_files = 0                     " set max files to enumerate as infinite
   if executable('rg')
     set grepprg=rg\ --color=never
     let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
