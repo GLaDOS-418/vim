@@ -199,7 +199,7 @@ if has('gui_running')
       set anti enc=utf-8
       set guifont=Source\ Code\ Pro\ Medium\ 12
   elseif has("gui_win32") || has("gui_win64" )
-      set guifont=Source Code Pro:Medium:h12
+      set guifont=Source Code Pro:Medium:h20
   endif
 endif
 

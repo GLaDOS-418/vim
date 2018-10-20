@@ -52,8 +52,8 @@ function! BuildYCM(info) "{{{2
 endfunction
 " }}}
 
-" plug plugin setup.
-call plug#begin('~/.vim/plugged')
+" plug plugin setup. vim_home and sep in vimrc
+call plug#begin(vim_home . sep . 'plugged')
 
 " Automatically install plugins on startup.
 " if !empty(filter(copy(g:plugs), '!isdirectory(v:val.dir)'))
