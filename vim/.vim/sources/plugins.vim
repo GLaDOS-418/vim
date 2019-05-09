@@ -10,11 +10,11 @@
 if empty(glob('~/.vim/autoload/plug.vim')) && executable('curl')
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
         \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall | source $MYVIMRC
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
 " helper function to check for conditions and load plugins. Follow below pattern:
-" Cond( condition1, Cond(condition2, ,Cond(condition2, {dictionary}) ) )
+" Cond( condition1, Cond(condition2,Cond(condition3, {dictionary}) ) )
 function! Cond(cond, ...) "{{{2
   let opts = get(a:000, 0, {})
   return (a:cond) ? opts : extend(opts, { 'on': [], 'for': [] })
@@ -52,6 +52,11 @@ function! BuildYCM(info) "{{{2
 endfunction
 " }}}
 
+function! HasPython()
+  return has('python')||has('python3')
+endfunction
+
+
 " plug plugin setup. vim_home and sep in vimrc
 call plug#begin(vim_home . sep . 'plugged')
 
@@ -76,11 +81,11 @@ Plug 'majutsushi/tagbar'               " show tags in sidebar using ctags
 Plug 'tpope/vim-abolish'
 
 Plug 'Valloric/YouCompleteMe',
-  \ {'do':function('BuildYCM'),
-  \  'for':[]
-  \ }                                  " code completion engine
+  \ Cond(HasPython(),
+  \ {'do':function('BuildYCM'), 'for':[]})
 Plug 'w0rp/ale'                        " asynchronous linting engine
-Plug 'sirver/ultisnips'                " custom snippets
+Plug 'sirver/ultisnips',
+  \ Cond(HasPython())
 Plug 'scrooloose/vim-slumlord'         " inline previews for plantuml acitvity dia
 Plug 'aklt/plantuml-syntax'            " syntax/linting for plantuml
 Plug 'alvan/vim-closetag'              " to close markup lang tags
@@ -111,8 +116,8 @@ call plug#end()
   let g:gutentags_define_advanced_commands = 1
 
 " ale - plugin config {{{2
-  nnoremap <silent> <localleader>k <Plug>(ale_previous_wrap)
-  nnoremap <silent> <localleader>j <Plug>(ale_next_wrap)
+  nnoremap <silent> <C-k> <Plug>(ale_previous_wrap)
+  nnoremap <silent> <C-j> <Plug>(ale_next_wrap)
   let g:ale_lint_on_text_changed = 0
   let g:ale_warn_about_trailing_whitespace = 0  " disable for python files
   let g:ale_warn_about_trailing_blank_lines = 0 " disable for python files
@@ -148,8 +153,13 @@ call plug#end()
 " vimwiki- plugin config {{{2
   let g:vimwiki_list = [{'path': '~/repos/personal_notes/', 'syntax': 'markdown', 'ext': '.md'},
                        \{'path': '~/repos/work_notes/',     'syntax': 'markdown', 'ext': '.md'},
+                       \{'path': '~/repos/blog/', 'syntax': 'markdown', 'ext': '.md'},
                        \]
   let g:vimwiki_use_mouse = 1
+  noremap glo :VimwikiChangeSymbolTo *<CR>
+  noremap glO :VimwikiChangeSymbolInListTo *<CR>
+  noremap gll :VimwikiChangeSymbolTo #<CR>
+  noremap glL :VimwikiChangeSymbolInListTo #<CR>
 
 
 " tabular - plugin config {{{2

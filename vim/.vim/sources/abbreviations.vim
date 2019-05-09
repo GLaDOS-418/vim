@@ -22,15 +22,18 @@ inoremap () ()
 inoremap {} {}
 
 " quotes and backtick
-inoremap '- '
-inoremap "- "
-inoremap `- `
+" inoremap '- '
+" inoremap "- "
+" inoremap `- `
+inoremap '' '
+inoremap "" "
+inoremap `` `
 inoremap '      ''<++><esc>F'i
 inoremap "      ""<++><esc>F"i
 inoremap `      ``<++><esc>F`i
-inoremap '' ''
-inoremap "" ""
-inoremap `` ``
+" inoremap '' ''
+" inoremap "" ""
+" inoremap `` ``
 inoremap '''      '''  '''<esc>F<space>i
 inoremap """      """  """<++><esc>F<space>i
 inoremap ```      ```  ```<++><esc>F<space>i
@@ -39,10 +42,11 @@ inoremap "<cr>  "<cr>"<cr><++><esc>kO
 inoremap `<cr>  `<cr>`<cr><++><esc>kO
 inoremap '''<cr>  '''<cr>'''<cr><++><esc>kO
 inoremap """<cr>  """<cr>"""<cr><++><esc>kO
-inoremap ```<cr>  ```<cr>```<cr><++><esc>kO
+inoremap ```<cr>  ```<esc>mza<cr><++><cr>```<cr><++><esc>`za
 
 " misc
-inoremap /*- /*
+" inoremap /*- /*
+inoremap /** /*
 inoremap /*  /*  */<++><esc>F<space>i
 inoremap /*<cr>  /*<cr>*/<cr><++><esc>kO<tab>
 

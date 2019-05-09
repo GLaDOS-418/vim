@@ -22,7 +22,7 @@ endfunction
 let source_file_names=['plugins', 'statusline', 'abbreviations', 'custom_functions']
 
 for file_name in  source_file_names
-  exe 'source' . SourceFileName(sep, vim_home, 'sources', file_name . '.vim')
+  exe 'source ' . SourceFileName(sep, vim_home, 'sources', file_name . '.vim')
 endfor
 
 "------------------------------------------------------------
@@ -143,18 +143,22 @@ set autoindent
 set cindent           " better alternative to smartindent
 set expandtab         " tabs are spaces
 " set tabstop=2       " commented: r/vim/wiki/tabstop
-set shiftwidth=2      " when (un)indenting lines shift with 1unit shiftwidth
-set softtabstop=2     " number of spaces in TAB when editing
+set shiftwidth=4      " when (un)indenting lines shift with 1unit shiftwidth
+set softtabstop=4     " number of spaces in TAB when editing
 set pastetoggle=<F2>  " toggle insert(paste) mode
 
 " Remove the Windows ^M - when the encodings gets messed up
 noremap <silent> <c-m> mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 
 " handle jump markers
-inoremap <space><tab> <esc>/<++><CR>:nohl<CR>"_c4l
-inoremap <leader><space><tab> <++><esc>4h?<++><CR>:nohl<CR>"_c4l
-nnoremap <space><tab><tab> :%s/<++>//g<CR>
-inoremap <leader>m <++><esc>
+" inoremap <space><tab> <esc>/<++><CR>:nohl<CR>"_c4l
+" inoremap <leader><space><tab> <++><esc>4h?<++><CR>:nohl<CR>"_c4l
+" nnoremap <space><tab><tab> :%s/<++>//g<CR>
+" inoremap <leader>m <++><esc>
+inoremap j<tab> <esc>/<++><CR>:nohl<CR>"_c4l
+nnoremap <s-tab><s-tab> :%s/<++>//g<CR>
+inoremap <leader><tab> <++><esc>4h?<++><CR>:nohl<CR>"_c4l
+inoremap <s-tab> <++><esc>
 
 " indentation control in visual mode
 vnoremap > >gv
@@ -199,7 +203,9 @@ if has('gui_running')
       set anti enc=utf-8
       set guifont=Source\ Code\ Pro\ Medium\ 12
   elseif has("gui_win32") || has("gui_win64" )
-      set guifont=Source Code Pro:Medium:h20
+      set lines=30
+      set columns=110
+      set guifont=Source_Code_Pro_Medium:h11:cANSI:qDRAFT
   endif
 endif
 
@@ -339,7 +345,7 @@ augroup default_group
     autocmd filetype java nnoremap <C-c> :w <bar> !javac % && java -enableassertions %:p <CR>
     autocmd filetype python nnoremap <C-c> :w <bar> !python % <CR>
     autocmd filetype plantuml nnoremap <C-c> :call BuildUml() <cr>
-    
+
     " Set scripts to be executable from the shell
     autocmd BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "/bin/" | silent execute "!chmod a+x <afile>" | endif | endif
     autocmd FocusLost * :silent! wall          " Save on lost focus
