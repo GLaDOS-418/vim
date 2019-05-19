@@ -19,7 +19,7 @@ function! SourceFileName(fsep, ...)
    return join(a:000, a:fsep)
 endfunction
 
-let source_file_names=['plugins', 'statusline', 'abbreviations', 'custom_functions']
+let source_file_names=['plugins', 'statusline', 'abbreviations', 'custom_functions', 'environment']
 
 for file_name in  source_file_names
   exe 'source ' . SourceFileName(sep, vim_home, 'sources', file_name . '.vim')
@@ -37,7 +37,6 @@ set history=1000                " set how many lines of history vim has to remem
 set autoread                    " set the file to autoread when a file is changed from outside
 set encoding=utf-8              " set vim encoding to utf-8
 set fileencoding=utf-8          " set vim encoding to utf-8
-set esckeys                     " Allow cursor keys in insert mode.
 set title                       " change the terminal's title
 set spelllang=en                " 'en_gb' sets region to British English. 'en' for all regions
 set noswapfile                  " stops vim from creating a .swp file
@@ -52,6 +51,10 @@ set backspace=indent,eol,start  " allow backspacing over everything in insert mo
 set diffopt+=vertical           " vim-fugitive vertical split on diff
 "set mouse+=a                   " use mouse to place cursor and copy w/o line num
 syntax enable                   " enable syntax processing
+
+if !has('nvim')
+  set esckeys                   " Allow cursor keys in insert mode.
+endif
 
 augroup backup
   au!

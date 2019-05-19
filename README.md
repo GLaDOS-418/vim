@@ -34,3 +34,5 @@
 * [Building vim from source]( https://github.com/Valloric/YouCompleteMe/wiki/Building-Vim-from-source )
 * [ripgrep is faster than {grep, ag, git grep, ucg, pt, sift} - Andrew Gallant&#39;s Blog]( https://blog.burntsushi.net/ripgrep/ )
 * [GitHub - bchretien/vim-profiler: Utility script to profile (n)vim (e.g. startup times of plugins)]( https://github.com/bchretien/vim-profiler )
+
+
