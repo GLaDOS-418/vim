@@ -21,7 +21,7 @@ if !has('clipboard') && executable(s:clip_yank)
   " augroup END
 
   noremap <C-c> :call system('clip.exe', GetSelectedText())<CR>
-end
+endif
 
 if !has('clipboard') && executable('powershell.exe')
   func! GetClipboardText()
@@ -29,8 +29,9 @@ if !has('clipboard') && executable('powershell.exe')
     return text[:-2] " remove last newline from windows clipboard
   endfunc
 
-  nnoremap <C-v> :exe 'norm! a'. GetClipboardText()<CR>
-end
+  nnoremap <M-v> :exe 'norm! a'. GetClipboardText()<CR>
+  nnoremap <C-M-v> :exe 'norm! a'. GetClipboardText()<CR>
+endif
 
 "------------------------------------------------------------
 " END {{{1
