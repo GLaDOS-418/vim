@@ -67,7 +67,7 @@ call plug#begin(vim_home . sep . 'plugged')
 
 Plug 'morhetz/gruvbox'                  " current colorscheme
 Plug 'junegunn/rainbow_parentheses.vim' " match paranthesis pair colors
-
+Plug 'machakann/vim-highlightedyank'   " flash highlight yanked region
 Plug 'tpope/vim-fugitive'              " handle git commands
 Plug 'airblade/vim-gitgutter'          " see git diff in buffer
 Plug 'tpope/vim-surround'              " surround text with tags
