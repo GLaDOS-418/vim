@@ -44,7 +44,8 @@ function! BuildYCM(info) "{{{2
   " - force:  set on PlugInstall! or PlugUpdate!
   if has('python')||has('python3')
     if a:info.status == 'installed' || a:info.force
-      !./install.py --clang-completer --rust-completer --go-completer --rust-completer --java-completer
+      " !./install.py --clang-completer --go-completer --rust-completer --java-completer --system-libclang --system-boost
+      !python install.py --clang-completer --go-completer --rust-completer --java-completer
     endif
   else
     echom "you don't 've python support in vim to build YCM!!!"
@@ -76,6 +77,8 @@ Plug 'godlygeek/tabular'               " text alignment
 Plug 'itchyny/calendar.vim'            " crazy calendar plugin that can sync tasks
 Plug 'sjl/gundo.vim'                   " see vim history-tree
 Plug 'ctrlpvim/ctrlp.vim'              " fuzzy file search
+" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+" Plug 'junegunn/fzf.vim'
 Plug 'ervandew/supertab'               " use tab for all insert mode completions
 Plug 'majutsushi/tagbar'               " show tags in sidebar using ctags
 Plug 'tpope/vim-abolish'
@@ -126,7 +129,7 @@ call plug#end()
 " gitgutter - plugin config {{{2
   set updatetime=1000                 "wait how much time to detect file update
   let g:gitgutter_max_signs = 500     "threshold upto which gitgutter shows sign
-  let g:gitgutter_highlight_lines = 1
+  let g:gitgutter_highlight_lines = 0
   nnoremap gn :GitGutterNextHunk<CR>
   nnoremap gp :GitGutterPrevHunk<CR>
   nnoremap <leader>hs :GitGutterStageHunk<CR>
@@ -138,6 +141,15 @@ call plug#end()
   else
     let g:gitgutter_sign_column_always = 1
   endif
+  
+  let g:gitgutter_sign_added = '++'
+  let g:gitgutter_sign_modified = '**'
+  let g:gitgutter_sign_removed = '~~'
+  let g:gitgutter_sign_removed_first_line = '^^'
+  let g:gitgutter_sign_modified_removed = '*~'
+  " highlight GitGutterAdd    guifg=#009900 guibg=#009900 ctermfg=2 ctermbg=2
+  " highlight GitGutterChange guifg=#bbbb00 guibg=#bbbb00 ctermfg=3 ctermbg=3
+  " highlight GitGutterDelete guifg=#ff2222 guibg=#ff2222 ctermfg=1 ctermbg=1
 
 
 " vim-closetag - plugin config {{{2
@@ -182,16 +194,19 @@ call plug#end()
   let g:ctrlp_switch_buffer = 'E'               " jmp to file if already opened
   let g:ctrlp_match_window = 'bottom,order:ttb' " top-to-bottom filename matching
   let g:ctrlp_max_files = 0                     " set max files to enumerate as infinite
-  if executable('rg')
-    set grepprg=rg\ --color=never
-    let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
-  else
-    augroup set_ignore
-    au!
-     "autocmd VimEnter * call WildignoreFromGitignore()
-   augroup END
-  endif
+   if executable('rg')
+     set grepprg=rg\ --color=never
+     let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
+   else
+     augroup set_ignore
+     au!
+      "autocmd VimEnter * call WildignoreFromGitignore()
+    augroup END
+   endif
 
+" fzf - plugin config {{{2
+    let g:fzf_nvim_statusline = 0 " disable statusline overwriting
+    nnoremap <silent> <c-p> :Files<CR>
 
 " vim-markdown-composer - plugin config {{{2
   let g:markdown_composer_browser = '/usr/bin/firefox'
