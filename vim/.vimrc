@@ -146,8 +146,8 @@ set autoindent
 set cindent           " better alternative to smartindent
 set expandtab         " tabs are spaces
 " set tabstop=2       " commented: r/vim/wiki/tabstop
-set shiftwidth=4      " when (un)indenting lines shift with 1unit shiftwidth
-set softtabstop=4     " number of spaces in TAB when editing
+set shiftwidth=2      " when (un)indenting lines shift with 1unit shiftwidth
+set softtabstop=2     " number of spaces in TAB when editing
 set pastetoggle=<F2>  " toggle insert(paste) mode
 
 " Remove the Windows ^M - when the encodings gets messed up
@@ -274,9 +274,8 @@ nnoremap <silent> <leader>rn :set relativenumber!<CR>
 " <leader>k is move right one space
 inoremap <leader>k <right>
 
-" edit/load vimrc/bashrc
+" edit/load vimrc
 nnoremap <silent> <leader>ev :e $MYVIMRC<CR>
-nnoremap <silent> <leader>eb :e ~/.bashrc<CR>
 nnoremap <silent> <leader>sv :source $MYVIMRC<CR>
 
 " save session.
@@ -306,6 +305,17 @@ nnoremap <leader>gr :call CD_Git_Root()<cr>
 nnoremap <leader>cti :call WildignoreFromGitignore()<cr>
 
 "------------------------------------------------------------
+" ENVIRONMENT PROFILES   {{{1
+"------------------------------------------------------------
+
+function! Cpp( )
+    nnoremap <C-c> :w <bar> !clear && g++ -fsanitize=address -std=gnu++17 -g -D fio % -o %:p:h/%:t:r.out && time ./%:r.out<CR>
+    inoremap <leader>e :%s/\(std::\)\?endl/"\\n"/<cr>
+    inoremap <leader>io <esc>:r ~/.vim/personal_snips/cpp_fast_io.cpp<CR>i
+    inoremap <leader>r <esc>:r ~/.vim/personal_snips/cpp_algo_start.cpp<CR>i
+    nnoremap <c-s> :!kdbg <c-r>=expand("%:r:h") . ".out"<cr>&<cr>
+endfunction
+"------------------------------------------------------------
 " AUTO COMMANDS   {{{1
 "------------------------------------------------------------
 
@@ -321,10 +331,7 @@ augroup default_group
     autocmd BufNewFile,BufRead *.uml,*.pu,*.plantuml,.*puml set filetype=plantuml
     autocmd BufNewFile,BufRead *.md,*.mdown,*.markdown,.*mkd set filetype=markdown
 
-    autocmd filetype cpp nnoremap <C-c> :w <bar> !clear && g++ -std=gnu++14 -g -D fio % -o %:p:h/%:t:r.out && time ./%:r.out<CR>
-    autocmd filetype cpp inoremap <leader>e :%s/\(std::\)\?endl/"\\n"/<cr>
-    autocmd filetype cpp inoremap <leader>io <esc>:r ~/.vim/personal_snips/cpp_fast_io.cpp<CR>i
-    autocmd filetype cpp inoremap <leader>r <esc>:r ~/.vim/personal_snips/cpp_algo_start.cpp<CR>i
+    autocmd filetype cpp call Cpp()
     autocmd filetype java nnoremap <C-c> :w <bar> !javac % && java -enableassertions %:p <CR>
     autocmd filetype python nnoremap <C-c> :w <bar> !python % <CR>
     autocmd filetype plantuml nnoremap <C-c> :call BuildUml() <cr>

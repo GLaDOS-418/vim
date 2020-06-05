@@ -32,14 +32,14 @@ let g:currentmode={
 
 " Function: display errors from Ale in statusline
 function! LinterStatus() abort " {{{2
-  let l:counts = ale#statusline#Count(bufnr(''))
-  let l:all_errors = l:counts.error + l:counts.style_error
-  let l:all_non_errors = l:counts.total - l:all_errors
-  return l:counts.total == 0 ? '' : printf(
-  \ 'W:%d E:%d',
-  \ l:all_non_errors,
-  \ l:all_errors
-  \)
+  " let l:counts = ale#statusline#Count(bufnr(''))
+  " let l:all_errors = l:counts.error + l:counts.style_error
+  " let l:all_non_errors = l:counts.total - l:all_errors
+  " return l:counts.total == 0 ? '' : printf(
+  " \ 'W:%d E:%d',
+  " \ l:all_non_errors,
+  " \ l:all_errors
+  " \)
 endfunction
 
 " Function: returns paste mode. (since insert behaves different in this mode)
@@ -100,7 +100,7 @@ function! ActiveStatus() " {{{2
   let statusline.="\ %m"                      " modifi(ed|able) flag
   let statusline.="%="                        " switching to the right side
   let statusline.="%#ErrorMsg#"               " hl group style: error message
-  let statusline.="%{LinterStatus()}"         " error message from ALE plugin
+  " let statusline.="%{LinterStatus()}"       " error message from ALE plugin
   let statusline.="%#StatusLineNC#"
   let statusline.="%y"                        " file type
   let statusline.="[%{&fileencoding?&fileencoding:&encoding}"
@@ -108,7 +108,7 @@ function! ActiveStatus() " {{{2
   "let statusline.="\ %3p%%"                  " file position percentage
   let statusline.="[r:%{v:register}]"
   let statusline.="%#Title#"
-  let statusline.="\ %l:%-c\ "               " line[width-4ch, pad-left]:col[width-3ch, pad-right]
+  let statusline.="\ %l:%-c\ "                " line[width-4ch, pad-left]:col[width-3ch, pad-right]
   let statusline.="%*"                        " switch to normal statusline hl
   let statusline.="\ %3L "                    " number of lines in buffer
   return statusline
@@ -118,7 +118,7 @@ function! InactiveStatus() " {{{2
   " same as active status without colors
   let statusline="%<%#StatusLineNC#"
   let statusline.=" %3{toupper(get(g:currentmode,strtrans(mode())))} %{PasteForStatusline()}"
-  let statusline.="%.15{GitBranchFugitive()}\ %f%r%=%{LinterStatus()}%y"
+  let statusline.="%.15{GitBranchFugitive()}\ %f%r%=%y"
   let statusline.="[%{&fileencoding?&fileencoding:&encoding}][%{&fileformat}\]"
   let statusline.="\ %4l:%-3c\ %6L "
   return statusline

@@ -21,7 +21,6 @@
 * [Why I love Vim: It’s the lesser-known features that make it so amazing]( https://medium.freecodecamp.org/learn-linux-vim-basic-features-19134461ab85 )
 * [Improving CtrlP with 'fd - a better find']( https://bluz71.github.io/2017/10/26/turbocharge-the-ctrlp-vim-plugin.html )
 
-
 ### USEFUL LINKS
 
 * [r/vim]( https://reddit.com/r/vim )
@@ -35,8 +34,22 @@
 * [ripgrep is faster than {grep, ag, git grep, ucg, pt, sift} - Andrew Gallant&#39;s Blog]( https://blog.burntsushi.net/ripgrep/ )
 * [GitHub - bchretien/vim-profiler: Utility script to profile (n)vim (e.g. startup times of plugins)]( https://github.com/bchretien/vim-profiler )
 * [How to copy text from vim to system clipboard? · Issue #892 · microsoft/WSL · GitHub]( https://github.com/Microsoft/WSL/issues/892 )
+* [LSP | Langserver.org]( https://langserver.org/ )
+* [TabNine | Deep Learning for code completion]( https://www.tabnine.com/ )
+
+### DISCUSSIONS
+
+* [Do LSP's make tag generating tools obsolete?]( https://www.reddit.com/r/vim/comments/fj9tsz/do_lsps_make_tag_generating_tools_obsolete/ )
+* [a guide to LSP in vim]( https://old.reddit.com/r/vim/comments/b33lc1/a_guide_to_lsp_auto_completion_in_vim/#eix8cuk )
+* [A LSP client maintainer's view of the protocol | YCM]( https://www.reddit.com/r/vim/comments/b3yzq4/a_lsp_client_maintainers_view_of_the_lsp_protocol/ )
 
 ### OTHER INTERESTING PLUGINS
  
 * [GitHub - junegunn/vim-peekaboo: " / @ / CTRL-R]( https://github.com/junegunn/vim-peekaboo )
-* 
+* [GitHub - autozimu/LanguageClient-neovim: Language Server Protocol (LSP) support for vim and neovim.]( https://github.com/autozimu/LanguageClient-neovim )
+* [GitHub - Shougo/deoplete.nvim: Dark powered asynchronous completion framework for neovim/Vim8]( https://github.com/Shougo/deoplete.nvim )
+* [GitHub - puremourning/vimspector: vimspector - A multi-language debugging system for Vim]( https://github.com/puremourning/vimspector )
+* [GitHub - universal-ctags/ctags: A maintained ctags implementation]( https://github.com/universal-ctags/ctags )
+* [GitHub - tbodt/deoplete-tabnine: Deoplete source for TabNine]( https://github.com/tbodt/deoplete-tabnine )
+* [GitHub - honza/vim-snippets: vim-snipmate default snippets (Previously snipmate-snippets)]( https://github.com/honza/vim-snippets )
+* [GitHub - neoclide/coc.nvim: Intellisense engine for Vim8 & Neovim, full language server protocol support as VSCode]( https://github.com/neoclide/coc.nvim )

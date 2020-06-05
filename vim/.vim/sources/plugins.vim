@@ -13,6 +13,11 @@ if empty(glob('~/.vim/autoload/plug.vim')) && executable('curl')
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
+if empty(glob('~/.vim/pack/vimspector/opt/vimspector')) && executable('git')
+  silent !mkdir -p $HOME/.vim/pack
+  silent !git clone https://github.com/puremourning/vimspector ~/.vim/pack/vimspector/opt/vimspector
+endif
+
 " helper function to check for conditions and load plugins. Follow below pattern:
 " Cond( condition1, Cond(condition2,Cond(condition3, {dictionary}) ) )
 function! Cond(cond, ...) "{{{2
@@ -62,17 +67,15 @@ endfunction
 call plug#begin(vim_home . sep . 'plugged')
 
 " Automatically install plugins on startup.
-" if !empty(filter(copy(g:plugs), '!isdirectory(v:val.dir)'))
-"   autocmd VimEnter * PlugInstall | q
-" endif
+if !empty(filter(copy(g:plugs), '!isdirectory(v:val.dir)'))
+  autocmd VimEnter * PlugInstall | q
+endif
 
-Plug 'morhetz/gruvbox'                  " current colorscheme
-Plug 'junegunn/rainbow_parentheses.vim' " match paranthesis pair colors
+Plug 'morhetz/gruvbox'                 " current colorscheme
 Plug 'machakann/vim-highlightedyank'   " flash highlight yanked region
 Plug 'tpope/vim-fugitive'              " handle git commands
 Plug 'airblade/vim-gitgutter'          " see git diff in buffer
 Plug 'tpope/vim-surround'              " surround text with tags
-Plug 'junegunn/goyo.vim'               " distraction free mode
 Plug 'godlygeek/tabular'               " text alignment
 Plug 'itchyny/calendar.vim'            " crazy calendar plugin that can sync tasks
 Plug 'sjl/gundo.vim'                   " see vim history-tree
@@ -83,27 +86,45 @@ Plug 'ervandew/supertab'               " use tab for all insert mode completions
 Plug 'majutsushi/tagbar'               " show tags in sidebar using ctags
 Plug 'tpope/vim-abolish'
 
-Plug 'Valloric/YouCompleteMe',
-  \ Cond(HasPython(),
-  \ {'do':function('BuildYCM'), 'for':[]})
-Plug 'w0rp/ale'                        " asynchronous linting engine
-Plug 'sirver/ultisnips',
-  \ Cond(HasPython())
 Plug 'scrooloose/vim-slumlord'         " inline previews for plantuml acitvity dia
 Plug 'aklt/plantuml-syntax'            " syntax/linting for plantuml
 Plug 'alvan/vim-closetag'              " to close markup lang tags
-Plug 'ludovicchabant/vim-gutentags'
-  \ ,Cond(executable('ctags'),Cond(executable('gtags-cscope')))
-Plug 'skywind3000/gutentags_plus'
-  \ ,Cond(executable('ctags'),Cond(executable('gtags-cscope')))
 
 Plug 'vimwiki/vimwiki'                 " note taking in vim
 Plug 'euclio/vim-markdown-composer',
   \{'do': function('BuildComposer')}   " async markdown live preview
 
-" yuttie/comfortable-motion.vim
-" vinegar
-" netrw config
+" vimspector works better with vim rahter than nvim
+" Plug 'puremourning/vimspector', " a debugging plugin for c++
+"   \{ 'dir' : '~/.vim/pack/vimspector/opt/vimspector',
+"   \  'do'  : './install_gadget.py --enable-c --enable-go --enable-python --enable-bash'}
+
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " asynchronous code completion
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ } " a LSP server for multiple languages, works with deoplete
+
+" disabled on 25-April-2020
+" Plug 'w0rp/ale'                         " asynchronous linting engine
+" Plug 'junegunn/rainbow_parentheses.vim' " match paranthesis pair colors
+" Plug 'junegunn/goyo.vim'                " distraction free mode
+" Plug 'ludovicchabant/vim-gutentags'
+"   \ ,Cond(executable('ctags'),Cond(executable('gtags-cscope')))
+" Plug 'skywind3000/gutentags_plus'
+"   \ ,Cond(executable('ctags'),Cond(executable('gtags-cscope')))
+" Plug 'Valloric/YouCompleteMe',
+"   \ Cond(HasPython(),
+"   \ {'do':function('BuildYCM'), 'for':[]})
+"Plug 'sirver/ultisnips',
+"  \ Cond(HasPython())
 
 call plug#end()
 
@@ -190,7 +211,7 @@ call plug#end()
   let g:ctrlp_cache_dir = $HOME.'/.cache/ctrlp'
   let g:ctrlp_match_current_file = 1
   let g:ctrlp_working_path_mode = 'ra'          " pwd as current git root
-  let g:ctrlp_root_markers = ['.root']          " add .root as project root
+  let g:ctrlp_root_markers = ['.root', '.git']          " add .root as project root
   let g:ctrlp_switch_buffer = 'E'               " jmp to file if already opened
   let g:ctrlp_match_window = 'bottom,order:ttb' " top-to-bottom filename matching
   let g:ctrlp_max_files = 0                     " set max files to enumerate as infinite
@@ -219,14 +240,14 @@ call plug#end()
   let g:ycm_enable_diagnostic_signs = 0                                 " only ale linting
   let g:ycm_enable_diagnostic_highlighting = 0                          " only ale linting
   let g:ycm_echo_current_diagnostic = 0                                 " only ale linting
-  let g:ycm_key_list_select_completion = ['<down>','<c-n>']
-  let g:ycm_key_list_previous_completion = ['<up>','<c-p>']
+  let g:ycm_key_list_select_completion = ['<down>','<c-j>']
+  let g:ycm_key_list_previous_completion = ['<up>','<c-k>']
   let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 
 
 " supertab - plugin config{{{2
   " mapped with down of YCM
-  let g:SuperTabDefaultCompletionType = '<c-n>'
+  let g:SuperTabDefaultCompletionType = '<c-j>'
 
 
 " ultisnips - plugin config{{{2
@@ -238,6 +259,24 @@ call plug#end()
 " tagbar - plugin config{{{2
   nnoremap <silent> <F8> :TagbarOpen fj<cr>
 
+" vim spectre - plugin config {{{2
+  let g:vimspector_enable_mappings = 'VISUAL_STUDIO'
+  packadd! vimspector
+
+" deoplete - plugin config{{{2
+  let g:deoplete#enable_at_startup = 1
+
+" LanguageServerClient-neovim{{{2
+  nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+  nnoremap <silent> <F12> :call LanguageClient#textDocument_definition()<CR>
+  nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+  set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
+
+let g:LanguageClient_serverCommands = {
+    \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
+    \ 'python': ['/usr/local/bin/pyls'],
+    \ 'cpp': ['/usr/bin/clangd'],
+    \ }
 "------------------------------------------------------------
 " END {{{1
 "------------------------------------------------------------
