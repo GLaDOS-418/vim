@@ -159,6 +159,7 @@ noremap <silent> <c-m> mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 " nnoremap <space><tab><tab> :%s/<++>//g<CR>
 " inoremap <leader>m <++><esc>
 inoremap j<tab> <esc>/<++><CR>:nohl<CR>"_c4l
+inoremap k<tab> <esc>/<--><CR>:nohl<CR>"_c4l
 nnoremap <s-tab><s-tab> :%s/<++>//g<CR>
 inoremap <leader><tab> <++><esc>4h?<++><CR>:nohl<CR>"_c4l
 inoremap <s-tab> <++><esc>
@@ -235,7 +236,7 @@ nnoremap <space> za
 
 augroup ft_markers
   au!
-  autocmd filetype cpp,c,js setlocal foldmethod=marker foldmarker={,}
+  autocmd filetype cpp,rust,c,js setlocal foldmethod=marker foldmarker={,}
   autocmd filetype python   setlocal foldmethod=indent
   autocmd filetype vim      setlocal foldmethod=marker
 augroup END
@@ -309,12 +310,17 @@ nnoremap <leader>cti :call WildignoreFromGitignore()<cr>
 "------------------------------------------------------------
 
 function! Cpp( )
-    nnoremap <C-c> :w <bar> !clear && g++ -fsanitize=address -std=gnu++17 -g -D fio % -o %:p:h/%:t:r.out && time ./%:r.out<CR>
+    nnoremap <C-c> :w <bar> !clear && clang++ -Wfatal-errors -Wmisleading-indentation -Wmissing-braces -Wparentheses -Wunused-variable -Wunused-value -Wuninitialized -Wshadow -fsanitize=pointer-compare -fsanitize=pointer-subtract -fsanitize=undefined -fsanitize=address -O2 -std=gnu++17 -g -D fio % -o %:p:h/%:t:r.out && time ./%:r.out<CR>
     inoremap <leader>e :%s/\(std::\)\?endl/"\\n"/<cr>
     inoremap <leader>io <esc>:r ~/.vim/personal_snips/cpp_fast_io.cpp<CR>i
     inoremap <leader>r <esc>:r ~/.vim/personal_snips/cpp_algo_start.cpp<CR>i
     nnoremap <c-s> :!kdbg <c-r>=expand("%:r:h") . ".out"<cr>&<cr>
 endfunction
+
+function! Rust( )
+    nnoremap <C-c> :w <bar> !clear && rustc % && time ./%:r<CR>
+endfunction
+
 "------------------------------------------------------------
 " AUTO COMMANDS   {{{1
 "------------------------------------------------------------
@@ -332,6 +338,7 @@ augroup default_group
     autocmd BufNewFile,BufRead *.md,*.mdown,*.markdown,.*mkd set filetype=markdown
 
     autocmd filetype cpp call Cpp()
+    autocmd filetype rust call Rust()
     autocmd filetype java nnoremap <C-c> :w <bar> !javac % && java -enableassertions %:p <CR>
     autocmd filetype python nnoremap <C-c> :w <bar> !python % <CR>
     autocmd filetype plantuml nnoremap <C-c> :call BuildUml() <cr>

@@ -46,10 +46,14 @@ using vpii=std::vector<pii>;
 using vpll=std::vector<pll>;
 using namespace std;
 
-inline bool eq(double a, double b) { return fabs(a-b) < 1e-9; }
+inline bool feq(double a, double b, double acceptableDiff = 1e-9 ) { return fabs(a-b) < acceptableDiff; }
 inline bool toggle(bool& flag){flag=!flag; return flag;}
 
 //fast io <++>
+class Solution {
+public:
+  // <-->
+};
 
 int main() {
   ios_base::sync_with_stdio(false);
@@ -65,6 +69,7 @@ int main() {
   int t;
   cin>>t;
   while(t--) {
+    Solution s;
     // code here... <++>
   }
 

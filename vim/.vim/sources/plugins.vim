@@ -275,7 +275,7 @@ call plug#end()
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
     \ 'python': ['/usr/local/bin/pyls'],
-    \ 'cpp': ['/usr/bin/clangd'],
+    \ 'cpp': ['/usr/bin/clangd', '-std=c++17'],
     \ }
 "------------------------------------------------------------
 " END {{{1
