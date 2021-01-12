@@ -13,10 +13,10 @@ if empty(glob('~/.vim/autoload/plug.vim')) && executable('curl')
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-if empty(glob('~/.vim/pack/vimspector/opt/vimspector')) && executable('git')
-  silent !mkdir -p $HOME/.vim/pack
-  silent !git clone https://github.com/puremourning/vimspector ~/.vim/pack/vimspector/opt/vimspector
-endif
+" if empty(glob('~/.vim/pack/vimspector/opt/vimspector')) && executable('git')
+"   silent !mkdir -p $HOME/.vim/pack
+"   silent !git clone https://github.com/puremourning/vimspector ~/.vim/pack/vimspector/opt/vimspector
+" endif
 
 " helper function to check for conditions and load plugins. Follow below pattern:
 " Cond( condition1, Cond(condition2,Cond(condition3, {dictionary}) ) )
@@ -95,9 +95,10 @@ Plug 'euclio/vim-markdown-composer',
   \{'do': function('BuildComposer')}   " async markdown live preview
 
 " vimspector works better with vim rahter than nvim
-" Plug 'puremourning/vimspector', " a debugging plugin for c++
-"   \{ 'dir' : '~/.vim/pack/vimspector/opt/vimspector',
-"   \  'do'  : './install_gadget.py --enable-c --enable-go --enable-python --enable-bash'}
+" a debugging plugin for c++
+Plug 'puremourning/vimspector', { 
+   \  'do' : ':VimspectorUpdate'
+   \ }
 
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " asynchronous code completion
@@ -135,16 +136,16 @@ call plug#end()
 " gutentags_plus {{{2
 " generate datebases in my cache directory, prevent gtags files polluting my project
   let g:gutentags_cache_dir = expand('~/.cache/tags')
-  let g:gutentags_project_root = ['.root', '.git']
+  let g:gutentags_project_root = ['.root', '.git', '.svn', '.hg' ]
   let g:gutentags_modules = ['ctags' , 'gtags_cscope']
   let g:gutentags_define_advanced_commands = 1
 
 " ale - plugin config {{{2
-  nnoremap <silent> <C-k> <Plug>(ale_previous_wrap)
-  nnoremap <silent> <C-j> <Plug>(ale_next_wrap)
-  let g:ale_lint_on_text_changed = 0
-  let g:ale_warn_about_trailing_whitespace = 0  " disable for python files
-  let g:ale_warn_about_trailing_blank_lines = 0 " disable for python files
+  " nnoremap <silent> <C-k> <Plug>(ale_previous_wrap)
+  " nnoremap <silent> <C-j> <Plug>(ale_next_wrap)
+  " let g:ale_lint_on_text_changed = 0
+  " let g:ale_warn_about_trailing_whitespace = 0  " disable for python files
+  " let g:ale_warn_about_trailing_blank_lines = 0 " disable for python files
 
 
 " gitgutter - plugin config {{{2
@@ -196,11 +197,11 @@ call plug#end()
 
 
 " tabular - plugin config {{{2
-  if exists(":Tabularize")
-    noremap <leader>a= :Tabularize /=<cr>
-    noremap <leader>a" :Tabularize /"<cr>
-    noremap <leader>a: :Tabularize /:<cr>
-  endif
+  " if exists(":Tabularize")
+  "   noremap <leader>a= :Tabularize /=<cr>
+  "   noremap <leader>a" :Tabularize /"<cr>
+  "   noremap <leader>a: :Tabularize /:<cr>
+  " endif
 
 
 " ctrlp - plugin config {{{2
@@ -259,10 +260,6 @@ call plug#end()
 " tagbar - plugin config{{{2
   nnoremap <silent> <F8> :TagbarOpen fj<cr>
 
-" vim spectre - plugin config {{{2
-  let g:vimspector_enable_mappings = 'VISUAL_STUDIO'
-  packadd! vimspector
-
 " deoplete - plugin config{{{2
   let g:deoplete#enable_at_startup = 1
 
@@ -277,6 +274,11 @@ let g:LanguageClient_serverCommands = {
     \ 'python': ['/usr/local/bin/pyls'],
     \ 'cpp': ['/usr/bin/clangd', '-std=c++17'],
     \ }
+
+" vimspector {{{2
+  let g:vimspector_enable_mappings = 'HUMAN' "  'VISUAL_STUDIO'
+  let g:vimspector_install_gadgets = [ 'debugpy', 'vscode-cpptools', 'CodeLLDB', 'vscode-go', 'vscode-java-debug', 'vscode-bash-debug' ]
+
 "------------------------------------------------------------
 " END {{{1
 "------------------------------------------------------------

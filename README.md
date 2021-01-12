@@ -53,3 +53,4 @@
 * [GitHub - tbodt/deoplete-tabnine: Deoplete source for TabNine]( https://github.com/tbodt/deoplete-tabnine )
 * [GitHub - honza/vim-snippets: vim-snipmate default snippets (Previously snipmate-snippets)]( https://github.com/honza/vim-snippets )
 * [GitHub - neoclide/coc.nvim: Intellisense engine for Vim8 & Neovim, full language server protocol support as VSCode]( https://github.com/neoclide/coc.nvim )
+* [GitHub - Chiel92/vim-autoformat: Provide easy code formatting in Vim by integrating existing code formatters.]( https://github.com/Chiel92/vim-autoformat )

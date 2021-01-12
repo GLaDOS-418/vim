@@ -25,6 +25,13 @@ for file_name in  source_file_names
   exe 'source ' . SourceFileName(sep, vim_home, 'sources', file_name . '.vim')
 endfor
 
+" source ~/.vim/sources/plugins.vim
+" source ~/.vim/sources/statusline.vim
+" source ~/.vim/sources/abbreviations.vim
+" source ~/.vim/sources/custom_functions.vim
+" source ~/.vim/sources/environment.vim
+
+
 "------------------------------------------------------------
 " MISC {{{1
 "------------------------------------------------------------
@@ -236,7 +243,7 @@ nnoremap <space> za
 
 augroup ft_markers
   au!
-  autocmd filetype cpp,rust,c,js setlocal foldmethod=marker foldmarker={,}
+  autocmd filetype cpp,go,rust,c,js setlocal foldmethod=marker foldmarker={,}
   autocmd filetype python   setlocal foldmethod=indent
   autocmd filetype vim      setlocal foldmethod=marker
 augroup END
@@ -321,6 +328,10 @@ function! Rust( )
     nnoremap <C-c> :w <bar> !clear && rustc % && time ./%:r<CR>
 endfunction
 
+function! Golang( )
+    nnoremap <C-c> :w <bar> !clear && go run % && time ./%:r<CR>
+endfunction
+
 "------------------------------------------------------------
 " AUTO COMMANDS   {{{1
 "------------------------------------------------------------
@@ -337,6 +348,7 @@ augroup default_group
     autocmd BufNewFile,BufRead *.uml,*.pu,*.plantuml,.*puml set filetype=plantuml
     autocmd BufNewFile,BufRead *.md,*.mdown,*.markdown,.*mkd set filetype=markdown
 
+    autocmd filetype go call Golang()
     autocmd filetype cpp call Cpp()
     autocmd filetype rust call Rust()
     autocmd filetype java nnoremap <C-c> :w <bar> !javac % && java -enableassertions %:p <CR>
