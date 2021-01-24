@@ -7,6 +7,10 @@
 let mapleader=','               " leader is comma
 let maplocalleader="\<space>"   " localleader is space
 
+
+" vim-polyglot needs this variable before loading the script
+let g:polyglot_disabled = ['go', 'sensible']
+
 if has('win32') ||  has('win64')
   let g:sep = '\'
   let g:vim_home = fnamemodify(expand("$MYVIMRC"), ":p:h") . sep . 'vimfiles'
@@ -37,18 +41,18 @@ endfor
 "------------------------------------------------------------
 
 " set nocompatible              " commented: r/vim/wiki/vimrctips
+set hidden                      " allow moving around w/ saving the buffers
 set nostartofline               " Make j/k respect the columns
 set clipboard=unnamedplus       " to use operating system clipboard
 set clipboard+=unnamed          " to use operating system clipboard
 set history=1000                " set how many lines of history vim has to remember
 set autoread                    " set the file to autoread when a file is changed from outside
+" set autochdir                 " changed the cwd when vim opens a file/buffer
 set encoding=utf-8              " set vim encoding to utf-8
 set fileencoding=utf-8          " set vim encoding to utf-8
 set title                       " change the terminal's title
 set spelllang=en                " 'en_gb' sets region to British English. 'en' for all regions
 set noswapfile                  " stops vim from creating a .swp file
-" set nobackup                  " no error when same file being edited by multiple vim sessions
-set backupdir=~/.cache/backup   " keep backup in this folder
 set textwidth=0                 " no automatic linefeeds in insert mode
 set wrap                        " word wrap the text(normal/visual)
 set visualbell                  " don't beep
@@ -56,13 +60,32 @@ set noerrorbells                " don't beep
 set colorcolumn=100             " highlight on col 100
 set backspace=indent,eol,start  " allow backspacing over everything in insert mode
 set diffopt+=vertical           " vim-fugitive vertical split on diff
-"set mouse+=a                   " use mouse to place cursor and copy w/o line num
+set viminfo='100,<1000,s10,h    " increases the memory limit from 50 lines to 1000 lines
+set cmdheight=1                 " may give more space for displaying messages (default=1)
+set updatetime=300              " slower update time leads to poor UX
 syntax enable                   " enable syntax processing
+"set mouse+=a                   " use mouse to place cursor and copy w/o line num
+set shortmess+=c                " req for `coc.nvim` : github.com/neoclide/coc.nvim
 
 if !has('nvim')
   set esckeys                   " Allow cursor keys in insert mode.
 endif
 
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved.
+if has("patch-8.1.1564")
+  " Recently vim can merge signcolumn and number column into one
+  set signcolumn=number
+else
+  set signcolumn=yes
+endif
+
+" https://github.com/neoclide/coc.nvim/issues/649#issuecomment-480086894
+set nobackup                    " no error when same file being edited by multiple vim sessions
+set nowritebackup               " don't write backup to a file
+" set backupdir=~/.cache/backup " keep backup in this folder
+
+" this augroup isn't req anymore but, still here for documentation purpose
 augroup backup
   au!
   " remove all old backups on vim start
@@ -129,7 +152,7 @@ endif
 set background=dark
 
 try
-  colorscheme gruvbox
+  colorscheme gruvbox8
 catch
   colorscheme desert
 endtry
@@ -205,6 +228,25 @@ set wildmode=longest,list,full
 set wildmenu    " visual autocomplete for command menu
 set lazyredraw  " redraw only when needed
 set showmatch   " highlight matching [{()}]
+
+"------------------------------------------------------------
+" FILE EXPLORER  {{{1
+"------------------------------------------------------------
+
+" disabled in favour of NerdTree
+
+" let g:netrw_liststyle = 3  " directory view - tree
+" let g:netrw_banner = 0     " remove the banner
+" let g:netrw_winsize = 25 " width of the explorer is 25% of the whole window
+" let g:netrw_browse_split = 4 " open files in a new window
+" let g:netrw_altv = 1 " open new file to the right of the project drawer
+" let g:netrw_list_hide = &wildignore " respect custom wildignore
+"
+" " launch netrw as soon as you enter vim
+" augroup ProjectDrawer
+"   autocmd!
+"   autocmd VimEnter * :Vexplore
+" augroup END
 
 "------------------------------------------------------------
 " SEARCHING  {{{1
@@ -300,8 +342,8 @@ nnoremap <leader>ga :!git add %<CR>
 inoremap <leader>p <F2><esc>pa<F2>
 
 " markdown style link paste from os clipboard
-nnoremap <leader>l mk:read !curl --silent --location <C-R>=shellescape(@+)<cr> <bar> tr --delete '\n' <bar> grep -oP "<title.*?>.*?<\/title>" <bar> head -n 1 <bar> sed -E -e "s@<title.*?>[[:space:]]*(.*?)[[:space:]]*</title>@\1@g" -e "s/[[:space:]]+/ /g"<CR>i[<esc>A]( <C-R>+ )<esc>0v$h"zydd`k"zp
-inoremap <leader>l <esc>mk:read !curl --silent --location <C-R>=shellescape(@+)<cr> <bar> tr --delete '\n' <bar> grep -oP "<title.*?>.*?<\/title>" <bar> head -n 1<bar> sed -E -e "s@.*<title.*?>[[:space:]]*(.*?)[[:space:]]*</title>.*@\1@" -e "s/[[:space:]]+/ /g"<CR>i[<esc>A]( <C-R>+ )<esc>0v$h"zydd`k"zpa
+nnoremap <leader><leader>l mk:read !curl --silent --location <C-R>=shellescape(@+)<cr> <bar> tr --delete '\n' <bar> grep -oP "<title.*?>.*?<\/title>" <bar> head -n 1 <bar> sed -E -e "s@<title.*?>[[:space:]]*(.*?)[[:space:]]*</title>@\1@g" -e "s/[[:space:]]+/ /g"<CR>i[<esc>A]( <C-R>+ )<esc>0v$h"zydd`k"zp
+inoremap <leader><leader>l <esc>mk:read !curl --silent --location <C-R>=shellescape(@+)<cr> <bar> tr --delete '\n' <bar> grep -oP "<title.*?>.*?<\/title>" <bar> head -n 1<bar> sed -E -e "s@.*<title.*?>[[:space:]]*(.*?)[[:space:]]*</title>.*@\1@" -e "s/[[:space:]]+/ /g"<CR>i[<esc>A]( <C-R>+ )<esc>0v$h"zydd`k"zpa
 
 " get file name w/o ext
 inoremap <leader>f <esc>mk:put =expand('%:t:r')<cr>v$hx`kpa
@@ -329,7 +371,7 @@ function! Rust( )
 endfunction
 
 function! Golang( )
-    nnoremap <C-c> :w <bar> !clear && go run % && time ./%:r<CR>
+    nnoremap <C-c> :w <bar> !time go run %<CR>
 endfunction
 
 "------------------------------------------------------------
@@ -360,13 +402,18 @@ augroup default_group
     autocmd FocusLost * :silent! wall          " Save on lost focus
     autocmd VimResized * :wincmd = " Resize splits when the window is resized
     autocmd VimEnter * redraw!
+
+    " auto reload when vim config is modified
+    autocmd! bufwritepost init.vim source %
+    autocmd! bufwritepost .vimrc source %
 augroup END
 
 " revisit  code navigations
-set csprg=gtags-cscope
-nmap <Leader>fd :cs f g <C-R>=expand( "<cword>" )<CR><CR>
-nmap <Leader>fr :cs f s <C-R>=expand( "<cword>" )<CR><CR>
-nmap <Leader>fc :cs f c <C-R>=expand( "<cword>" )<CR><CR>
+" update : attempting code navigation using coc.nvim
+" set csprg=gtags-cscope
+" nmap <Leader>fd :cs f g <C-R>=expand( "<cword>" )<CR><CR>
+" nmap <Leader>fr :cs f s <C-R>=expand( "<cword>" )<CR><CR>
+" nmap <Leader>fc :cs f c <C-R>=expand( "<cword>" )<CR><CR>
 
 let g:gitroot =  Git_Repo_Cdup()
 "vim build tags for project"
@@ -398,7 +445,7 @@ augroup temp
 augroup END
 
 " find hex value
-nnoremap <leader>h :let @@=<C-R><C-W><CR>
+nnoremap <leader>x :let @@=<C-R><C-W><CR>
 "------------------------------------------------------------
 " END {{{1
 "------------------------------------------------------------

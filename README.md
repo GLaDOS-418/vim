@@ -1,5 +1,10 @@
-# vim_config
+# (N)Vim Config
+
+### CONTENTS
+
 * .vimrc
+* .gvimrc
+* init.vim
 * vim-plug glob
 * source code pro font (tff)
 
@@ -35,7 +40,8 @@
 * [GitHub - bchretien/vim-profiler: Utility script to profile (n)vim (e.g. startup times of plugins)]( https://github.com/bchretien/vim-profiler )
 * [How to copy text from vim to system clipboard? · Issue #892 · microsoft/WSL · GitHub]( https://github.com/Microsoft/WSL/issues/892 )
 * [LSP | Langserver.org]( https://langserver.org/ )
-* [TabNine | Deep Learning for code completion]( https://www.tabnine.com/ )
+* [TabNine | Deep Learning for code completion]( https://www.tabnine.com/ ) - freemium
+* [Improving Vim Workflow With fzf | Pragmatic Pineapple]( https://pragmaticpineapple.com/improving-vim-workflow-with-fzf/ )
 
 ### DISCUSSIONS
 
@@ -52,5 +58,29 @@
 * [GitHub - universal-ctags/ctags: A maintained ctags implementation]( https://github.com/universal-ctags/ctags )
 * [GitHub - tbodt/deoplete-tabnine: Deoplete source for TabNine]( https://github.com/tbodt/deoplete-tabnine )
 * [GitHub - honza/vim-snippets: vim-snipmate default snippets (Previously snipmate-snippets)]( https://github.com/honza/vim-snippets )
-* [GitHub - neoclide/coc.nvim: Intellisense engine for Vim8 & Neovim, full language server protocol support as VSCode]( https://github.com/neoclide/coc.nvim )
 * [GitHub - Chiel92/vim-autoformat: Provide easy code formatting in Vim by integrating existing code formatters.]( https://github.com/Chiel92/vim-autoformat )
+* [GitHub - pbogut/fzf-mru.vim: Vim plugin that allows using awesome CtrlP MRU plugin with even more amazing FZF]( https://github.com/pbogut/fzf-mru.vim )
+* [GitHub - dyng/ctrlsf.vim: An ack.vim alternative mimics Ctrl-Shift-F on Sublime Text 2]( https://github.com/dyng/ctrlsf.vim )
+* [GitHub - easymotion/vim-easymotion: Vim motions on speed!]( https://github.com/easymotion/vim-easymotion )
+* [GitHub - tpope/vim-sensible: sensible.vim: Defaults everyone can agree on]( https://github.com/tpope/vim-sensible )
+* [GitHub - supercrabtree/vim-resurrect: Add Chrome's "Reopen Closed Tab" behaviour to vim buffers]( https://github.com/supercrabtree/vim-resurrect )
+* [GitHub - nvim-treesitter/nvim-treesitter: Nvim Treesitter configurations and abstraction layer]( https://github.com/nvim-treesitter/nvim-treesitter ) 
+* [GitHub - ms-jpq/chadtree: File manager for Neovim. Better than NERDTree.]( https://github.com/ms-jpq/chadtree ) - potential NERDTree replacement
+
+### PREVIOUSLY USED PLUGINS
+
+`w0rp/ale` : using `coc.nvim` now, which has a better LSP support.
+
+
+### KNOWN ISSUES
+
+* when using airblade/vim-rooter: Changes Vim working directory to project root.]( https://github.com/airblade/vim-rooter ) - doesn't work well with nerdtree because it unsets `autochdir` and because of that, I can't open NerdTree in the VCS root.
+
+
+### TODO
+
+* `fzf` is not caching results resulting in recomputation of the whole search space.
+* `coc.nvim` setup for golang and cpp.
+* `ultisnips` setup.
+* making `vim-polyglot` work with `coc.nvim`.
+* set up `vimspector` for debugging.

@@ -1,4 +1,7 @@
-plugged*
+# files
 *.out
-SourceCodePro*
+.netrwhist
 
+# dirs
+**/plugged
+**/fonts
