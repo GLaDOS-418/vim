@@ -111,7 +111,8 @@ endif
 
 " Code Completion {{{3
 
-Plug 'neoclide/coc.nvim', {'branch': 'release'} " Node based code completion engine with LSP support
+Plug 'neoclide/coc.nvim', {'branch': 'release',
+     \ 'do': { -> coc#util#install()}} " Node based code completion engine with LSP support
 Plug 'sheerun/vim-polyglot'            " collection of language packs for vim
 Plug 'alvan/vim-closetag'              " to close markup lang tags
 
