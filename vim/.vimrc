@@ -72,9 +72,9 @@ if !has('nvim')
 endif
 
 " Always show the signcolumn, otherwise it would shift the text each time
-" diagnostics appear/become resolved.
+" diagnostics appear or gets resolved.
 if has("patch-8.1.1564")
-  " Recently vim can merge signcolumn and number column into one
+  " merge signcolumn and number column into one
   set signcolumn=number
 else
   set signcolumn=yes
@@ -119,7 +119,7 @@ else
 endif
 
 "insert datetime in the format specified on <F9>
-nnoremap <F9> "=strftime("%Y-%m-%d")<CR>P
+" nnoremap <F9> "=strftime("%Y-%m-%d")<CR>P " normal mode mapping might be required for debugging
 inoremap <F9> <C-R>=strftime("%Y-%m-%d")<CR>
 
 " spell check toggle
@@ -359,7 +359,7 @@ nnoremap <leader>cti :call WildignoreFromGitignore()<cr>
 "------------------------------------------------------------
 
 function! Cpp( )
-    nnoremap <C-c> :w <bar> !clear && clang++ -Wfatal-errors -Wmisleading-indentation -Wmissing-braces -Wparentheses -Wunused-variable -Wunused-value -Wuninitialized -Wshadow -fsanitize=pointer-compare -fsanitize=pointer-subtract -fsanitize=undefined -fsanitize=address -O2 -std=gnu++17 -g -D fio % -o %:p:h/%:t:r.out && time ./%:r.out<CR>
+    nnoremap <C-c> :w <bar> !clang++ -Wfatal-errors -Wmisleading-indentation -Wmissing-braces -Wparentheses -Wunused-variable -Wunused-value -Wuninitialized -Wshadow -fsanitize=pointer-compare -fsanitize=pointer-subtract -fsanitize=undefined -fsanitize=address -O2 -std=gnu++20 -g -D fio % -o %:p:h/%:t:r.out && time ./%:r.out<cr>
     inoremap <leader>e :%s/\(std::\)\?endl/"\\n"/<cr>
     inoremap <leader>io <esc>:r ~/.vim/personal_snips/cpp_fast_io.cpp<CR>i
     inoremap <leader>r <esc>:r ~/.vim/personal_snips/cpp_algo_start.cpp<CR>i
@@ -367,7 +367,7 @@ function! Cpp( )
 endfunction
 
 function! Rust( )
-    nnoremap <C-c> :w <bar> !clear && rustc % && time ./%:r<CR>
+    nnoremap <C-c> :w <bar> !rustc % -o %:p:h/%:t:r.out && printf "\n" && time ./%:r.out<CR>
 endfunction
 
 function! Golang( )
@@ -399,9 +399,14 @@ augroup default_group
 
     " Set scripts to be executable from the shell
     autocmd BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "/bin/" | silent execute "!chmod a+x <afile>" | endif | endif
-    autocmd FocusLost * :silent! wall          " Save on lost focus
+    autocmd FocusLost,BufLeave,VimLeave * :silent! wall          " Save on lost focus
     autocmd VimResized * :wincmd = " Resize splits when the window is resized
     autocmd VimEnter * redraw!
+
+    " https://stackoverflow.com/questions/2157914/can-vim-monitor-realtime-changes-to-a-file/48296697#48296697
+    " needs low updatetime and autoread set. checks if file is changed on disk and reloads, doesn't if buffer is not saved
+    " useful if you're using multiple editors e.g. vim for writing and vscode for debugging
+    autocmd CursorHold *  checktime | call feedkeys("lh")
 
     " auto reload when vim config is modified
     autocmd! bufwritepost init.vim source %

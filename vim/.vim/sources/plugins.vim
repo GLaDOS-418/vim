@@ -133,6 +133,7 @@ Plug 'itchyny/calendar.vim'            " crazy calendar plugin that can sync tas
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-repeat'                " repeat vim commands, and not just the native ones
 Plug 'airblade/vim-rooter'
+" Plug 'djoshea/vim-autoread'
 
 " disabled on 25-April-2020
 " Plug 'junegunn/rainbow_parentheses.vim' " match paranthesis pair colors
@@ -287,6 +288,8 @@ endif
 
 
 " coc.nvim {{{2
+
+  let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-clangd', 'coc-cmake']
 
   " Use tab for trigger completion with characters ahead and navigate.
   " NOTE: right now supertab uses tab so disabling the next two mappings

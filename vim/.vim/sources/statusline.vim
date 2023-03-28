@@ -54,7 +54,7 @@ endfunction
 
 " Function: return git branch name from vim-fugitive plugin
 function! GitBranchFugitive() abort " {{{2
-  let branch=fugitive#head()
+  let branch=fugitive#Head()
   if branch != ''
     return ' '.branch.' '
   else
