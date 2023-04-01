@@ -72,8 +72,12 @@ if !empty(filter(copy(g:plugs), '!isdirectory(v:val.dir)'))
 endif
 
 " Visual {{{3
-Plug 'lifepillar/vim-gruvbox8'         " a better gruvbox
-Plug 'machakann/vim-highlightedyank'   " flash highlight yanked region
+Plug 'lifepillar/vim-gruvbox8'          " a better gruvbox
+Plug 'machakann/vim-highlightedyank'    " flash highlight yanked region
+
+" TODO: setup treesitter
+Plug 'nvim-treesitter/nvim-treesitter', " interface for github.com/tree-sitter/tree-sitter
+     \{'do': ':TSUpdate'}               "   it's a parser generator
 
 
 " Source Control {{{3
@@ -92,7 +96,8 @@ Plug 'easymotion/vim-easymotion'                " better movements
 " Architecture & Notes {{{3
 Plug 'scrooloose/vim-slumlord'         " inline previews for plantuml acitvity dia
 Plug 'aklt/plantuml-syntax'            " syntax/linting for plantuml
-Plug 'vimwiki/vimwiki'                 " note taking in vim
+" moved notetaking to obsidian
+" Plug 'vimwiki/vimwiki'                 " note taking in vim
 Plug 'euclio/vim-markdown-composer',
   \{'do': function('BuildComposer')}   " async markdown live preview
 
@@ -116,6 +121,10 @@ Plug 'neoclide/coc.nvim', {'branch': 'release',
 Plug 'sheerun/vim-polyglot'            " collection of language packs for vim
 Plug 'alvan/vim-closetag'              " to close markup lang tags
 
+" Code View {{{3
+" Plug 'neovim/nvim-lspconfig'
+" Plug 'SmiteshP/nvim-navic'
+Plug 'lukas-reineke/indent-blankline.nvim'
 
 " Editing Utils {{{3
 
@@ -289,7 +298,7 @@ endif
 
 " coc.nvim {{{2
 
-  let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-clangd', 'coc-cmake']
+  let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-clangd', 'coc-cmake', 'coc-rust-analyzer']
 
   " Use tab for trigger completion with characters ahead and navigate.
   " NOTE: right now supertab uses tab so disabling the next two mappings
@@ -379,6 +388,14 @@ nnoremap <Leader><Leader>w <Plug>(easymotion-overwin-w)
 " search word
 map  / <Plug>(easymotion-sn)
 omap / <Plug>(easymotion-tn)
+
+
+" indent-blankline
+let g:show_current_context = 1
+let g:show_current_context_start = 1
+let g:space_char_blankline = " "
+let g:show_current_context = 1
+let g:show_current_context_start = 1
 
 "------------------------------------------------------------
 " END {{{1

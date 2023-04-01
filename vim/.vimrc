@@ -19,21 +19,21 @@ else
   let g:vim_home = fnamemodify(expand("$MYVIMRC"), ":p:h") . sep . '.vim'
 endif
 
-function! SourceFileName(fsep, ...)
-   return join(a:000, a:fsep)
-endfunction
+" function! SourceFileName(fsep, ...)
+"    return join(a:000, a:fsep)
+" endfunction
 
-let source_file_names=['plugins', 'statusline', 'abbreviations', 'custom_functions', 'environment']
+" let source_file_names=['plugins', 'statusline', 'abbreviations', 'custom_functions', 'environment']
+" 
+" for file_name in  source_file_names
+"   exe 'source ' . SourceFileName(sep, vim_home, 'sources', file_name . '.vim')
+" endfor
 
-for file_name in  source_file_names
-  exe 'source ' . SourceFileName(sep, vim_home, 'sources', file_name . '.vim')
-endfor
-
-" source ~/.vim/sources/plugins.vim
-" source ~/.vim/sources/statusline.vim
-" source ~/.vim/sources/abbreviations.vim
-" source ~/.vim/sources/custom_functions.vim
-" source ~/.vim/sources/environment.vim
+source $HOME/.vim/sources/plugins.vim
+source $HOME/.vim/sources/statusline.vim
+source $HOME/.vim/sources/abbreviations.vim
+source $HOME/.vim/sources/custom_functions.vim
+source $HOME/.vim/sources/environment.vim
 
 
 "------------------------------------------------------------
@@ -207,7 +207,7 @@ set number          " show line numbers
 set showcmd         " shows last entered command in bottom right bar, not working
 set noshowmode      " don't show mode on last line
 set cursorline      " highlight current line
-set scrolloff=5     " minimum line offset to present on screen while scrolling.
+set scrolloff=8     " minimum line offset to present on screen while scrolling.
 
 " increase window size
 nnoremap + <C-W>+
@@ -313,6 +313,22 @@ nnoremap <silent> <c-f> :bn<cr>
 nnoremap <silent> <c-b> :bp<cr>
 nnoremap <silent> <c-q> :bd<cr>
 
+" move selections up or down
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+
+" join the line and move the cursor to the original position
+nnoremap J mzJ`z
+
+" move down/up and move the cursor to the centre of the buffer
+nnoremap <C-d> <C-d>zz
+nnoremap <C-u> <C-u>zz
+
+" move the cursor to next/prev match, centre the cursor and enter visual mode
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+
 "------------------------------------------------------------
 " LEADER SHORTCUTS  {{{1
 "------------------------------------------------------------
@@ -359,7 +375,7 @@ nnoremap <leader>cti :call WildignoreFromGitignore()<cr>
 "------------------------------------------------------------
 
 function! Cpp( )
-    nnoremap <C-c> :w <bar> !clang++ -Wfatal-errors -Wmisleading-indentation -Wmissing-braces -Wparentheses -Wunused-variable -Wunused-value -Wuninitialized -Wshadow -fsanitize=pointer-compare -fsanitize=pointer-subtract -fsanitize=undefined -fsanitize=address -O2 -std=gnu++20 -g -D fio % -o %:p:h/%:t:r.out && time ./%:r.out<cr>
+    nnoremap <C-c> :w <bar> !clang++ -pthread -Wfatal-errors -Wmisleading-indentation -Wmissing-braces -Wparentheses -Wunused-variable -Wunused-value -Wuninitialized -Wshadow -fsanitize=pointer-compare -fsanitize=pointer-subtract -fsanitize=undefined -fsanitize=address -O2 -std=gnu++20 -g -D fio % -o %:p:h/%:t:r.out && time ./%:r.out<cr>
     inoremap <leader>e :%s/\(std::\)\?endl/"\\n"/<cr>
     inoremap <leader>io <esc>:r ~/.vim/personal_snips/cpp_fast_io.cpp<CR>i
     inoremap <leader>r <esc>:r ~/.vim/personal_snips/cpp_algo_start.cpp<CR>i
@@ -372,6 +388,10 @@ endfunction
 
 function! Golang( )
     nnoremap <C-c> :w <bar> !time go run %<CR>
+endfunction
+
+function! Java( )
+    nnoremap <C-c> :w <bar> !time javac %:p:h/%:t:r.java && java  -enableassertions %:p:h/%:t:r.class<CR>
 endfunction
 
 "------------------------------------------------------------
@@ -393,7 +413,7 @@ augroup default_group
     autocmd filetype go call Golang()
     autocmd filetype cpp call Cpp()
     autocmd filetype rust call Rust()
-    autocmd filetype java nnoremap <C-c> :w <bar> !javac % && java -enableassertions %:p <CR>
+    autocmd filetype java nnoremap Java()
     autocmd filetype python nnoremap <C-c> :w <bar> !python % <CR>
     autocmd filetype plantuml nnoremap <C-c> :call BuildUml() <cr>
 
