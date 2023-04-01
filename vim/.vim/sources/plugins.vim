@@ -390,12 +390,36 @@ map  / <Plug>(easymotion-sn)
 omap / <Plug>(easymotion-tn)
 
 
-" indent-blankline
+" indent-blankline {{{2
+
 let g:show_current_context = 1
 let g:show_current_context_start = 1
 let g:space_char_blankline = " "
 let g:show_current_context = 1
 let g:show_current_context_start = 1
+
+
+" undotree {{{2
+
+if has("persistent_undo")
+   let target_path = expand('~/.local/share/.vimundodir')
+
+    " create the directory and any parent directories
+    " if the location does not exist.
+    if !isdirectory(target_path)
+        call mkdir(target_path, "p", 0700)
+    endif
+
+    let &undodir=target_path
+    set undofile
+
+    " create the undo file if it does not exist
+    if !filereadable(&undofile)
+        call writefile([], &undofile)
+    endif
+endif
+
+nnoremap <leader>u :UndotreeToggle<cr>
 
 "------------------------------------------------------------
 " END {{{1
