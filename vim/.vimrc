@@ -29,12 +29,11 @@ endif
 "   exe 'source ' . SourceFileName(sep, vim_home, 'sources', file_name . '.vim')
 " endfor
 
-source $HOME/.vim/sources/plugins.vim
-source $HOME/.vim/sources/statusline.vim
-source $HOME/.vim/sources/abbreviations.vim
-source $HOME/.vim/sources/custom_functions.vim
-source $HOME/.vim/sources/environment.vim
-
+source $HOME/vim/vim/.vim/sources/plugins.vim
+source $HOME/vim/vim/.vim/sources/statusline.vim
+source $HOME/vim/vim/.vim/sources/abbreviations.vim
+source $HOME/vim/vim/.vim/sources/custom_functions.vim
+source $HOME/vim/vim/.vim/sources/environment.vim
 
 "------------------------------------------------------------
 " MISC {{{1

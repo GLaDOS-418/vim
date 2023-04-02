@@ -116,8 +116,27 @@ endif
 
 " Code Completion {{{3
 
-Plug 'neoclide/coc.nvim', {'branch': 'release',
-     \ 'do': { -> coc#util#install()}} " Node based code completion engine with LSP support
+" Plug 'neoclide/coc.nvim', {'branch': 'release',
+"      \ 'do': { -> coc#util#install()}} " Node based code completion engine with LSP support
+
+" LSP Support {{{4
+Plug 'neovim/nvim-lspconfig'                           " Required
+Plug 'williamboman/mason.nvim', {'do': ':MasonUpdate'} " Optional
+Plug 'williamboman/mason-lspconfig.nvim'               " Optional
+
+" Autocompletion
+Plug 'hrsh7th/nvim-cmp'         " Required
+Plug 'hrsh7th/cmp-nvim-lsp'     " Required
+Plug 'L3MON4D3/LuaSnip'         " Required
+Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v2.x'}
+
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
+"
+" }}}
+
+
+
 Plug 'sheerun/vim-polyglot'            " collection of language packs for vim
 Plug 'alvan/vim-closetag'              " to close markup lang tags
 
@@ -297,68 +316,72 @@ endif
 
 
 " coc.nvim {{{2
+"
+"  let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-clangd', 'coc-cmake', 'coc-rust-analyzer']
+"
+"  " Use tab for trigger completion with characters ahead and navigate.
+"  " NOTE: right now supertab uses tab so disabling the next two mappings
+"  inoremap <silent><expr> <TAB>
+"        \ pumvisible() ? "\<C-n>" :
+"        \ <SID>check_back_space() ? "\<TAB>" :
+"        \ coc#refresh()
+"  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+"
+"  function! s:check_back_space() abort
+"    let col = col('.') - 1
+"    return !col || getline('.')[col - 1]  =~# '\s'
+"  endfunction
+"
+"  " Use <c-space> to trigger completion.
+"  if has('nvim')
+"    inoremap <silent><expr> <c-space> coc#refresh()
+"  else
+"    inoremap <silent><expr> <c-@> coc#refresh()
+"  endif
+"
+"  " Make <CR> auto-select the first completion item and notify coc.nvim to
+"  " format on enter, <cr> could be remapped by other vim plugin
+"  inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+"                                \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+"
+"  " GoTo code navigation.
+"  nnoremap <silent> gd <Plug>(coc-definition)
+"  nnoremap <silent> gt <Plug>(coc-type-definition)
+"  nnoremap <silent> gi <Plug>(coc-implementation)
+"  nnoremap <silent> gr <Plug>(coc-references)
+"
+"  " Use K to show documentation in preview window.
+"  nnoremap <silent> K :call <SID>show_documentation()<CR>
+"
+"  function! s:show_documentation()
+"    if (index(['vim','help'], &filetype) >= 0)
+"      execute 'h '.expand('<cword>')
+"    elseif (coc#rpc#ready())
+"      call CocActionAsync('doHover')
+"    else
+"      execute '!' . &keywordprg . " " . expand('<cword>')
+"    endif
+"  endfunction
+"
+"  " Symbol renaming.
+"  nmap <leader>rr <Plug>(coc-rename)
+"
+"  " Formatting selected code.
+"  xmap <leader>cf  <Plug>(coc-format-selected)
+"  nmap <leader>cf  <Plug>(coc-format-selected)
+"
+"  augroup coc
+"    au!
+"    " Highlight the symbol and its references when holding the cursor.
+"    autocmd CursorHold * silent call CocActionAsync('highlight')
+"    " Update signature help on jump placeholder.
+"    autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+"  augroup END
 
-  let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-clangd', 'coc-cmake', 'coc-rust-analyzer']
 
-  " Use tab for trigger completion with characters ahead and navigate.
-  " NOTE: right now supertab uses tab so disabling the next two mappings
-  inoremap <silent><expr> <TAB>
-        \ pumvisible() ? "\<C-n>" :
-        \ <SID>check_back_space() ? "\<TAB>" :
-        \ coc#refresh()
-  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+" lsp-zero {{{2
 
-  function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~# '\s'
-  endfunction
-
-  " Use <c-space> to trigger completion.
-  if has('nvim')
-    inoremap <silent><expr> <c-space> coc#refresh()
-  else
-    inoremap <silent><expr> <c-@> coc#refresh()
-  endif
-
-  " Make <CR> auto-select the first completion item and notify coc.nvim to
-  " format on enter, <cr> could be remapped by other vim plugin
-  inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-                                \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-
-  " GoTo code navigation.
-  nnoremap <silent> gd <Plug>(coc-definition)
-  nnoremap <silent> gt <Plug>(coc-type-definition)
-  nnoremap <silent> gi <Plug>(coc-implementation)
-  nnoremap <silent> gr <Plug>(coc-references)
-
-  " Use K to show documentation in preview window.
-  nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-  function! s:show_documentation()
-    if (index(['vim','help'], &filetype) >= 0)
-      execute 'h '.expand('<cword>')
-    elseif (coc#rpc#ready())
-      call CocActionAsync('doHover')
-    else
-      execute '!' . &keywordprg . " " . expand('<cword>')
-    endif
-  endfunction
-
-  " Symbol renaming.
-  nmap <leader>rr <Plug>(coc-rename)
-
-  " Formatting selected code.
-  xmap <leader>cf  <Plug>(coc-format-selected)
-  nmap <leader>cf  <Plug>(coc-format-selected)
-
-  augroup coc
-    au!
-    " Highlight the symbol and its references when holding the cursor.
-    autocmd CursorHold * silent call CocActionAsync('highlight')
-    " Update signature help on jump placeholder.
-    autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-  augroup END
-
+nnoremap <leader>gr <cmd>Telescope lsp_references<cr>
 
 " vim-easymotion {{{2
 
@@ -412,14 +435,13 @@ if has("persistent_undo")
 
     let &undodir=target_path
     set undofile
-
-    " create the undo file if it does not exist
-    if !filereadable(&undofile)
-        call writefile([], &undofile)
-    endif
 endif
 
 nnoremap <leader>u :UndotreeToggle<cr>
+
+" lsp-zero {{{2
+
+ luafile $HOME/vim/vim/.vim/lua/lsp_zero.lua
 
 "------------------------------------------------------------
 " END {{{1
