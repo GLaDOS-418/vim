@@ -122,7 +122,7 @@ endif
 inoremap <F9> <C-R>=strftime("%Y-%m-%d")<CR>
 
 " spell check toggle
-nnoremap <F6> :set spell!<cr>
+nnoremap <leader>ss :set spell!<cr>
 
 " redraw buffer
 noremap  <F5> :redraw!<CR>
@@ -177,7 +177,9 @@ set expandtab         " tabs are spaces
 " set tabstop=2       " commented: r/vim/wiki/tabstop
 set shiftwidth=2      " when (un)indenting lines shift with 1unit shiftwidth
 set softtabstop=2     " number of spaces in TAB when editing
-set pastetoggle=<F2>  " toggle insert(paste) mode
+if !has('nvim')
+  set pastetoggle=<F6>  " toggle insert(paste) mode
+endif
 
 " Remove the Windows ^M - when the encodings gets messed up
 noremap <silent> <c-m> mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
@@ -186,12 +188,11 @@ noremap <silent> <c-m> mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 " inoremap <space><tab> <esc>/<++><CR>:nohl<CR>"_c4l
 " inoremap <leader><space><tab> <++><esc>4h?<++><CR>:nohl<CR>"_c4l
 " nnoremap <space><tab><tab> :%s/<++>//g<CR>
-" inoremap <leader>m <++><esc>
 inoremap j<tab> <esc>/<++><CR>:nohl<CR>"_c4l
 inoremap k<tab> <esc>/<--><CR>:nohl<CR>"_c4l
 nnoremap <s-tab><s-tab> :%s/<++>//g<CR>
 inoremap <leader><tab> <++><esc>4h?<++><CR>:nohl<CR>"_c4l
-inoremap <s-tab> <++><esc>
+inoremap <leader>m <++><esc>
 
 " indentation control in visual mode
 vnoremap > >gv
@@ -354,7 +355,8 @@ vnoremap <silent> <leader>ts :s/\s\+$//ge<cr>
 nnoremap <leader>ga :!git add %<CR>
 
 " paste in insert mode without auto-formatting
-inoremap <leader>p <F2><esc>pa<F2>
+inoremap <leader>p <esc><cmd>set paste<cr>p<cr><cmd>set nopaste<cr>a<cr>
+nnoremap <leader>p <esc><cmd>set paste<cr>p<cr><cmd>set nopaste<cr>a<cr>
 
 " markdown style link paste from os clipboard
 nnoremap <leader><leader>l mk:read !curl --silent --location <C-R>=shellescape(@+)<cr> <bar> tr --delete '\n' <bar> grep -oP "<title.*?>.*?<\/title>" <bar> head -n 1 <bar> sed -E -e "s@<title.*?>[[:space:]]*(.*?)[[:space:]]*</title>@\1@g" -e "s/[[:space:]]+/ /g"<CR>i[<esc>A]( <C-R>+ )<esc>0v$h"zydd`k"zp
