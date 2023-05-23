@@ -19,21 +19,22 @@ else
   let g:vim_home = fnamemodify(expand("$MYVIMRC"), ":p:h") . sep . '.vim'
 endif
 
-" function! SourceFileName(fsep, ...)
-"    return join(a:000, a:fsep)
-" endfunction
+function! SourceFileName(fsep, ...)
+   return join(a:000, a:fsep)
+endfunction
 
-" let source_file_names=['plugins', 'statusline', 'abbreviations', 'custom_functions', 'environment']
-" 
-" for file_name in  source_file_names
-"   exe 'source ' . SourceFileName(sep, vim_home, 'sources', file_name . '.vim')
-" endfor
+let source_file_names=['plugins', 'statusline', 'abbreviations', 'custom_functions', 'environment']
 
-source $HOME/vim/vim/.vim/sources/plugins.vim
-source $HOME/vim/vim/.vim/sources/statusline.vim
-source $HOME/vim/vim/.vim/sources/abbreviations.vim
-source $HOME/vim/vim/.vim/sources/custom_functions.vim
-source $HOME/vim/vim/.vim/sources/environment.vim
+for file_name in  source_file_names
+  exe 'source ' . SourceFileName(sep, vim_home, 'sources', file_name . '.vim')
+endfor
+
+" to maintain interoperability b/w diff OS, below can't be used
+" source $HOME/vim/vim/.vim/sources/plugins.vim
+" source $HOME/vim/vim/.vim/sources/statusline.vim
+" source $HOME/vim/vim/.vim/sources/abbreviations.vim
+" source $HOME/vim/vim/.vim/sources/custom_functions.vim
+" source $HOME/vim/vim/.vim/sources/environment.vim
 
 "------------------------------------------------------------
 " MISC {{{1
@@ -203,7 +204,7 @@ vnoremap < <gv
 "------------------------------------------------------------
 
 set number          " show line numbers
-"set relativenumber " show relative line number
+set relativenumber " show relative line number
 set showcmd         " shows last entered command in bottom right bar, not working
 set noshowmode      " don't show mode on last line
 set cursorline      " highlight current line
@@ -376,7 +377,7 @@ nnoremap <leader>cti :call WildignoreFromGitignore()<cr>
 "------------------------------------------------------------
 
 function! Cpp( )
-    nnoremap <C-c> :w <bar> !clang++ -pthread -Wfatal-errors -Wmisleading-indentation -Wmissing-braces -Wparentheses -Wunused-variable -Wunused-value -Wuninitialized -Wshadow -fsanitize=pointer-compare -fsanitize=pointer-subtract -fsanitize=undefined -fsanitize=address -O2 -std=gnu++20 -g -D fio % -o %:p:h/%:t:r.out && time ./%:r.out<cr>
+    nnoremap <C-c> :w <bar> !clang++ -lpthread -Wall -Werror -Wmisleading-indentation -Wmissing-braces -Wparentheses -Wunused-variable -Wunused-value -Wuninitialized -Wshadow -fsanitize=pointer-compare -fsanitize=pointer-subtract -fsanitize=undefined -fsanitize=address -O2 -std=gnu++2b -g -D fio % -o %:p:h/%:t:r.out && time ./%:r.out<cr>
     inoremap <leader>e :%s/\(std::\)\?endl/"\\n"/<cr>
     inoremap <leader>io <esc>:r ~/.vim/personal_snips/cpp_fast_io.cpp<CR>i
     inoremap <leader>r <esc>:r ~/.vim/personal_snips/cpp_algo_start.cpp<CR>i

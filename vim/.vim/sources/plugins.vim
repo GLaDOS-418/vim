@@ -127,7 +127,7 @@ Plug 'neovim/nvim-lspconfig'                           " Required
 " Autocompletion {{{5
 Plug 'hrsh7th/nvim-cmp'         " Required
 Plug 'hrsh7th/cmp-nvim-lsp'     " Required
-Plug 'L3MON4D3/LuaSnip', {'tag': 'v1.*', 'do': 'make install_jsregexp'}  " Required
+Plug 'L3MON4D3/LuaSnip', {'tag': 'v1.*'}  " Required
 Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v2.x'}
 
 " snippets (vim-snipmate)  {{{6
@@ -208,11 +208,16 @@ call plug#end()
     let g:gitgutter_sign_column_always = 1
   endif
 
-  let g:gitgutter_sign_added = '++'
-  let g:gitgutter_sign_modified = '**'
-  let g:gitgutter_sign_removed = '~~'
-  let g:gitgutter_sign_removed_first_line = '^^'
-  let g:gitgutter_sign_modified_removed = '*~'
+  let g:gitgutter_sign_added = ''
+  let g:gitgutter_sign_modified = ''
+  let g:gitgutter_sign_removed = ''
+  let g:gitgutter_sign_removed_first_line = ''
+  let g:gitgutter_sign_modified_removed = ''
+  " let g:gitgutter_sign_added = '++'
+  " let g:gitgutter_sign_modified = '**'
+  " let g:gitgutter_sign_removed = '~~'
+  " let g:gitgutter_sign_removed_first_line = '^^'
+  " let g:gitgutter_sign_modified_removed = '*~'
   " highlight GitGutterAdd    guifg=#009900 guibg=#009900 ctermfg=2 ctermbg=2
   " highlight GitGutterChange guifg=#bbbb00 guibg=#bbbb00 ctermfg=3 ctermbg=3
   " highlight GitGutterDelete guifg=#ff2222 guibg=#ff2222 ctermfg=1 ctermbg=1
