@@ -377,15 +377,15 @@ nnoremap <leader>cti :call WildignoreFromGitignore()<cr>
 "------------------------------------------------------------
 
 function! Cpp( )
-    nnoremap <C-c> :w <bar> !clang++ -lpthread -Wall -Werror -Wmisleading-indentation -Wmissing-braces -Wparentheses -Wunused-variable -Wunused-value -Wuninitialized -Wshadow -fsanitize=pointer-compare -fsanitize=pointer-subtract -fsanitize=undefined -fsanitize=address -O2 -std=gnu++2b -g -D fio % -o %:p:h/%:t:r.out && time ./%:r.out<cr>
+    nnoremap <C-c> :w <bar> !clang++ -pthread -Wall -Werror -Wmisleading-indentation -Wmissing-braces -Wparentheses -Wunused-variable -Wunused-value -Wuninitialized -Wshadow -fsanitize=pointer-compare -fsanitize=pointer-subtract -fsanitize=undefined -fsanitize=address -O2 -std=gnu++2b -g -D fio % -o %:p:h/%:t:r && time ./%:r<cr>
     inoremap <leader>e :%s/\(std::\)\?endl/"\\n"/<cr>
     inoremap <leader>io <esc>:r ~/.vim/personal_snips/cpp_fast_io.cpp<CR>i
     inoremap <leader>r <esc>:r ~/.vim/personal_snips/cpp_algo_start.cpp<CR>i
-    nnoremap <c-s> :!kdbg <c-r>=expand("%:r:h") . ".out"<cr>&<cr>
+    nnoremap <c-s> :!kdbg <c-r>=expand("%:r:h") <cr>&<cr>
 endfunction
 
 function! Rust( )
-    nnoremap <C-c> :w <bar> !rustc % -o %:p:h/%:t:r.out && printf "\n" && time ./%:r.out<CR>
+    nnoremap <C-c> :w <bar> !rustc % -o %:p:h/%:t:r && printf "\n" && time ./%:r<CR>
 endfunction
 
 function! Golang( )
@@ -393,7 +393,7 @@ function! Golang( )
 endfunction
 
 function! Java( )
-    nnoremap <C-c> :w <bar> !time javac %:p:h/%:t:r.java && java  -enableassertions %:p:h/%:t:r.class<CR>
+    nnoremap <C-c> :w <bar> !time javac %:p:h/%:t:r.java && java  -enableassertions %:t:r<CR>
 endfunction
 
 "------------------------------------------------------------
@@ -415,7 +415,7 @@ augroup default_group
     autocmd filetype go call Golang()
     autocmd filetype cpp call Cpp()
     autocmd filetype rust call Rust()
-    autocmd filetype java nnoremap Java()
+    autocmd filetype java call Java()
     autocmd filetype python nnoremap <C-c> :w <bar> !python % <CR>
     autocmd filetype plantuml nnoremap <C-c> :call BuildUml() <cr>
 

@@ -82,7 +82,7 @@ Plug 'nvim-treesitter/nvim-treesitter', " interface for github.com/tree-sitter/t
 
 " Source Control {{{3
 Plug 'tpope/vim-fugitive'              " handle git commands
-Plug 'airblade/vim-gitgutter'          " see git diff in buffer
+" Plug 'airblade/vim-gitgutter'          " see git diff in buffer
 
 
 " Navigation {{{3
@@ -107,12 +107,13 @@ Plug 'euclio/vim-markdown-composer',
 if has('vim')
   " TODO : SET UP VIMSPECTOR
   " vimspector works better with vim rahter than nvim
+  " use nvim-dap (better than vimspector) for neovim
   " a debugging plugin for c++
   " Plug 'puremourning/vimspector', {
   "    \  'do' : ':VimspectorUpdate'
   "    \ }
 endif
-
+Plug 'mfussenegger/nvim-dap'
 
 " Code Completion {{{3
 
@@ -122,6 +123,7 @@ endif
 Plug 'williamboman/mason-lspconfig.nvim'               " Optional
 Plug 'williamboman/mason.nvim', {'do': ':MasonUpdate'} " Optional
 Plug 'neovim/nvim-lspconfig'                           " Required
+
 " LSP Support {{{4
 
 " Autocompletion {{{5
@@ -444,13 +446,23 @@ endif
 
 nnoremap <leader>u :UndotreeToggle<cr>
 
+"-----------------------------------------------------------
+" LUA CONFIGS
+"-----------------------------------------------------------
+
+let source_file_names=['lsp_zero', 'nvim_dap']
+
+for file_name in  source_file_names
+  exe 'luafile' . SourceFileName(sep, vim_home, 'lua', file_name . '.lua')
+endfor
+
 " lsp-zero {{{2
+nnoremap <leader>gr <cmd>Telescope lsp_references<cr>
 
- nnoremap <leader>gr <cmd>Telescope lsp_references<cr>
- luafile $HOME/vim/vim/.vim/lua/lsp_zero.lua
-
-
+" lsp-zero {{{2
 let g:snipMate = { 'snippet_version' : 1 }
+
+
 
 "------------------------------------------------------------
 " END {{{1
