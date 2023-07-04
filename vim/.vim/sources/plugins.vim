@@ -98,8 +98,8 @@ Plug 'scrooloose/vim-slumlord'         " inline previews for plantuml acitvity d
 Plug 'aklt/plantuml-syntax'            " syntax/linting for plantuml
 " moved notetaking to obsidian
 " Plug 'vimwiki/vimwiki'                 " note taking in vim
-Plug 'euclio/vim-markdown-composer',
-  \{'do': function('BuildComposer')}   " async markdown live preview
+" Plug 'euclio/vim-markdown-composer',
+  " \{'do': function('BuildComposer')}   " async markdown live preview
 
 
 " Debug {{{3

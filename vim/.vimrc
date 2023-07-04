@@ -377,7 +377,7 @@ nnoremap <leader>cti :call WildignoreFromGitignore()<cr>
 "------------------------------------------------------------
 
 function! Cpp( )
-    nnoremap <C-c> :w <bar> !g++ -pthread -latomic -Wall -Werror -Wmisleading-indentation -Wmissing-braces -Wparentheses -Wunused-variable -Wunused-value -Wuninitialized -Wshadow -fsanitize=pointer-compare -fsanitize=pointer-subtract -fsanitize=undefined -fsanitize=address -O2 -std=gnu++2b -g -D fio % -o %:p:h/%:t:r && time ./%:r<cr>
+    nnoremap <C-c> :w <bar> !g++ -pthread -latomic -Wall -Werror -Wmisleading-indentation -Wmissing-braces -Wparentheses -Wunused-variable -Wunused-value -Wuninitialized -Wshadow -fsanitize=pointer-compare -fsanitize=pointer-subtract -fsanitize=undefined -fsanitize=address -O2 -std=gnu++2b -g -D fio % -o %:p:h/%:t:r.out && time ./%:r.out<cr>
     inoremap <leader>e :%s/\(std::\)\?endl/"\\n"/<cr>
     inoremap <leader>io <esc>:r ~/.vim/personal_snips/cpp_fast_io.cpp<CR>i
     inoremap <leader>r <esc>:r ~/.vim/personal_snips/cpp_algo_start.cpp<CR>i
