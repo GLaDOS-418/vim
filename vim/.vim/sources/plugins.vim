@@ -120,17 +120,17 @@ Plug 'mfussenegger/nvim-dap'
 " Plug 'neoclide/coc.nvim', {'branch': 'release',
 "      \ 'do': { -> coc#util#install()}} " Node based code completion engine with LSP support
 
-Plug 'williamboman/mason-lspconfig.nvim'               " Optional
-Plug 'williamboman/mason.nvim', {'do': ':MasonUpdate'} " Optional
-Plug 'neovim/nvim-lspconfig'                           " Required
+" Plug 'williamboman/mason-lspconfig.nvim'               " Optional
+" Plug 'williamboman/mason.nvim', {'do': ':MasonUpdate'} " Optional
+" Plug 'neovim/nvim-lspconfig'                           " Required
 
 " LSP Support {{{4
 
 " Autocompletion {{{5
-Plug 'hrsh7th/nvim-cmp'         " Required
-Plug 'hrsh7th/cmp-nvim-lsp'     " Required
-Plug 'L3MON4D3/LuaSnip', {'tag': 'v1.*'}  " Required
-Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v2.x'}
+" Plug 'hrsh7th/nvim-cmp'         " Required
+" Plug 'hrsh7th/cmp-nvim-lsp'     " Required
+" Plug 'L3MON4D3/LuaSnip', {'tag': 'v1.*'}  " Required
+" Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v2.x'}
 
 " snippets (vim-snipmate)  {{{6
 " Plug 'MarcWeber/vim-addon-mw-utils' | 
@@ -138,8 +138,8 @@ Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v2.x'}
 "   \ Plug 'garbas/vim-snipmate' |
 Plug 'honza/vim-snippets'
 
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
+" Plug 'nvim-lua/plenary.nvim'
+" Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
 
 
 Plug 'sheerun/vim-polyglot'            " collection of language packs for vim
@@ -450,17 +450,17 @@ nnoremap <leader>u :UndotreeToggle<cr>
 " LUA CONFIGS
 "-----------------------------------------------------------
 
-let source_file_names=['lsp_zero', 'nvim_dap']
-
-for file_name in  source_file_names
-  exe 'luafile' . SourceFileName(sep, vim_home, 'lua', file_name . '.lua')
-endfor
-
-" lsp-zero {{{2
-nnoremap <leader>gr <cmd>Telescope lsp_references<cr>
-
-" lsp-zero {{{2
-let g:snipMate = { 'snippet_version' : 1 }
+" let source_file_names=['lsp_zero', 'nvim_dap']
+" 
+" for file_name in  source_file_names
+"   exe 'luafile' . SourceFileName(sep, vim_home, 'lua', file_name . '.lua')
+" endfor
+" 
+" " lsp-zero {{{2
+" nnoremap <leader>gr <cmd>Telescope lsp_references<cr>
+" 
+" " lsp-zero {{{2
+" let g:snipMate = { 'snippet_version' : 1 }
 
 
 
