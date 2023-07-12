@@ -104,43 +104,49 @@ Plug 'aklt/plantuml-syntax'            " syntax/linting for plantuml
 
 " Debug {{{3
 
-if has('vim')
-  " TODO : SET UP VIMSPECTOR
-  " vimspector works better with vim rahter than nvim
-  " use nvim-dap (better than vimspector) for neovim
-  " a debugging plugin for c++
-  " Plug 'puremourning/vimspector', {
-  "    \  'do' : ':VimspectorUpdate'
-  "    \ }
-endif
-Plug 'mfussenegger/nvim-dap'
+" TODO : SET UP VIMSPECTOR FOR VIM
+" vimspector works better with vim rahter than nvim
+" use nvim-dap (better than vimspector) for neovim
+" a debugging plugin for c++
+" Plug 'puremourning/vimspector', {
+"    \  'do' : ':VimspectorUpdate'
+"    \ }
 
-" Code Completion {{{3
+if has('nvim')
+  Plug 'mfussenegger/nvim-dap'
+endif
+"
+" LSP Support {{{4
 
 " Plug 'neoclide/coc.nvim', {'branch': 'release',
 "      \ 'do': { -> coc#util#install()}} " Node based code completion engine with LSP support
 
-" Plug 'williamboman/mason-lspconfig.nvim'               " Optional
-" Plug 'williamboman/mason.nvim', {'do': ':MasonUpdate'} " Optional
-" Plug 'neovim/nvim-lspconfig'                           " Required
+if has('nvim')
+  Plug 'williamboman/mason-lspconfig.nvim'               " Optional
+  Plug 'williamboman/mason.nvim', {'do': ':MasonUpdate'} " Optional
+  Plug 'neovim/nvim-lspconfig'                           " Required
+endif
 
-" LSP Support {{{4
 
 " Autocompletion {{{5
-" Plug 'hrsh7th/nvim-cmp'         " Required
-" Plug 'hrsh7th/cmp-nvim-lsp'     " Required
-" Plug 'L3MON4D3/LuaSnip', {'tag': 'v1.*'}  " Required
-" Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v2.x'}
+if has('nvim')
+  Plug 'hrsh7th/nvim-cmp'         " Required
+  Plug 'hrsh7th/cmp-nvim-lsp'     " Required
+  Plug 'L3MON4D3/LuaSnip', {'tag': 'v1.*'}  " Required
+  Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v2.x'}
+endif
 
-" snippets (vim-snipmate)  {{{6
-" Plug 'MarcWeber/vim-addon-mw-utils' | 
-"   \ Plug 'tomtom/tlib_vim' |
-"   \ Plug 'garbas/vim-snipmate' |
-Plug 'honza/vim-snippets'
+" snippets {{{6
+if has('nvim')
+  Plug 'MarcWeber/vim-addon-mw-utils' | 
+    \ Plug 'tomtom/tlib_vim' |
+    \ Plug 'garbas/vim-snipmate' |
+    \ Plug 'honza/vim-snippets'
+  
+  Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' } |
+    \ Plug 'nvim-lua/plenary.nvim'
 
-" Plug 'nvim-lua/plenary.nvim'
-" Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
-
+endif
 
 Plug 'sheerun/vim-polyglot'            " collection of language packs for vim
 Plug 'alvan/vim-closetag'              " to close markup lang tags
@@ -450,17 +456,21 @@ nnoremap <leader>u :UndotreeToggle<cr>
 " LUA CONFIGS
 "-----------------------------------------------------------
 
-" let source_file_names=['lsp_zero', 'nvim_dap']
-" 
-" for file_name in  source_file_names
-"   exe 'luafile' . SourceFileName(sep, vim_home, 'lua', file_name . '.lua')
-" endfor
-" 
-" " lsp-zero {{{2
-" nnoremap <leader>gr <cmd>Telescope lsp_references<cr>
-" 
-" " lsp-zero {{{2
-" let g:snipMate = { 'snippet_version' : 1 }
+if has('nvim')
+
+  let source_file_names=['lsp_zero', 'nvim_dap']
+
+  for file_name in  source_file_names
+    exe 'luafile' . SourceFileName(sep, vim_home, 'lua', file_name . '.lua')
+  endfor
+
+  " lsp-zero {{{2
+  nnoremap <leader>gr <cmd>Telescope lsp_references<cr>
+
+  " lsp-zero {{{2
+  let g:snipMate = { 'snippet_version' : 1 }
+
+endif
 
 
 
