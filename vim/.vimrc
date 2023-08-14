@@ -153,6 +153,7 @@ set background=dark
 
 try
   colorscheme gruvbox8
+  " colorscheme tokyonight
 catch
   colorscheme desert
 endtry

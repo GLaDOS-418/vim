@@ -5,12 +5,16 @@ lsp.default_keymaps({
   preserve_mappings = false
 })
 
+-- find names for servers
+-- https://github.com/williamboman/mason-lspconfig.nvim#available-lsp-servershttps://github.com/williamboman/mason-lspconfig.nvim#available-lsp-servers
 lsp.ensure_installed({
   -- Replace these with whatever servers you want to install
   'clangd',
   'cmake',
   'rust_analyzer',
-  'gopls'
+  'gopls',
+  'java_language_server',
+  'lua_ls'
 })
 
 -- lsp.format_on_save({
@@ -21,11 +25,14 @@ lsp.ensure_installed({
 -- })
 
 -- " (Optional) Configure lua language server for neovim
+require('lspconfig').clangd.setup {}
+require('lspconfig').gopls.setup {}
+require('lspconfig').java_language_server.setup {}
 require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+require('lspconfig').rust_analyzer.setup {}
+
 -- require("luasnip.loaders.from_snipmate").load({paths = "~/snippets"})
 -- require("luasnip.loaders.from_snipmate").load({ include = { "c" } }) -- Load only python snippets
-
-require('lspconfig').clangd.setup {}
 
 local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()

@@ -13,50 +13,12 @@ if empty(glob('~/.vim/autoload/plug.vim')) && executable('curl')
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-" if empty(glob('~/.vim/pack/vimspector/opt/vimspector')) && executable('git')
-"   silent !mkdir -p $HOME/.vim/pack
-"   silent !git clone https://github.com/puremourning/vimspector ~/.vim/pack/vimspector/opt/vimspector
-" endif
-
 " helper function to check for conditions and load plugins. Follow below pattern:
 " Cond( condition1, Cond(condition2,Cond(condition3, {dictionary}) ) )
 function! Cond(cond, ...) "{{{2
   let opts = get(a:000, 0, {})
   return (a:cond) ? opts : extend(opts, { 'on': [], 'for': [] })
 endfunction
-
-" build function req for vim-markdown-composer
-" cargo is rust package mangaer
-function! BuildComposer(info) "{{{2
-  if executable('cargo')
-    if a:info.status != 'unchanged' || a:info.force
-      if has('nvim')
-        !cargo build --release
-      else
-        !cargo build --release --no-default-features --features json-rpc
-      endif
-    endif
-  else
-    echom "you don't 've cargo installed to build previewer!!!"
-  endif
-endfunction
-
-" post update hook to build YCM
-function! BuildYCM(info) "{{{2
-  " info is a dictionary with 3 fields
-  " - name:   name of the plugin
-  " - status: 'installed', 'updated', or 'unchanged'
-  " - force:  set on PlugInstall! or PlugUpdate!
-  if has('python')||has('python3')
-    if a:info.status == 'installed' || a:info.force
-      " !./install.py --clang-completer --go-completer --rust-completer --java-completer --system-libclang --system-boost
-      !python install.py --clang-completer --go-completer --rust-completer --java-completer
-    endif
-  else
-    echom "you don't 've python support in vim to build YCM!!!"
-  endif
-endfunction
-" }}}
 
 function! HasPython()
   return has('python')||has('python3')
@@ -73,9 +35,11 @@ endif
 
 " Visual {{{3
 Plug 'lifepillar/vim-gruvbox8'          " a better gruvbox
+Plug 'folke/tokyonight.nvim'
+Plug 'ryanoasis/vim-devicons'           " icons for plugins
+
 Plug 'machakann/vim-highlightedyank'    " flash highlight yanked region
 
-" TODO: setup treesitter
 Plug 'nvim-treesitter/nvim-treesitter', " interface for github.com/tree-sitter/tree-sitter
      \{'do': ':TSUpdate'}               "   it's a parser generator
 
@@ -114,6 +78,7 @@ Plug 'aklt/plantuml-syntax'            " syntax/linting for plantuml
 
 if has('nvim')
   Plug 'mfussenegger/nvim-dap'
+  Plug 'rcarriga/nvim-dap-ui'
 endif
 "
 " LSP Support {{{4
@@ -134,6 +99,8 @@ if has('nvim')
   Plug 'hrsh7th/cmp-nvim-lsp'     " Required
   Plug 'L3MON4D3/LuaSnip', {'tag': 'v1.*'}  " Required
   Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v2.x'}
+
+  Plug 'jose-elias-alvarez/null-ls.nvim' " formatter/linter
 endif
 
 " snippets {{{6
@@ -159,6 +126,12 @@ Plug 'lukas-reineke/indent-blankline.nvim'
 " Editing Utils {{{3
 
 " Plug 'ervandew/supertab'             " use tab for all insert mode completions
+
+" gtags-cscope support is removed in nvim 0.9+
+" https://github.com/neovim/neovim/pull/20545
+if has('nvim')
+  Plug 'dhananjaylatkar/cscope_maps.nvim'
+endif
 Plug 'majutsushi/tagbar'               " show tags in sidebar using ctags
 Plug 'tpope/vim-surround'              " surround text with tags
 Plug 'godlygeek/tabular'               " text alignment
@@ -294,8 +267,9 @@ endif
 
   let NERDTreeQuitOnOpen = 1 " close nerdtree on opening a file
   let NERDTreeMinimalUI  = 1
+  let NERDTreeShowHidden = 1
 
-  noremap <leader>nt :NERDTreeToggleVCS<CR>
+  noremap <c-n> :NERDTreeToggleVCS<CR>
 
   let g:NERDTreeGitStatusIndicatorMapCustom = {
                   \ 'Modified'  :'✹',
@@ -409,7 +383,7 @@ nnoremap <Leader>k <Plug>(easymotion-k)
 nnoremap <Leader>l <Plug>(easymotion-lineforward)
 
 " <leader>f{char} to move to {char}
-nnoremap <Leader>f <Plug>(easymotion-overwin-f)
+" nnoremap <Leader>f <Plug>(easymotion-overwin-f)
 
 " s{char}{char} to move to {char}{char}
 nmap s <Plug>(easymotion-s2)
@@ -458,16 +432,15 @@ nnoremap <leader>u :UndotreeToggle<cr>
 
 if has('nvim')
 
-  let source_file_names=['lsp_zero', 'nvim_dap']
-
-  for file_name in  source_file_names
-    exe 'luafile' . SourceFileName(sep, vim_home, 'lua', file_name . '.lua')
-  endfor
+  lua require('lsp_zero')
+  lua require('nvim_dap')
+  lua require('null_ls')
+  lua require('mason_cfg')
 
   " lsp-zero {{{2
   nnoremap <leader>gr <cmd>Telescope lsp_references<cr>
+  nnoremap <leader>f <cmd>LspZeroFormat<cr>
 
-  " lsp-zero {{{2
   let g:snipMate = { 'snippet_version' : 1 }
 
 endif
