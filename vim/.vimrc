@@ -184,16 +184,16 @@ if !has('nvim')
 endif
 
 " Remove the Windows ^M - when the encodings gets messed up
-noremap <silent> <c-m> mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
+" noremap <silent> <c-m> mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 
 " handle jump markers
 " inoremap <space><tab> <esc>/<++><CR>:nohl<CR>"_c4l
 " inoremap <leader><space><tab> <++><esc>4h?<++><CR>:nohl<CR>"_c4l
 " nnoremap <space><tab><tab> :%s/<++>//g<CR>
+" inoremap <leader><tab> <esc>/<--><CR>:nohl<CR>"_c4l
+" nnoremap <s-tab><s-tab> :%s/<++>//g<CR>
 inoremap j<tab> <esc>/<++><CR>:nohl<CR>"_c4l
-inoremap k<tab> <esc>/<--><CR>:nohl<CR>"_c4l
-nnoremap <s-tab><s-tab> :%s/<++>//g<CR>
-inoremap <leader><tab> <++><esc>4h?<++><CR>:nohl<CR>"_c4l
+inoremap k<tab> <++><esc>4h?<++><CR>:nohl<CR>"_c4l
 inoremap <leader>m <++><esc>
 
 " indentation control in visual mode

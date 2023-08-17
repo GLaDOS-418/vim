@@ -50,10 +50,26 @@ Plug 'tpope/vim-fugitive'              " handle git commands
 
 
 " Navigation {{{3
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-Plug 'preservim/nerdtree' |                     " open project drawer
-    \ Plug 'Xuyuanp/nerdtree-git-plugin' |      " mark files/dirs according to their status in drawer
+if has('nvim')
+  Plug 'nvim-neo-tree/neo-tree.nvim', { 'branch': 'v3.x' } |
+    \ Plug 'nvim-tree/nvim-web-devicons' |
+    \ Plug 'MunifTanjim/nui.nvim'
+
+  Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' } |
+    \ Plug 'nvim-lua/plenary.nvim'
+
+  Plug 'ThePrimeagen/harpoon'
+
+else
+  Plug 'preservim/nerdtree' |                     " open project drawer
+  \ Plug 'Xuyuanp/nerdtree-git-plugin'        " mark files/dirs according to their status in drawer
+
+  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+  Plug 'junegunn/fzf.vim'
+
+endif
+
+
 Plug 'easymotion/vim-easymotion'                " better movements
 
 
@@ -109,10 +125,6 @@ if has('nvim')
     \ Plug 'tomtom/tlib_vim' |
     \ Plug 'garbas/vim-snipmate' |
     \ Plug 'honza/vim-snippets'
-  
-  Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' } |
-    \ Plug 'nvim-lua/plenary.nvim'
-
 endif
 
 Plug 'sheerun/vim-polyglot'            " collection of language packs for vim
@@ -233,7 +245,10 @@ call plug#end()
     " fzf file fuzzy search that respects .gitignore
     " If in git directory, show only files that are committed, staged, unstaged or untracked
     " else use regular :Files
-    nnoremap <expr> <C-p> (len(system('git rev-parse')) ? ':Files' : ':GFiles --exclude-standard --others --cached')."\<cr>"
+    if has('vim')
+      nnoremap <expr> <c-t> (len(system('git rev-parse')) ? ':Files' : ':GFiles --exclude-standard --others --cached')."\<cr>"
+    endif
+
     let g:fzf_action = {
       \ 'ctrl-t': 'tab split',
       \ 'ctrl-i': 'split',
@@ -269,7 +284,9 @@ endif
   let NERDTreeMinimalUI  = 1
   let NERDTreeShowHidden = 1
 
-  noremap <c-n> :NERDTreeToggleVCS<CR>
+  if has('vim')
+    noremap <leader>d :NERDTreeToggleVCS<CR>
+  endif
 
   let g:NERDTreeGitStatusIndicatorMapCustom = {
                   \ 'Modified'  :'✹',
@@ -294,7 +311,7 @@ endif
     " autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
     "     \ quit | endif
     " Open the existing NERDTree on each new tab.
-    autocmd BufWinEnter * silent NERDTreeMirror
+    " autocmd BufWinEnter * silent NERDTreeMirror
   augroup END
 
 
@@ -303,6 +320,14 @@ endif
   let g:rooter_change_directory_for_non_project_files = 'current'
   let g:rooter_resolve_links = 1
   let g:rooter_cd_cmd = 'lcd'
+
+
+
+" neotree {{{2
+
+  if has('nvim')
+    noremap <leader>d :Neotree filesystem reveal left<cr>
+  endif
 
 
 " coc.nvim {{{2
@@ -437,9 +462,20 @@ if has('nvim')
   lua require('null_ls')
   lua require('mason_cfg')
 
+  " telescope {{{2
+  nnoremap <leader>ff <cmd>Telescope find_files find_command=rg,--ignore,--hidden,--files,--glob=!.git/*,--smart-case<cr>
+  nnoremap <leader>fg <cmd>Telescope live_grep find_command=rg,--ignore,--hidden,--files,--glob=!.git/*,--smart-case<cr>
+  nnoremap <leader>fb <cmd>Telescope buffers<cr>
+  nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+
   " lsp-zero {{{2
-  nnoremap <leader>gr <cmd>Telescope lsp_references<cr>
-  nnoremap <leader>f <cmd>LspZeroFormat<cr>
+  nnoremap <leader>lf <cmd>LspZeroFormat<cr>
+
+  " harpoon {{{2
+  nnoremap <c-m> <cmd>lua require("harpoon.mark").add_file()<cr>
+  nnoremap <c-g> <cmd>lua require("harpoon.ui").toggle_quick_menu()<cr>
+  nnoremap <c-n> <cmd>lua require("harpoon.ui").nav_next()<cr>
+  nnoremap <c-p> <cmd>lua require("harpoon.ui").nav_prev()<cr>
 
   let g:snipMate = { 'snippet_version' : 1 }
 
