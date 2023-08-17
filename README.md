@@ -73,13 +73,25 @@
 
 ### KNOWN ISSUES
 
-* when using airblade/vim-rooter: Changes Vim working directory to project root.]( https://github.com/airblade/vim-rooter ) - doesn't work well with nerdtree because it unsets `autochdir` and because of that, I can't open NerdTree in the VCS root on vim start.
-
+* when using airblade/vim-rooter: Changes Vim working directory to project root.( https://github.com/airblade/vim-rooter ) - doesn't work well with nerdtree because it unsets `autochdir` and because of that, I can't open NerdTree in the VCS root on vim start.
 
 ### TODO
+right now there's an attempt to make the config compatible with both vim and neovim.
+I might want to move completely to neovim and put vim config in archive mode or
+maybe i'll restructure my config to include vim, neovim and vscode.
+I've not made up my mind fully on that.
 
-* `fzf` is not caching results resulting in recomputation of the whole search space.
-* `coc.nvim` setup for golang and cpp.
-* snippets' setup.
-* making `vim-polyglot` work with `coc.nvim`.
-* set up `vimspector` for debugging.
+as of aug 2023, after Bram Moolenaar's passing, there's no clear directive of vim.
+vim was already an improvement over vi and neovim is over vim.
+
+neovim has tree-sitter support, native lua support, client-server architecture, community driven,
+better out-of-the-box config, and several other optimisations and cleaner codebase
+(e.g. they removed cscope support in nvim 0.9+ ), it has an inbuilt library 'Checkhealth' to see 
+if everything's installed properly or not. You can embed nvim into other editors, no more half-baked
+vim emulations and more work is being done on this. the nvim code is being refactored to move away
+from vimscript one part at a time and it's a fast moving project.
+
+nvim was moving ahead of vim development in terms of new features. it has more robust async support (RPC API),
+native lsp and dap support, embedded terminal support, floating windows etc. each of which eventually found its ways to
+vim but, apparantly nvim does them better.
+
