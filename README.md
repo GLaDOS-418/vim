@@ -42,6 +42,8 @@
 * [LSP | Langserver.org]( https://langserver.org/ )
 * [TabNine | Deep Learning for code completion]( https://www.tabnine.com/ ) - freemium
 * [Improving Vim Workflow With fzf | Pragmatic Pineapple]( https://pragmaticpineapple.com/improving-vim-workflow-with-fzf/ )
+* [GitHub - rockerBOO/awesome-neovim: Collections of awesome neovim plugins.]( https://github.com/rockerBOO/awesome-neovim )
+* [Dotfyle | Neovim Plugin Search | Neovim Config Search | Neovim News]( https://dotfyle.com/ )
 
 ### DISCUSSIONS
 
