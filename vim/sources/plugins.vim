@@ -437,7 +437,7 @@ let g:show_current_context_start = 1
 " undotree {{{2
 
 if has("persistent_undo")
-   let target_path = expand('~/.local/share/.vimundodir')
+   let target_path = expand('~/.local/share/.vimundodir/')
 
     " create the directory and any parent directories
     " if the location does not exist.
