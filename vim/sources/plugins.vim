@@ -33,9 +33,25 @@ if !empty(filter(copy(g:plugs), '!isdirectory(v:val.dir)'))
   autocmd VimEnter * PlugInstall | q
 endif
 
+" useless-but-fun {{{3
+Plug 'Eandrju/cellular-automaton.nvim'
+Plug 'goolord/alpha-nvim'
+Plug 'rcarriga/nvim-notify'
+Plug 'folke/noice.nvim'
+
 " Visual {{{3
+"
+" colorschemes
+Plug 'rebelot/kanagawa.nvim'            " dragon is the best
 Plug 'lifepillar/vim-gruvbox8'          " a better gruvbox
+Plug 'EdenEast/nightfox.nvim'           " terafox it is
 Plug 'folke/tokyonight.nvim'
+Plug 'marko-cerovac/material.nvim'
+Plug 'projekt0n/github-nvim-theme'
+Plug 'catppuccin/nvim'
+Plug 'rose-pine/neovim'
+
+
 Plug 'ryanoasis/vim-devicons'           " icons for plugins
 
 Plug 'machakann/vim-highlightedyank'    " flash highlight yanked region
@@ -106,17 +122,14 @@ if has('nvim')
   Plug 'williamboman/mason-lspconfig.nvim'               " Optional
   Plug 'williamboman/mason.nvim', {'do': ':MasonUpdate'} " Optional
   Plug 'neovim/nvim-lspconfig'                           " Required
-endif
-
-
-" Autocompletion {{{5
-if has('nvim')
   Plug 'hrsh7th/nvim-cmp'         " Required
   Plug 'hrsh7th/cmp-nvim-lsp'     " Required
   Plug 'L3MON4D3/LuaSnip', {'tag': 'v1.*'}  " Required
   Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v2.x'}
 
   Plug 'jose-elias-alvarez/null-ls.nvim' " formatter/linter
+
+  Plug 'mfussenegger/nvim-jdtls'
 endif
 
 " snippets {{{6

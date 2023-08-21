@@ -152,8 +152,9 @@ endif
 set background=dark
 
 try
-  colorscheme gruvbox8
-  " colorscheme tokyonight
+  " colorscheme gruvbox8
+  " colorscheme terafox
+  colorscheme kanagawa-dragon
 catch
   colorscheme desert
 endtry

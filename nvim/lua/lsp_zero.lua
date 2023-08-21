@@ -25,14 +25,14 @@ lsp.ensure_installed({
 -- })
 
 -- " (Optional) Configure lua language server for neovim
-require('lspconfig').clangd.setup {}
-require('lspconfig').gopls.setup {}
-require('lspconfig').java_language_server.setup {}
 require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
-require('lspconfig').rust_analyzer.setup {}
-
 -- require("luasnip.loaders.from_snipmate").load({paths = "~/snippets"})
 -- require("luasnip.loaders.from_snipmate").load({ include = { "c" } }) -- Load only python snippets
+
+require('lspconfig').clangd.setup {}
+require('lspconfig').rust_analyzer.setup {}
+require('lspconfig').gopls.setup {}
+require('lspconfig').java_language_server.setup {}
 
 local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
