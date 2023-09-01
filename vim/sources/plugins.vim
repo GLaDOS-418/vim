@@ -42,22 +42,25 @@ Plug 'folke/noice.nvim'
 " Visual {{{3
 "
 " colorschemes
-Plug 'rebelot/kanagawa.nvim'            " dragon is the best
+Plug 'rebelot/kanagawa.nvim'            " use kanagawa-dragon
+Plug 'EdenEast/nightfox.nvim'           " use terafox
 Plug 'lifepillar/vim-gruvbox8'          " a better gruvbox
-Plug 'EdenEast/nightfox.nvim'           " terafox it is
-Plug 'folke/tokyonight.nvim'
-Plug 'marko-cerovac/material.nvim'
-Plug 'projekt0n/github-nvim-theme'
-Plug 'catppuccin/nvim'
-Plug 'rose-pine/neovim'
+" Plug 'folke/tokyonight.nvim'
+" Plug 'marko-cerovac/material.nvim'
+" Plug 'projekt0n/github-nvim-theme'
+" Plug 'catppuccin/nvim'
+" Plug 'rose-pine/neovim'
 
 
 Plug 'ryanoasis/vim-devicons'           " icons for plugins
 
 Plug 'machakann/vim-highlightedyank'    " flash highlight yanked region
 
-Plug 'nvim-treesitter/nvim-treesitter', " interface for github.com/tree-sitter/tree-sitter
-     \{'do': ':TSUpdate'}               "   it's a parser generator
+if has('nvim')
+  Plug 'stevearc/dressing.nvim'           " UI hooks in nvim for input
+  Plug 'nvim-treesitter/nvim-treesitter', " interface for github.com/tree-sitter/tree-sitter
+       \{'do': ':TSUpdate'}               "   it's a parser generator
+endif
 
 
 " Source Control {{{3
@@ -75,14 +78,17 @@ if has('nvim')
     \ Plug 'nvim-lua/plenary.nvim'
 
   Plug 'ThePrimeagen/harpoon'
+  Plug 'chrisgrieser/nvim-genghis'            " vim-eunuch alternative for nvim
+  Plug 'hrsh7th/cmp-omni'                     " required by nvim-genghis for autocompletion of directories
 
 else
-  Plug 'preservim/nerdtree' |                     " open project drawer
+  Plug 'preservim/nerdtree' |                 " open project drawer
   \ Plug 'Xuyuanp/nerdtree-git-plugin'        " mark files/dirs according to their status in drawer
 
   Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
   Plug 'junegunn/fzf.vim'
 
+  Plug 'tpope/vim-eunuch'               " file modification commands
 endif
 
 
@@ -464,6 +470,9 @@ endif
 
 nnoremap <leader>u :UndotreeToggle<cr>
 
+" vim-eunuch and nvim-genghis {{{2
+
+
 "-----------------------------------------------------------
 " LUA CONFIGS
 "-----------------------------------------------------------
@@ -480,6 +489,7 @@ if has('nvim')
   nnoremap <leader>fg <cmd>Telescope live_grep find_command=rg,--ignore,--hidden,--files,--glob=!.git/*,--smart-case<cr>
   nnoremap <leader>fb <cmd>Telescope buffers<cr>
   nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+  nnoremap <leader>fc <cmd>Telescope git_commits<cr>
 
   " lsp-zero {{{2
   nnoremap <leader>lf <cmd>LspZeroFormat<cr>
