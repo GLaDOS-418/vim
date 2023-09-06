@@ -56,7 +56,10 @@ endfunction
 function! GitBranchFugitive() abort " {{{2
   let branch=''
   if exists('g:loaded_fugitive')
-    let branch .= fugitive#Head()
+    " let branch .= fugitive#Head()
+    let branch .= FugitiveStatusline()  " better. falls back on commits etc. if not on any branch
+  elseif executable('git')
+    let branch .= system('git branch --show-current 2> /dev/null | tr -d "\n" ')
   endif
 
   if branch != ''
@@ -98,8 +101,10 @@ function! ActiveStatus() " {{{2
   let statusline.="%{PasteForStatusline()}"   " paste mode flag
   let statusline.="%<"                        " truncate to left
   let statusline.="%#PmenuSel#"               " let hl group to : popup menu normal line
-  " let statusline.="%.15{GitBranch()}"       " github.com/vim/vim/issues/3197
-  let statusline.="%#SGit#%.15{GitBranchFugitive()}" " git branch[max width=15]
+
+  " let statusline.="%.17{GitBranch()}"              " github.com/vim/vim/issues/3197
+  let statusline.="%#SGit#%.17{GitBranchFugitive()}" " git branch[max width=17]
+
   let statusline.="%#WildMenu#"               " hl group style: dir listing
   let statusline.="\ %f"                      " file name
   let statusline.="%r"                        " read only flag
