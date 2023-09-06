@@ -54,7 +54,11 @@ endfunction
 
 " Function: return git branch name from vim-fugitive plugin
 function! GitBranchFugitive() abort " {{{2
-  let branch=fugitive#Head()
+  let branch=''
+  if exists('g:loaded_fugitive')
+    let branch .= fugitive#Head()
+  endif
+
   if branch != ''
     return ' '.branch.' '
   else
@@ -66,34 +70,36 @@ endfunction
 function! ChangeModeColor() " {{{2
   " \v means 'very magic'
   if (mode() =~# '\v(n|no)')
-    exe 'hi! User9 ctermfg=black ctermbg=yellow cterm=bold guifg=black guibg=yellow gui=bold'
+    exe 'hi! StatuslineColorGroup ctermfg=black ctermbg=yellow cterm=bold guifg=black guibg=yellow gui=bold'
   elseif (mode() =~# '\v(v|V)' || get(g:currentmode,strtrans(mode())) ==# 'v·block' )
     " visual block needed special handling because it is <c-v>
-    exe 'hi! User9 ctermfg=white ctermbg=blue cterm=bold guifg=white guibg=blue gui=bold'
+    exe 'hi! StatuslineColorGroup ctermfg=white ctermbg=darkblue cterm=bold guifg=white guibg=darkblue gui=bold'
   elseif (mode() ==# 'i')
-    exe 'hi! User9 ctermfg=white ctermbg=red cterm=bold guifg=white guibg=red gui=bold'
+    exe 'hi! StatuslineColorGroup ctermfg=white ctermbg=darkred cterm=bold guifg=white guibg=darkred gui=bold'
   elseif (mode() ==# 'c'|| mode() ==# 't')
-    exe 'hi! User9 ctermfg=black ctermbg=cyan cterm=bold guifg=black guibg=cyan gui=bold'
+    exe 'hi! StatuslineColorGroup ctermfg=black ctermbg=cyan cterm=bold guifg=black guibg=cyan gui=bold'
   elseif (mode() ==# '\v(R|Rv)')
-    exe 'hi! User9 ctermfg=black ctermbg=green cterm=bold guifg=black guibg=green gui=bold'
+    exe 'hi! StatuslineColorGroup ctermfg=black ctermbg=green cterm=bold guifg=black guibg=green gui=bold'
   else
-    exe 'hi! User9 ctermfg=black ctermbg=white cterm=bold guifg=black guibg=white gui=bold'
+    exe 'hi! StatuslineColorGroup ctermfg=black ctermbg=white cterm=bold guifg=black guibg=white gui=bold'
   endif
   return ''
 endfunction
+
+exe 'hi! SGit ctermfg=white ctermbg=black cterm=bold guifg=white guibg=black gui=bold'
 
 " General Format: %-0{minwid}.{maxwid}{item}
 " Higlight Groups: #<format-name>#  -> see :help hl for more group names
 function! ActiveStatus() " {{{2
   let statusline=""                           " clear statusline
   let statusline.="%{ChangeModeColor()}"      " Changing the statusline color
-  let statusline.="%#User9#"
+  let statusline.="%#StatuslineColorGroup#"
   let statusline.="\ %3{toupper(get(g:currentmode,strtrans(mode())))} "
   let statusline.="%{PasteForStatusline()}"   " paste mode flag
   let statusline.="%<"                        " truncate to left
   let statusline.="%#PmenuSel#"               " let hl group to : popup menu normal line
   " let statusline.="%.15{GitBranch()}"       " github.com/vim/vim/issues/3197
-  let statusline.="%.15{GitBranchFugitive()}" " git branch[max width=15]
+  let statusline.="%#SGit#%.15{GitBranchFugitive()}" " git branch[max width=15]
   let statusline.="%#WildMenu#"               " hl group style: dir listing
   let statusline.="\ %f"                      " file name
   let statusline.="%r"                        " read only flag
