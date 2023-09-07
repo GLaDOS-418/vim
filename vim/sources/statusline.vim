@@ -142,8 +142,8 @@ setlocal statusline=%!ActiveStatus()
 "------------------------------------------------------------
 augroup vim_statusline
   autocmd!
-  autocmd WinEnter,BufEnter * setlocal statusline=%!ActiveStatus()
-  autocmd WinLeave,BufLeave * setlocal statusline=%!InactiveStatus()
+  autocmd CursorMoved,BufWinEnter,FocusGained,WinEnter,BufEnter * setlocal statusline=%!ActiveStatus()
+  autocmd BufWinLeave,FocusLost,WinLeave,BufLeave * setlocal statusline=%!InactiveStatus()
 augroup END
 
 "------------------------------------------------------------

@@ -345,7 +345,7 @@ endif
 " neotree {{{2
 
   if has('nvim')
-    noremap <leader>d :Neotree filesystem reveal left<cr>
+    noremap <leader>d :Neotree toggle filesystem float<cr>
   endif
 
 

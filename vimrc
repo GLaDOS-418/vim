@@ -362,8 +362,7 @@ inoremap <leader>p <esc><cmd>set paste<cr>p<cr><cmd>set nopaste<cr>a<cr>
 nnoremap <leader>p <esc><cmd>set paste<cr>p<cr><cmd>set nopaste<cr>a<cr>
 
 " markdown style link paste from os clipboard
-nnoremap <leader><leader>l mk:read !curl --silent --location <C-R>=shellescape(@+)<cr> <bar> tr --delete '\n' <bar> grep -oP "<title.*?>.*?<\/title>" <bar> head -n 1 <bar> sed -E -e "s@<title.*?>[[:space:]]*(.*?)[[:space:]]*</title>@\1@g" -e "s/[[:space:]]+/ /g"<CR>i[<esc>A]( <C-R>+ )<esc>0v$h"zydd`k"zp
-inoremap <leader><leader>l <esc>mk:read !curl --silent --location <C-R>=shellescape(@+)<cr> <bar> tr --delete '\n' <bar> grep -oP "<title.*?>.*?<\/title>" <bar> head -n 1<bar> sed -E -e "s@.*<title.*?>[[:space:]]*(.*?)[[:space:]]*</title>.*@\1@" -e "s/[[:space:]]+/ /g"<CR>i[<esc>A]( <C-R>+ )<esc>0v$h"zydd`k"zpa
+nnoremap <leader>m mk:read !curl --silent --location <C-R>=shellescape(@+)<cr> <bar> tr --delete '\n' <bar> grep -oP "<title.*?>.*?<\/title>" <bar> head -n 1 <bar> sed -E -e "s@<title.*?>[[:space:]]*(.*?)[[:space:]]*</title>@\1@g" -e "s/[[:space:]]+/ /g"<CR>i[<esc>A]( <C-R>+ )<esc>0v$h"zydd`k"zp
 
 " get file name w/o ext
 inoremap <leader>f <esc>mk:put =expand('%:t:r')<cr>v$hx`kpa

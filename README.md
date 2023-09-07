@@ -66,6 +66,7 @@
 * [GitHub - nvim-treesitter/nvim-treesitter: Nvim Treesitter configurations and abstraction layer]( https://github.com/nvim-treesitter/nvim-treesitter ) 
 * [GitHub - ms-jpq/chadtree: File manager for Neovim. Better than NERDTree.]( https://github.com/ms-jpq/chadtree ) - potential NERDTree replacement
 * [GitHub - neoclide/coc-snippets: Snippets solution for coc.nvim]( https://github.com/neoclide/coc-snippets )
+* [GitHub - s1n7ax/nvim-window-picker: This plugins prompts the user to pick a window and returns the window id of the picked window]( https://github.com/s1n7ax/nvim-window-picker )
 
 ### PREVIOUSLY USED PLUGINS
 
