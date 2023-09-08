@@ -48,13 +48,15 @@
 * [Why do Vim experts prefer buffers over tabs? - Stack Overflow]( https://stackoverflow.com/questions/26708822/why-do-vim-experts-prefer-buffers-over-tabs/26745051 )
 * [A LSP client maintainer's view of the protocol | YCM]( https://www.reddit.com/r/vim/comments/b3yzq4/a_lsp_client_maintainers_view_of_the_lsp_protocol/ )
 
-### SOME PLUGIN DISCOVERY SOURCES
+### PLUGIN DISCOVERY SOURCES
 
 * [GitHub - akrawchyk/awesome-vim: The Vim plugin shortlist]( https://github.com/akrawchyk/awesome-vim )
 * [Vim Awesome]( https://vimawesome.com/ )
 * [Dotfyle | Neovim Plugin Search | Neovim Config Search | Neovim News]( https://dotfyle.com/ )
 * [rockerBOO/awesome-neovim: Collections of awesome neovim plugins.](https://github.com/rockerBOO/awesome-neovim#cursorline)
-* [vimrc/vimrcs at master · amix/vimrc · GitHub]( https://github.com/amix/vimrc/tree/master/vimrcs )
+* [nvimawesome](https://nvim-awesome.vercel.app/) 
+* [Modules labeled 'neovim' - LuaRocks]( https://luarocks.org/labels/neovim )
+* [neovimcraft]( https://neovimcraft.com/ )
 
 ### SOCIAL MEDIA
 
@@ -72,18 +74,18 @@ maybe i'll restructure my config to include vim, neovim and vscode.
 I've not made up my mind fully on that.
 
 as of aug 2023, after Bram Moolenaar's passing, [vim's future](https://github.com/vim/vim/discussions/12736) is yet to be seen.
-Does it starts moving fast? idk. vim was already an improvement over vi and neovim is an attempt to improve upon that.
+vim was already an improvement over vi and neovim is an attempt to improve upon that.
 
 neovim has tree-sitter support, native lua support, more exlusive plugins, client-server architecture, community driven,
 better out-of-the-box config, [better file change detection](https://github.com/neovim/neovim/issues/1380)
 (for which I have a [hack in my config](https://github.com/GLaDOS-418/vim/blob/ea23b01022f56358030163471ed2f484ad9d4407/vimrc#L430) ) 
 and several other optimisations and cleaner codebase
 (e.g. [they removed cscope support in nvim 0.9+](https://github.com/neovim/neovim/pull/20545) ), it has an inbuilt library 'Checkhealth' to see 
-if everything's installed properly or not. You can embed nvim into other editors (e.g. [vscode-neovim](https://github.com/vscode-neovim/vscode-neovim) ),
+if everything's installed properly or not. You can embed nvim into other editors (e.g. [vscode-neovim](https://github.com/vscode-neovim/vscode-neovim), [firenvim](https://github.com/glacambre/firenvim) ),
 no more half-baked vim emulations and more work is being done on this. the nvim code is being refactored to move away
 from vimscript one part at a time and it's a fast moving project.
 
 nvim was moving ahead of vim development in terms of new features. it has more robust async support (RPC API),
-native lsp and dap support, embedded terminal support, floating windows etc. each of which eventually found its ways to
+native lsp and dap support, embedded terminal support, floating windows etc. most of which eventually found its ways to
 vim but, apparantly nvim does them better.
 

@@ -57,6 +57,7 @@ Plug 'ryanoasis/vim-devicons'           " icons for plugins
 Plug 'machakann/vim-highlightedyank'    " flash highlight yanked region
 
 if has('nvim')
+  Plug 'luckasRanarison/nvim-devdocs'
   Plug 'stevearc/dressing.nvim'           " UI hooks in nvim for input
   Plug 'nvim-treesitter/nvim-treesitter', " interface for github.com/tree-sitter/tree-sitter
        \{'do': ':TSUpdate'}               "   it's a parser generator
@@ -490,6 +491,7 @@ if has('nvim')
   nnoremap <leader>fb <cmd>Telescope buffers<cr>
   nnoremap <leader>fh <cmd>Telescope help_tags<cr>
   nnoremap <leader>fc <cmd>Telescope git_commits<cr>
+  nnoremap <leader>fd <cmd>DevdocsOpenFloat<cr>
 
   " lsp-zero {{{2
   nnoremap <leader>lf <cmd>LspZeroFormat<cr>

@@ -187,16 +187,6 @@ endif
 " Remove the Windows ^M - when the encodings gets messed up
 " noremap <silent> <c-m> mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 
-" handle jump markers
-" inoremap <space><tab> <esc>/<++><CR>:nohl<CR>"_c4l
-" inoremap <leader><space><tab> <++><esc>4h?<++><CR>:nohl<CR>"_c4l
-" nnoremap <space><tab><tab> :%s/<++>//g<CR>
-" inoremap <leader><tab> <esc>/<--><CR>:nohl<CR>"_c4l
-" nnoremap <s-tab><s-tab> :%s/<++>//g<CR>
-inoremap j<tab> <esc>/<++><CR>:nohl<CR>"_c4l
-inoremap k<tab> <++><esc>4h?<++><CR>:nohl<CR>"_c4l
-inoremap <leader>m <++><esc>
-
 " indentation control in visual mode
 vnoremap > >gv
 vnoremap < <gv
@@ -362,8 +352,8 @@ inoremap <leader>p <esc><cmd>set paste<cr>p<cr><cmd>set nopaste<cr>a<cr>
 nnoremap <leader>p <esc><cmd>set paste<cr>p<cr><cmd>set nopaste<cr>a<cr>
 
 " markdown style link paste from os clipboard
-nnoremap <leader><leader>l mk:read !curl --silent --location <C-R>=shellescape(@+)<cr> <bar> tr --delete '\n' <bar> grep -oP "<title.*?>.*?<\/title>" <bar> head -n 1 <bar> sed -E -e "s@<title.*?>[[:space:]]*(.*?)[[:space:]]*</title>@\1@g" -e "s/[[:space:]]+/ /g"<CR>i[<esc>A]( <C-R>+ )<esc>0v$h"zydd`k"zp
-inoremap <esc><c-l> mk:read !curl --silent --location <C-R>=shellescape(@+)<cr> <bar> tr --delete '\n' <bar> grep -oP "<title.*?>.*?<\/title>" <bar> head -n 1 <bar> sed -E -e "s@<title.*?>[[:space:]]*(.*?)[[:space:]]*</title>@\1@g" -e "s/[[:space:]]+/ /g"<CR>i[<esc>A]( <C-R>+ )<esc>0v$h"zydd`k"zp
+nnoremap <leader><leader>l mk:read !curl --silent --location <C-R>=shellescape(@+)<cr> <bar> tr --delete '\n' <bar> grep -oP "<title.*?>.*?<\/title>" <bar> head -n 1 <bar> sed -E -e "s@<title.*?>[[:space:]]*(.*?)[[:space:]]*</title>@\1@g" -e "s/[[:space:]]+/ /g"<CR>i[<esc>A]( <C-R>+ )<esc>0D`kPJx
+inoremap <c-l> <esc>mk:read !curl --silent --location <C-R>=shellescape(@+)<cr> <bar> tr --delete '\n' <bar> grep -oP "<title.*?>.*?<\/title>" <bar> head -n 1 <bar> sed -E -e "s@<title.*?>[[:space:]]*(.*?)[[:space:]]*</title>@\1@g" -e "s/[[:space:]]+/ /g"<CR>i[<esc>A]( <C-R>+ )<esc>0D`kPJx
 
 " get file name w/o ext
 inoremap <leader>f <esc>mk:put =expand('%:t:r')<cr>v$hx`kpa
