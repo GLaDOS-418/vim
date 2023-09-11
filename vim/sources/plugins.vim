@@ -41,15 +41,12 @@ Plug 'folke/noice.nvim'
 
 " Visual {{{3
 "
+if has('nvim')
 " colorschemes
-Plug 'rebelot/kanagawa.nvim'            " use kanagawa-dragon
-Plug 'EdenEast/nightfox.nvim'           " use terafox
-Plug 'lifepillar/vim-gruvbox8'          " a better gruvbox
-" Plug 'folke/tokyonight.nvim'
-" Plug 'marko-cerovac/material.nvim'
-" Plug 'projekt0n/github-nvim-theme'
-" Plug 'catppuccin/nvim'
-" Plug 'rose-pine/neovim'
+  Plug 'rebelot/kanagawa.nvim'    " use kanagawa-dragon
+  Plug 'EdenEast/nightfox.nvim'   " use terafox
+endif
+Plug 'lifepillar/vim-gruvbox8'  " a better gruvbox
 
 
 Plug 'ryanoasis/vim-devicons'           " icons for plugins
@@ -173,6 +170,9 @@ Plug 'mbbill/undotree',                " gives a file changes tree
       \ {'on': 'UndotreeToggle'}
 
 " Non-Editing Utils {{{3
+if has('nvim')
+  Plug 'stevearc/resession.nvim'
+endif
 Plug 'itchyny/calendar.vim'            " crazy calendar plugin that can sync tasks
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-repeat'                " repeat vim commands, and not just the native ones
@@ -484,6 +484,8 @@ if has('nvim')
   lua require('nvim_dap')
   lua require('null_ls')
   lua require('mason_cfg')
+  lua require('resession_cfg')
+  lua require('misc')
 
   " telescope {{{2
   nnoremap <leader>ff <cmd>Telescope find_files find_command=rg,--ignore,--hidden,--files,--glob=!.git/*,--smart-case<cr>
