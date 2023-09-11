@@ -30,10 +30,6 @@ let g:currentmode={
       \'!'  :'shell',
       \'t'  :'terminal' }
 
-" Function: display errors from Ale in statusline
-function! LinterStatus() abort " {{{2
-endfunction
-
 " Function: returns paste mode. (since insert behaves different in this mode)
 function! PasteForStatusline() abort " {{{2
     let paste_status = &paste
@@ -103,7 +99,6 @@ function! ActiveStatus() " {{{2
   let statusline.="\ %m"                      " modifi(ed|able) flag
   let statusline.="%="                        " switching to the right side
   let statusline.="%#ErrorMsg#"               " hl group style: error message
-  " let statusline.="%{LinterStatus()}"       " error message from ALE plugin
   let statusline.="%#StatusLineNC#"
   let statusline.="%y"                        " file type
   let statusline.="[%{&fileencoding?&fileencoding:&encoding}"
