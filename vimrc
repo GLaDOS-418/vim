@@ -130,7 +130,7 @@ noremap  <F5> :redraw!<CR>
 inoremap <F5> :redraw!<CR>
 
 " toggle mouse
-nnoremap <F3> :call MouseToggle()<cr>
+" nnoremap <F3> :call MouseToggle()<cr>
 
 " vi.stackexchange.com/questions/2419/mapping-ctrls-does-not-work#2425
 silent! !stty -a | grep '\( \|^\)ixon' 1>/dev/null 2>&1
@@ -209,7 +209,7 @@ nnoremap > <C-W>>
 nnoremap - <C-W>-
 nnoremap < <C-W><
 
-" removed the below filetype plugin block as vim-plug handles it internally
+" commented the below filetype plugin block as vim-plug handles it internally
 " filetype on "required
 " filetype plugin indent on    " required
 
@@ -226,15 +226,13 @@ set showmatch   " highlight matching [{()}]
 " FILE EXPLORER  {{{1
 "------------------------------------------------------------
 
-" disabled in favour of NerdTree
+let g:netrw_liststyle = 3           " directory view - tree
+let g:netrw_banner = 0              " remove the banner
+let g:netrw_winsize = 25            " width of the explorer is 25% of the whole window
+let g:netrw_browse_split = 4        " open files in a new window
+let g:netrw_altv = 1                " open new file to the right of the project drawer
+let g:netrw_list_hide = &wildignore " respect custom wildignore
 
-" let g:netrw_liststyle = 3  " directory view - tree
-" let g:netrw_banner = 0     " remove the banner
-" let g:netrw_winsize = 25 " width of the explorer is 25% of the whole window
-" let g:netrw_browse_split = 4 " open files in a new window
-" let g:netrw_altv = 1 " open new file to the right of the project drawer
-" let g:netrw_list_hide = &wildignore " respect custom wildignore
-"
 " " launch netrw as soon as you enter vim
 " augroup ProjectDrawer
 "   autocmd!
@@ -261,7 +259,7 @@ vnoremap <silent> * :<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
 vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
 
 " replace all
-nnoremap S :%s//g<Left><Left>
+" nnoremap S :%s//g<Left><Left>
 
 " normal modd <c-r> is redo, visual mode is replace
 vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
@@ -271,14 +269,14 @@ vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
 
 " Folding {{{2
 set foldenable          " enable folding
-set foldlevelstart=10   " open most folds by default
-set foldnestmax=10      " max 10 nested folds
+set foldlevelstart=5    " open most folds by default
+set foldnestmax=5       " max 10 nested folds
 " space open/closes folds in current block
 nnoremap <space> za
 
 augroup ft_markers
   au!
-  autocmd filetype cpp,go,rust,c,js setlocal foldmethod=marker foldmarker={,}
+  autocmd filetype cpp,go,rust,c,js,java,ts,css setlocal foldmethod=marker foldmarker={,}
   autocmd filetype python   setlocal foldmethod=indent
   autocmd filetype vim      setlocal foldmethod=marker
 augroup END
@@ -330,9 +328,6 @@ nnoremap N Nzzzv
 nnoremap <silent> <leader>nn :set number!<CR>
 nnoremap <silent> <leader>rn :set relativenumber!<CR>
 
-" <leader>k is move right one space
-inoremap <leader>k <right>
-
 " edit/load vimrc
 nnoremap <silent> <leader>ev :e $MYVIMRC<CR>
 nnoremap <silent> <leader>sv :source $MYVIMRC<CR>
@@ -352,7 +347,7 @@ inoremap <leader>p <esc><cmd>set paste<cr>p<cr><cmd>set nopaste<cr>a<cr>
 nnoremap <leader>p <esc><cmd>set paste<cr>p<cr><cmd>set nopaste<cr>a<cr>
 
 " markdown style link paste from os clipboard
-nnoremap <leader><leader>l mk:read !curl --silent --location <C-R>=shellescape(@+)<cr> <bar> tr --delete '\n' <bar> grep -oP "<title.*?>.*?<\/title>" <bar> head -n 1 <bar> sed -E -e "s@<title.*?>[[:space:]]*(.*?)[[:space:]]*</title>@\1@g" -e "s/[[:space:]]+/ /g"<CR>i[<esc>A]( <C-R>+ )<esc>0D`kPJx
+nnoremap <leader>ll mk:read !curl --silent --location <C-R>=shellescape(@+)<cr> <bar> tr --delete '\n' <bar> grep -oP "<title.*?>.*?<\/title>" <bar> head -n 1 <bar> sed -E -e "s@<title.*?>[[:space:]]*(.*?)[[:space:]]*</title>@\1@g" -e "s/[[:space:]]+/ /g"<CR>i[<esc>A]( <C-R>+ )<esc>0D`kPJx
 inoremap <c-l> <esc>mk:read !curl --silent --location <C-R>=shellescape(@+)<cr> <bar> tr --delete '\n' <bar> grep -oP "<title.*?>.*?<\/title>" <bar> head -n 1 <bar> sed -E -e "s@<title.*?>[[:space:]]*(.*?)[[:space:]]*</title>@\1@g" -e "s/[[:space:]]+/ /g"<CR>i[<esc>A]( <C-R>+ )<esc>0D`kPJx
 
 " get file name w/o ext
@@ -399,8 +394,8 @@ augroup default_group
     autocmd!
 
     " latex compilation shell commands. req: (pdf|xe)latex
-    autocmd filetype tex nnoremap <buffer> <leader>t :!pdflatex % <CR>
-    autocmd filetype tex nnoremap <buffer> <leader>x :!xelatex % <CR>
+    " autocmd filetype tex nnoremap <buffer> <leader>t :!pdflatex % <CR>
+    autocmd filetype tex nnoremap <buffer> <C-c> :!xelatex % <CR>
 
     autocmd BufNewFile,BufRead *.uml,*.pu,*.plantuml,.*puml set filetype=plantuml
     autocmd BufNewFile,BufRead *.md,*.mdown,*.markdown,.*mkd set filetype=markdown
@@ -428,13 +423,6 @@ augroup default_group
     autocmd! bufwritepost .vimrc source %
 augroup END
 
-" revisit  code navigations
-" update : attempting code navigation using coc.nvim
-" set csprg=gtags-cscope
-" nmap <Leader>fd :cs f g <C-R>=expand( "<cword>" )<CR><CR>
-" nmap <Leader>fr :cs f s <C-R>=expand( "<cword>" )<CR><CR>
-" nmap <Leader>fc :cs f c <C-R>=expand( "<cword>" )<CR><CR>
-
 let g:gitroot =  Git_Repo_Cdup()
 "vim build tags for project"
 silent function! LoadTags( channel )
@@ -442,30 +430,6 @@ silent! execute "cs add " . g:gitroot . "GTAGS"
 echo "GTAGS built and loaded"
 endfunction
 
-silent function! UpdateTags()
-if filereadable(g:gitroot . "GTAGS")
-   silent! execute "cs kill 0"
-   call job_start( "global -u", { "close_cb": "LoadTags" } )
-endif
-endfunction
-
-silent function! BuildTags(  )
-if !filereadable( g:gitroot . "GTAGS" )
-   silent! execute "cs kill 0"
-   call job_start( "gtags-cscope -b", { "close_cb": "LoadTags" })
-else
-   silent! execute "cs add GTAGS"
-endif
-enew
-Explore
-endfunction
-
-augroup temp
-   "au filetype cpp autocmd vimrc BufWritePost <buffer> call UpdateTags()
-augroup END
-
-" find hex value
-nnoremap <leader>x :let @@=<C-R><C-W><CR>
 "------------------------------------------------------------
 " END {{{1
 "------------------------------------------------------------

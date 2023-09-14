@@ -96,10 +96,6 @@ Plug 'easymotion/vim-easymotion'                " better movements
 " Architecture & Notes {{{3
 Plug 'scrooloose/vim-slumlord'         " inline previews for plantuml acitvity dia
 Plug 'aklt/plantuml-syntax'            " syntax/linting for plantuml
-" moved notetaking to obsidian
-" Plug 'vimwiki/vimwiki'                 " note taking in vim
-" Plug 'euclio/vim-markdown-composer',
-  " \{'do': function('BuildComposer')}   " async markdown live preview
 
 
 " Debug {{{3
@@ -177,20 +173,6 @@ Plug 'itchyny/calendar.vim'            " crazy calendar plugin that can sync tas
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-repeat'                " repeat vim commands, and not just the native ones
 Plug 'airblade/vim-rooter'
-" Plug 'djoshea/vim-autoread'
-
-" disabled on 25-April-2020
-" Plug 'junegunn/rainbow_parentheses.vim' " match paranthesis pair colors
-" Plug 'junegunn/goyo.vim'                " distraction free mode
-" Plug 'ludovicchabant/vim-gutentags'
-"   \ ,Cond(executable('ctags'),Cond(executable('gtags-cscope')))
-" Plug 'skywind3000/gutentags_plus'
-"   \ ,Cond(executable('ctags'),Cond(executable('gtags-cscope')))
-" Plug 'Valloric/YouCompleteMe',
-"   \ Cond(HasPython(),
-"   \ {'do':function('BuildYCM'), 'for':[]})
-"Plug 'sirver/ultisnips',
-"  \ Cond(HasPython())
 
 call plug#end()
 
@@ -485,6 +467,7 @@ if has('nvim')
   lua require('null_ls')
   lua require('mason_cfg')
   lua require('resession_cfg')
+  lua require('neotree_cfg')
   lua require('misc')
 
   " telescope {{{2
