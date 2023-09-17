@@ -152,9 +152,13 @@ endif
 set background=dark
 
 try
-  " colorscheme gruvbox8
-  " colorscheme terafox
-  colorscheme kanagawa-dragon
+  if has('nvim')
+    colorscheme terafox
+    " colorscheme kanagawa-dragon
+    " colorscheme gruvbox8
+  else
+    colorscheme gruvbox8
+  endif
 catch
   colorscheme desert
 endtry

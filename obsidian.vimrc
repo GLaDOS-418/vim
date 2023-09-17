@@ -2,18 +2,18 @@
 imap jk <Esc>
 
 " invert ; <-> :
-nmap ; :
-nmap : ;
+nnoremap ; :
+nnoremap : ;
 
 " j and k navigate visual lines rather than logical ones
-nmap j gj
-nmap k gk
+nnoremap j gj
+nnoremap k gk
 
 " move to end/beginning of line(normal/visual  mode)
-nmap E $
-nmap B ^
-vmap E $
-vmap B ^
+nnoremap E $
+nnoremap B ^
+vnoremap E $
+vnoremap B ^
 
 " Yank to system clipboard
 set clipboard=unnamed

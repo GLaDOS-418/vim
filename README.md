@@ -2,29 +2,24 @@
 
 ### CONTENTS
 
-* .vimrc
-* .gvimrc
+* vimrc
+* gvimrc
 * init.lua
-* .obsidian.vimrc
+* obsidian.vimrc
 * vim-plug glob
-* source code pro font (tff)
+* source code pro font (tff) - for gvimrc
 
 ### SOURCE
 
 * [A Good Vimrc]( https://web.archive.org/web/20180603131820/https://dougblack.io/words/a-good-vimrc.html )
 * [Minimal Vim Configuration With vim-plug: For A Barebones Starter Config - devel.tech]( https://devel.tech/snippets/n/vIMmz8vZ/minimal-vim-configuration-with-vim-plug/#putting-it-all-together )
 * [GitHub - junegunn/vim-plug: Minimalist Vim Plugin Manager]( https://github.com/junegunn/vim-plug )
-* [VIM and Python – A Match Made in Heaven – Real Python]( https://realpython.com/blog/python/vim-and-python-a-match-made-in-heaven/ )
-* [Gitgutter Vim plugin - Anselmos Blog]( https://witkowskibartosz.com/blog/gitgutter-vim-plugin.html )
-* [Spell checking]( https://vimcasts.org/episodes/spell-checking/ )
 * [How I boosted my Vim &raquo; nvie.com]( https://nvie.com/posts/how-i-boosted-my-vim/ )
 * [Vim 101: Set Hidden – usevim – Medium]( https://medium.com/usevim/vim-101-set-hidden-f78800142855 )
 * [Vim for Writers - NaperWriMo Wiki]( https://naperwrimo.org/wiki/index.php?title=Vim_for_Writers )
-* [Command-T Optimized | Chris Toomey]( https://ctoomey.com/writing/command-t-optimized/ )
 * ["Vim Side Search: Making Search Fun Again"]( https://ddrscott.github.io/blog/2016/side-search/ )
 * [The Last Statusline For Vim – Hacker Noon]( https://hackernoon.com/the-last-statusline-for-vim-a613048959b2 )
 * [Why I love Vim: It’s the lesser-known features that make it so amazing]( https://medium.freecodecamp.org/learn-linux-vim-basic-features-19134461ab85 )
-* [Improving CtrlP with 'fd - a better find']( https://bluz71.github.io/2017/10/26/turbocharge-the-ctrlp-vim-plugin.html )
 
 ### USEFUL LINKS
 
@@ -37,13 +32,13 @@
 * [Building vim from source]( https://github.com/Valloric/YouCompleteMe/wiki/Building-Vim-from-source )
 * [ripgrep is faster than {grep, ag, git grep, ucg, pt, sift} - Andrew Gallant&#39;s Blog]( https://blog.burntsushi.net/ripgrep/ )
 * [GitHub - bchretien/vim-profiler: Utility script to profile (n)vim (e.g. startup times of plugins)]( https://github.com/bchretien/vim-profiler )
-* [LSP | Langserver.org]( https://langserver.org/ )
 * [TabNine | Deep Learning for code completion]( https://www.tabnine.com/ ) - freemium
 * [Improving Vim Workflow With fzf | Pragmatic Pineapple]( https://pragmaticpineapple.com/improving-vim-workflow-with-fzf/ )
 * [How to copy text from vim to system clipboard? · Issue #892 · microsoft/WSL · GitHub]( https://github.com/Microsoft/WSL/issues/892 )
 
 ### DISCUSSIONS
 
+* [LSP | Langserver.org]( https://langserver.org/ )
 * [Do LSP's make tag generating tools obsolete?]( https://www.reddit.com/r/vim/comments/fj9tsz/do_lsps_make_tag_generating_tools_obsolete/ )
 * [Why do Vim experts prefer buffers over tabs? - Stack Overflow]( https://stackoverflow.com/questions/26708822/why-do-vim-experts-prefer-buffers-over-tabs/26745051 )
 * [A LSP client maintainer's view of the protocol | YCM]( https://www.reddit.com/r/vim/comments/b3yzq4/a_lsp_client_maintainers_view_of_the_lsp_protocol/ )
@@ -57,6 +52,7 @@
 * [nvimawesome](https://nvim-awesome.vercel.app/) 
 * [Modules labeled 'neovim' - LuaRocks]( https://luarocks.org/labels/neovim )
 * [neovimcraft]( https://neovimcraft.com/ )
+* [Vim Tips Wiki | Fandom]( https://vim.fandom.com/wiki/Vim_Tips_Wiki )
 
 ### SOCIAL MEDIA
 
