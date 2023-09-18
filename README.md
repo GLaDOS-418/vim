@@ -35,6 +35,7 @@
 * [TabNine | Deep Learning for code completion]( https://www.tabnine.com/ ) - freemium
 * [Improving Vim Workflow With fzf | Pragmatic Pineapple]( https://pragmaticpineapple.com/improving-vim-workflow-with-fzf/ )
 * [How to copy text from vim to system clipboard? · Issue #892 · microsoft/WSL · GitHub]( https://github.com/Microsoft/WSL/issues/892 )
+* [Tmux and Vim — configurations to be better together | BugSnag Blog]( https://www.bugsnag.com/blog/tmux-and-vim/ )
 
 ### DISCUSSIONS
 
@@ -43,7 +44,7 @@
 * [Why do Vim experts prefer buffers over tabs? - Stack Overflow]( https://stackoverflow.com/questions/26708822/why-do-vim-experts-prefer-buffers-over-tabs/26745051 )
 * [A LSP client maintainer's view of the protocol | YCM]( https://www.reddit.com/r/vim/comments/b3yzq4/a_lsp_client_maintainers_view_of_the_lsp_protocol/ )
 
-### PLUGIN DISCOVERY SOURCES
+### IMPROVE VIM
 
 * [GitHub - akrawchyk/awesome-vim: The Vim plugin shortlist]( https://github.com/akrawchyk/awesome-vim )
 * [Vim Awesome]( https://vimawesome.com/ )

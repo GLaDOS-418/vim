@@ -90,8 +90,8 @@ else
 endif
 
 
-Plug 'easymotion/vim-easymotion'                " better movements
-
+Plug 'easymotion/vim-easymotion'        " better movements
+Plug 'christoomey/vim-tmux-navigator'   " navigate seamlessy between vim and tmux
 
 " Architecture & Notes {{{3
 Plug 'scrooloose/vim-slumlord'         " inline previews for plantuml acitvity dia

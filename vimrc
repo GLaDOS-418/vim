@@ -297,11 +297,12 @@ noremap k gk
 noremap E $
 noremap B ^
 
+" now managed by : 'christoomey/vim-tmux-navigator'
 " split navigations
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
+" nnoremap <c-j> <c-w><c-j>
+" nnoremap <c-k> <c-w><c-k>
+" nnoremap <c-l> <c-w><c-l>
+" nnoremap <c-h> <c-w><c-h>
 
 " buffer movements and delete
 nnoremap <silent> <c-f> :bn<cr>
