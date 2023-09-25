@@ -126,8 +126,8 @@ inoremap <F9> <C-R>=strftime("%Y-%m-%d")<CR>
 nnoremap <leader>ss :set spell!<cr>
 
 " redraw buffer
-noremap  <F5> :redraw!<CR>
-inoremap <F5> :redraw!<CR>
+" noremap  <F5> :redraw!<CR>
+" inoremap <F5> :redraw!<CR>
 
 " toggle mouse
 " nnoremap <F3> :call MouseToggle()<cr>

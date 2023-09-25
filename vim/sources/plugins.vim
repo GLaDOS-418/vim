@@ -130,7 +130,13 @@ if has('nvim')
   Plug 'jose-elias-alvarez/null-ls.nvim' " formatter/linter
 
   Plug 'mfussenegger/nvim-jdtls'
+
+  Plug 'nvimdev/lspsaga.nvim'
 endif
+
+" Language Specific {{{3
+Plug 'ray-x/go.nvim'
+Plug 'ray-x/guihua.lua' " recommended if need floating window support
 
 " snippets {{{6
 if has('nvim')

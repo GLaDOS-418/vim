@@ -6,3 +6,10 @@ require('nvim-devdocs').setup({
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Esc>', ':close<CR>', {})
   end
 })
+
+
+-- ray-x/go.nvim
+require('go').setup({})
+
+-- nvimdev/lspsaga
+require('lspsaga').setup({})
