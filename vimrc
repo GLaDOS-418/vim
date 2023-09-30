@@ -1,5 +1,5 @@
 "------------------------------------------------------------
-" SOURCES {{{1
+" PRE-CONFIG {{{1
 "------------------------------------------------------------
 
 " leaders before loading any plugin otherwise they remain vim
@@ -10,6 +10,18 @@ let maplocalleader="\<space>"   " localleader is space
 
 " vim-polyglot needs this variable before loading the script
 let g:polyglot_disabled = ['go', 'sensible']
+
+" required earlier for nvim-colorizer.lus
+"Use 24-bit (true-color) mode in Vim/Neovim (if inside tmux, it should be version 2.2 or later)
+" https://gist.github.com/weimeng23/60b51b30eb758bd7a2a648436da1e562
+if has("nvim")
+  "For Neovim 0.1.3 and 0.1.4
+  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+endif
+"For Neovim > 0.1.5 and Vim > patch 7.4.1799
+if has("termguicolors")
+  set termguicolors
+endif
 
 if has('win32') ||  has('win64')
   let g:sep = '\'
@@ -29,13 +41,12 @@ for file_name in  source_file_names
   exe 'source ' . SourceFileName(sep, vim_home, 'sources', file_name . '.vim')
 endfor
 
-" to maintain interoperability b/w diff OS, below can't be used
+" " to maintain interoperability b/w diff OS, below can't be used
 " source $HOME/vim/vim/.vim/sources/plugins.vim
 " source $HOME/vim/vim/.vim/sources/statusline.vim
 " source $HOME/vim/vim/.vim/sources/abbreviations.vim
 " source $HOME/vim/vim/.vim/sources/custom_functions.vim
 " source $HOME/vim/vim/.vim/sources/environment.vim
-
 "------------------------------------------------------------
 " MISC {{{1
 "------------------------------------------------------------
@@ -73,10 +84,12 @@ endif
 
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear or gets resolved.
-if has("patch-8.1.1564")
+if has("nvim")
+  set signcolumn=auto:1-3
+elseif has("patch-8.1.1564")
   " merge signcolumn and number column into one
   set signcolumn=number
-else
+elseif exists('&signcolumn')  " vim 7.4.2201+
   set signcolumn=yes
 endif
 
@@ -165,6 +178,7 @@ endtry
 
 " gruvbox - plugin config
 let g:gruvbox_contrast_dark='soft'
+
 
 " user highlight group colors
 hi! User1 ctermfg=black ctermbg=yellow cterm=bold guifg=black guibg=yellow gui=bold

@@ -8,8 +8,13 @@ require('nvim-devdocs').setup({
 })
 
 
--- ray-x/go.nvim
-require('go').setup({})
 
 -- nvimdev/lspsaga
-require('lspsaga').setup({})
+-- require('lspsaga').setup({})
+
+
+-- Bekaboo/dropbar.nvim
+require('dropbar').setup()
+
+-- norcalli/nvim-colorizer.lua
+require('colorizer').setup()

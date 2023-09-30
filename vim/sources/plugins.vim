@@ -45,6 +45,8 @@ if has('nvim')
 " colorschemes
   Plug 'rebelot/kanagawa.nvim'    " use kanagawa-dragon
   Plug 'EdenEast/nightfox.nvim'   " use terafox
+
+  Plug 'norcalli/nvim-colorizer.lua' " highlight colors in neovim
 endif
 Plug 'lifepillar/vim-gruvbox8'  " a better gruvbox
 
@@ -63,14 +65,14 @@ endif
 
 " Source Control {{{3
 Plug 'tpope/vim-fugitive'              " handle git commands
-" Plug 'airblade/vim-gitgutter'          " see git diff in buffer
+Plug 'airblade/vim-gitgutter'          " see git diff in buffer
 
 
 " Navigation {{{3
 if has('nvim')
-  Plug 'nvim-neo-tree/neo-tree.nvim', { 'branch': 'v3.x' } |
-    \ Plug 'nvim-tree/nvim-web-devicons' |
-    \ Plug 'MunifTanjim/nui.nvim'
+  Plug 'nvim-neo-tree/neo-tree.nvim', { 'branch': 'v3.x' }
+  Plug 'nvim-tree/nvim-web-devicons'
+  Plug 'MunifTanjim/nui.nvim'
 
   Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' } |
     \ Plug 'nvim-lua/plenary.nvim'
@@ -111,6 +113,10 @@ Plug 'aklt/plantuml-syntax'            " syntax/linting for plantuml
 if has('nvim')
   Plug 'mfussenegger/nvim-dap'
   Plug 'rcarriga/nvim-dap-ui'
+  Plug 'theHamsta/nvim-dap-virtual-text'
+
+  " language specific dap servers
+  Plug 'leoluz/nvim-dap-go'
 endif
 "
 " LSP Support {{{4
@@ -129,14 +135,19 @@ if has('nvim')
 
   Plug 'jose-elias-alvarez/null-ls.nvim' " formatter/linter
 
-  Plug 'mfussenegger/nvim-jdtls'
-
-  Plug 'nvimdev/lspsaga.nvim'
+  " breadcrumbs
+  " jPlug 'nvimdev/lspsaga.nvim'
+  Plug 'Bekaboo/dropbar.nvim'
 endif
 
 " Language Specific {{{3
+
+" golang
 Plug 'ray-x/go.nvim'
 Plug 'ray-x/guihua.lua' " recommended if need floating window support
+
+" java
+Plug 'mfussenegger/nvim-jdtls'
 
 " snippets {{{6
 if has('nvim')
@@ -203,25 +214,23 @@ call plug#end()
   nnoremap <leader>hu :GitGutterUndoHunk<CR>
   nnoremap <leader>hp :GitGutterPreviewHunk<CR>
   nnoremap <leader>ggt :GitGutterToggle<cr>
-  if exists('&signcolumn')  " vim 7.4.2201+
-    set signcolumn=yes
-  else
+  if !exists('&signcolumn')  " < vim 7.4.2201+
     let g:gitgutter_sign_column_always = 1
   endif
 
-  let g:gitgutter_sign_added = ''
-  let g:gitgutter_sign_modified = ''
-  let g:gitgutter_sign_removed = ''
-  let g:gitgutter_sign_removed_first_line = ''
-  let g:gitgutter_sign_modified_removed = ''
+  let g:gitgutter_sign_added = '│'
+  let g:gitgutter_sign_modified = '│'
+  let g:gitgutter_sign_removed = '_'
+  let g:gitgutter_sign_removed_first_line = '-'
+  let g:gitgutter_sign_modified_removed = '~'
   " let g:gitgutter_sign_added = '++'
   " let g:gitgutter_sign_modified = '**'
   " let g:gitgutter_sign_removed = '~~'
   " let g:gitgutter_sign_removed_first_line = '^^'
   " let g:gitgutter_sign_modified_removed = '*~'
-  " highlight GitGutterAdd    guifg=#009900 guibg=#009900 ctermfg=2 ctermbg=2
-  " highlight GitGutterChange guifg=#bbbb00 guibg=#bbbb00 ctermfg=3 ctermbg=3
-  " highlight GitGutterDelete guifg=#ff2222 guibg=#ff2222 ctermfg=1 ctermbg=1
+  highlight GitGutterAdd    guifg=#009900 guibg=#009900 ctermfg=2 ctermbg=2
+  highlight GitGutterChange guifg=#bbbb00 guibg=#bbbb00 ctermfg=3 ctermbg=3
+  highlight GitGutterDelete guifg=#ff2222 guibg=#ff2222 ctermfg=1 ctermbg=1
 
 
 " vim-closetag - plugin config {{{2
@@ -468,7 +477,7 @@ nnoremap <leader>u :UndotreeToggle<cr>
 
 if has('nvim')
 
-  lua require('lsp_zero')
+  lua require('lsp_cfg')
   lua require('nvim_dap')
   lua require('null_ls')
   lua require('mason_cfg')
@@ -494,6 +503,15 @@ if has('nvim')
   nnoremap <c-p> <cmd>lua require("harpoon.ui").nav_prev()<cr>
 
   let g:snipMate = { 'snippet_version' : 1 }
+
+  " nvim-dap {{{2
+  nnoremap <silent> <F6>  <cmd>lua require'dap'.toggle_breakpoint()<cr>
+  nnoremap <silent> <F5>  <cmd>lua require'dap'.continue()<cr>
+  nnoremap <silent> <F10> <cmd>lua require'dap'.step_over()<cr>
+  nnoremap <silent> <F11> <cmd>lua require'dap'.step_into()<cr>
+  nnoremap <silent> <F4>  <cmd>lua require'dap'.repl.open()<cr>
+  nnoremap <silent> <leader>dt <cmd>lua require('dap-go').debug_test()<cr>
+  nnoremap <silent> <leader>dtl <cmd>lua require('dap-go').debug_last_test()<cr>
 
 endif
 
