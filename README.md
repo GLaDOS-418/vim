@@ -65,24 +65,23 @@
 * when using airblade/vim-rooter: Changes Vim working directory to project root.( https://github.com/airblade/vim-rooter ) - doesn't work well with nerdtree because it unsets `autochdir` and because of that, I can't open NerdTree in the VCS root on vim start.
 
 ### TODO
-right now there's an attempt to make the config compatible with both vim and neovim.
-I might want to move completely to neovim and put vim config in archive mode or
-maybe i'll restructure my config to include vim, neovim and vscode.
-I've not made up my mind fully on that.
+right now there's an attempt to keep the config compatible with both vim and neovim.
+Although, I might move completely to neovim and put vim config in archive mode or
+maybe i'll restructure my config to separate vim/neovim/vscode-nvim config.
 
-as of aug 2023, after Bram Moolenaar's passing, [vim's future](https://github.com/vim/vim/discussions/12736) is yet to be seen.
+As of Aug 2023, after Bram Moolenaar's passing, [vim's future](https://github.com/vim/vim/discussions/12736) is yet to be seen.
 vim was already an improvement over vi and neovim is an attempt to improve upon that.
 
 neovim has tree-sitter support, native lua support, more exlusive plugins, client-server architecture, community driven,
-better out-of-the-box config, [better file change detection](https://github.com/neovim/neovim/issues/1380)
-(for which I have a [hack in my config](https://github.com/GLaDOS-418/vim/blob/ea23b01022f56358030163471ed2f484ad9d4407/vimrc#L430) ) 
-and several other optimisations and cleaner codebase
-(e.g. [they removed cscope support in nvim 0.9+](https://github.com/neovim/neovim/pull/20545) ), it has an inbuilt library 'Checkhealth' to see 
-if everything's installed properly or not. You can embed nvim into other editors (e.g. [vscode-neovim](https://github.com/vscode-neovim/vscode-neovim), [firenvim](https://github.com/glacambre/firenvim) ),
-no more half-baked vim emulations and more work is being done on this. the nvim code is being refactored to move away
-from vimscript one part at a time and it's a fast moving project.
+better out-of-the-box config, several other optimisations (e.g. [better file change detection](https://github.com/neovim/neovim/issues/1380)
+(you can use [this workaround](https://github.com/GLaDOS-418/vim/blob/ea23b01022f56358030163471ed2f484ad9d4407/vimrc#L430) ) ),
+it has an inbuilt library 'Checkhealth' to see if everything's installed properly or not.
+
+You can embed nvim into other editors (e.g. [vscode-neovim](https://github.com/vscode-neovim/vscode-neovim), [firenvim](https://github.com/glacambre/firenvim) ), 
+no more half-baked vim emulations and more work is being done on this and more. the nvim code is being refactored to move away
+from vimscript one part at a time to lua and it's a fast moving project.
 
 nvim was moving ahead of vim development in terms of new features. it has more robust async support (RPC API),
-native lsp and dap support, embedded terminal support, floating windows etc. most of which eventually found its ways to
-vim but, apparantly nvim does them better.
+native lsp support and a better dap support, embedded terminal support, floating windows etc. 
+a few of which eventually found its ways to vim but, apparantly nvim does them better.
 

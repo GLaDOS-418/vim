@@ -497,7 +497,7 @@ if has('nvim')
   nnoremap <leader>lf <cmd>LspZeroFormat<cr>
 
   " harpoon {{{2
-  nnoremap <c-m> <cmd>lua require("harpoon.mark").add_file()<cr>
+  nnoremap <c-s> <cmd>lua require("harpoon.mark").add_file()<cr>
   nnoremap <c-g> <cmd>lua require("harpoon.ui").toggle_quick_menu()<cr>
   nnoremap <c-n> <cmd>lua require("harpoon.ui").nav_next()<cr>
   nnoremap <c-p> <cmd>lua require("harpoon.ui").nav_prev()<cr>

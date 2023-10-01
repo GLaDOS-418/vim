@@ -85,7 +85,7 @@ endif
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear or gets resolved.
 if has("nvim")
-  set signcolumn=auto:1-3
+  set signcolumn=auto:2-4
 elseif has("patch-8.1.1564")
   " merge signcolumn and number column into one
   set signcolumn=number
