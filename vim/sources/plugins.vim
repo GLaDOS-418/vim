@@ -33,40 +33,34 @@ if !empty(filter(copy(g:plugs), '!isdirectory(v:val.dir)'))
   autocmd VimEnter * PlugInstall | q
 endif
 
-" useless-but-fun {{{3
-Plug 'Eandrju/cellular-automaton.nvim'
-Plug 'goolord/alpha-nvim'
-Plug 'rcarriga/nvim-notify'
-Plug 'folke/noice.nvim'
-
 " Visual {{{3
-"
 if has('nvim')
+  
+  Plug 'Eandrju/cellular-automaton.nvim'  " fun 
+  " Plug 'goolord/alpha-nvim'     " A startup page
+  Plug 'folke/noice.nvim' |       " floating command mode
+    " \ Plug 'rcarriga/nvim-notify'
+  Plug 'norcalli/nvim-colorizer.lua' " highlight colors in neovim
+
 " colorschemes
   Plug 'rebelot/kanagawa.nvim'    " use kanagawa-dragon
   Plug 'EdenEast/nightfox.nvim'   " use terafox
 
-  Plug 'norcalli/nvim-colorizer.lua' " highlight colors in neovim
-endif
-Plug 'lifepillar/vim-gruvbox8'  " a better gruvbox
-
-
-Plug 'ryanoasis/vim-devicons'           " icons for plugins
-
-Plug 'machakann/vim-highlightedyank'    " flash highlight yanked region
-
-if has('nvim')
   Plug 'luckasRanarison/nvim-devdocs'
   Plug 'stevearc/dressing.nvim'           " UI hooks in nvim for input
-  Plug 'nvim-treesitter/nvim-treesitter', " interface for github.com/tree-sitter/tree-sitter
+  
+  " interface for github.com/tree-sitter/tree-sitter
+  Plug 'nvim-treesitter/nvim-treesitter', 
        \{'do': ':TSUpdate'}               "   it's a parser generator
 endif
 
+Plug 'lifepillar/vim-gruvbox8'          " a better gruvbox
+Plug 'ryanoasis/vim-devicons'           " icons for plugins
+Plug 'machakann/vim-highlightedyank'    " flash highlight yanked region
 
 " Source Control {{{3
 Plug 'tpope/vim-fugitive'              " handle git commands
 Plug 'airblade/vim-gitgutter'          " see git diff in buffer
-
 
 " Navigation {{{3
 if has('nvim')
@@ -78,9 +72,7 @@ if has('nvim')
     \ Plug 'nvim-lua/plenary.nvim'
 
   Plug 'ThePrimeagen/harpoon'
-  Plug 'chrisgrieser/nvim-genghis'            " vim-eunuch alternative for nvim
-  Plug 'hrsh7th/cmp-omni'                     " required by nvim-genghis for autocompletion of directories
-  Plug 'folke/todo-comments.nvim'
+  Plug 'folke/todo-comments.nvim'         " add and search todo comments in repo
 
 else
   Plug 'preservim/nerdtree' |                 " open project drawer
@@ -88,11 +80,10 @@ else
 
   Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
   Plug 'junegunn/fzf.vim'
-
-  Plug 'tpope/vim-eunuch'               " file modification commands
 endif
 
 
+Plug 'tpope/vim-eunuch'               " file modification commands
 Plug 'easymotion/vim-easymotion'        " better movements
 Plug 'christoomey/vim-tmux-navigator'   " navigate seamlessy between vim and tmux
 
@@ -104,9 +95,6 @@ Plug 'aklt/plantuml-syntax'            " syntax/linting for plantuml
 " Debug {{{3
 
 " TODO : SET UP VIMSPECTOR FOR VIM
-" vimspector works better with vim rahter than nvim
-" use nvim-dap (better than vimspector) for neovim
-" a debugging plugin for c++
 " Plug 'puremourning/vimspector', {
 "    \  'do' : ':VimspectorUpdate'
 "    \ }
@@ -122,9 +110,6 @@ endif
 "
 " LSP Support {{{4
 
-" Plug 'neoclide/coc.nvim', {'branch': 'release',
-"      \ 'do': { -> coc#util#install()}} " Node based code completion engine with LSP support
-
 if has('nvim')
   Plug 'williamboman/mason-lspconfig.nvim'               " Optional
   Plug 'williamboman/mason.nvim', {'do': ':MasonUpdate'} " Optional
@@ -132,13 +117,14 @@ if has('nvim')
   Plug 'hrsh7th/nvim-cmp'         " Required
   Plug 'hrsh7th/cmp-nvim-lsp'     " Required
   Plug 'L3MON4D3/LuaSnip', {'tag': 'v1.*'}  " Required
-  Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v2.x'}
-
-  Plug 'jose-elias-alvarez/null-ls.nvim' " formatter/linter
+  Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v3.x'}
 
   " breadcrumbs
-  " jPlug 'nvimdev/lspsaga.nvim'
+  " Plug 'nvimdev/lspsaga.nvim'
   Plug 'Bekaboo/dropbar.nvim'
+else
+ Plug 'neoclide/coc.nvim', {'branch': 'release',
+      \ 'do': { -> coc#util#install()}} " NodeJS based with LSP support
 endif
 
 " Language Specific {{{3
@@ -162,7 +148,6 @@ Plug 'sheerun/vim-polyglot'            " collection of language packs for vim
 Plug 'alvan/vim-closetag'              " to close markup lang tags
 
 " Code View {{{3
-" Plug 'neovim/nvim-lspconfig'
 " Plug 'SmiteshP/nvim-navic'
 Plug 'lukas-reineke/indent-blankline.nvim'
 
@@ -187,23 +172,15 @@ Plug 'mbbill/undotree',                " gives a file changes tree
 if has('nvim')
   Plug 'stevearc/resession.nvim'
 endif
-Plug 'itchyny/calendar.vim'            " crazy calendar plugin that can sync tasks
-Plug 'tpope/vim-abolish'
-Plug 'tpope/vim-repeat'                " repeat vim commands, and not just the native ones
-Plug 'airblade/vim-rooter'
+Plug 'tpope/vim-abolish'    " working with word replacements
+Plug 'tpope/vim-repeat'     " repeat vim commands, and not just the native ones
+Plug 'airblade/vim-rooter'  " changes the cwd to project rootj
 
 call plug#end()
 
 "------------------------------------------------------------
 " PLUGIN SETTINGS {{{1
 "------------------------------------------------------------
-
-" gutentags_plus {{{2
-" generate datebases in my cache directory, prevent gtags files polluting my project
-  let g:gutentags_cache_dir = expand('~/.cache/tags')
-  let g:gutentags_project_root = ['.root', '.git', '.svn', '.hg' ]
-  let g:gutentags_modules = ['ctags' , 'gtags_cscope']
-  let g:gutentags_define_advanced_commands = 1
 
 " gitgutter - plugin config {{{2
   set updatetime=1000                 "wait how much time to detect file update
@@ -214,7 +191,6 @@ call plug#end()
   nnoremap <leader>hs :GitGutterStageHunk<CR>
   nnoremap <leader>hu :GitGutterUndoHunk<CR>
   nnoremap <leader>hp :GitGutterPreviewHunk<CR>
-  nnoremap <leader>ggt :GitGutterToggle<cr>
   if !exists('&signcolumn')  " < vim 7.4.2201+
     let g:gitgutter_sign_column_always = 1
   endif
@@ -224,36 +200,19 @@ call plug#end()
   let g:gitgutter_sign_removed = '_'
   let g:gitgutter_sign_removed_first_line = '-'
   let g:gitgutter_sign_modified_removed = '~'
-  " let g:gitgutter_sign_added = '++'
-  " let g:gitgutter_sign_modified = '**'
-  " let g:gitgutter_sign_removed = '~~'
-  " let g:gitgutter_sign_removed_first_line = '^^'
-  " let g:gitgutter_sign_modified_removed = '*~'
   highlight GitGutterAdd    guifg=#009900 guibg=#009900 ctermfg=2 ctermbg=2
   highlight GitGutterChange guifg=#bbbb00 guibg=#bbbb00 ctermfg=3 ctermbg=3
   highlight GitGutterDelete guifg=#ff2222 guibg=#ff2222 ctermfg=1 ctermbg=1
 
 
 " vim-closetag - plugin config {{{2
-  let g:closetag_filenames = '*.xml,*.xslt,*.htm,*.html,*.xhtml,*.phtml'
+  let g:closetag_filenames = '*.xml,*.xslt,*.htm,*.html,*.xhtml,*.phtml,*.tmpl'
   let g:closetag_xhtml_filenames = '*.xslt,*.xhtml,*.jsx'
-  let g:closetag_filetypes = 'html,xml,xhtml,phtml'
+  let g:closetag_filetypes = 'html,xml,xhtml,phtml,tmpl'
   let g:closetag_xhtml_filetypes = 'xslt,xhtml,jsx'
   let g:closetag_emptyTags_caseSensitive = 1
-  let g:closetag_shortcut = '>'               " Shortcut for closing tags, default is '>'
+  let g:closetag_shortcut = '>'    " Shortcut for closing tags, default is '>'
   let g:closetag_close_shortcut = '<leader>>' " Add > at current position without closing the current tag, default is ''
-
-
-" vimwiki- plugin config {{{2
-  let g:vimwiki_list = [{'path': '~/repos/personal_notes/', 'syntax': 'markdown', 'ext': '.md'},
-                       \{'path': '~/repos/work_notes/',     'syntax': 'markdown', 'ext': '.md'},
-                       \{'path': '~/repos/blog/', 'syntax': 'markdown', 'ext': '.md'},
-                       \]
-  let g:vimwiki_use_mouse = 1
-  noremap glo :VimwikiChangeSymbolTo *<CR>
-  noremap glO :VimwikiChangeSymbolInListTo *<CR>
-  noremap gll :VimwikiChangeSymbolTo #<CR>
-  noremap glL :VimwikiChangeSymbolInListTo #<CR>
 
 
 " fzf - plugin config {{{2
@@ -274,26 +233,8 @@ call plug#end()
     let g:fzf_tags_command = 'ctags -R'
 
 
-" vim-markdown-composer - plugin config {{{2
-  let g:markdown_composer_browser = '/usr/bin/firefox'
-  let g:markdown_composer_open_browser = 1
-  let g:markdown_composer_refresh_rate = 500 "ms
-  let g:markdown_composer_autostart = 0
-
-
-" supertab - plugin config{{{2
-  let g:SuperTabDefaultCompletionType = '<c-j>'
-
-
 " tagbar - plugin config{{{2
   nnoremap <silent> <F8> :TagbarOpen fj<cr>
-
-
-" vimspector {{{2
-if has('vim')
-  let g:vimspector_enable_mappings = 'HUMAN' "  'VISUAL_STUDIO'
-  let g:vimspector_install_gadgets = [ 'debugpy', 'vscode-cpptools', 'CodeLLDB', 'vscode-go', 'vscode-java-debug', 'vscode-bash-debug' ]
-endif
 
 
 " Nerdtree {{{2
@@ -320,25 +261,11 @@ endif
                   \ }
 
 
-  augroup nerdtree
-    au!
-    " Start NERDTree. If a file is specified, move the cursor to its window.
-    " autocmd StdinReadPre * let s:std_in=1
-    " autocmd VimEnter * NERDTree | if argc() > 0 || exists("s:std_in") | wincmd p | endif
-    " Exit Vim if NERDTree is the only window left.
-    " autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
-    "     \ quit | endif
-    " Open the existing NERDTree on each new tab.
-    " autocmd BufWinEnter * silent NERDTreeMirror
-  augroup END
-
-
 " vim-rooter {{{2
-  let g:rooter_patterns = ['.git', '.hg', '.svn', '.root', 'Makefile', '*.sln', 'build/env.sh', '=src']
+  let g:rooter_patterns = ['.git', '.hg', '.svn', '.root', 'Makefile', '*.sln', 'build/env.sh', '=src', 'go.mod']
   let g:rooter_change_directory_for_non_project_files = 'current'
   let g:rooter_resolve_links = 1
   let g:rooter_cd_cmd = 'lcd'
-
 
 
 " neotree {{{2
@@ -419,24 +346,10 @@ let g:EasyMotion_do_mapping  = 0 " Disable default mappings
 let g:EasyMotion_smartcase   = 1
 let g:EasyMotion_startofline = 0 " keep cursor column when JK motion
 
-" line motions
-nnoremap <Leader>h <Plug>(easymotion-linebackward)
-nnoremap <Leader>j <Plug>(easymotion-j)
-nnoremap <Leader>k <Plug>(easymotion-k)
-nnoremap <Leader>l <Plug>(easymotion-lineforward)
-
-" <leader>f{char} to move to {char}
-" nnoremap <Leader>f <Plug>(easymotion-overwin-f)
 
 " s{char}{char} to move to {char}{char}
 nmap s <Plug>(easymotion-s2)
 nmap t <Plug>(easymotion-t2)
-
-" Move to line
-nnoremap <Leader>L <Plug>(easymotion-overwin-line)
-
-" move to word
-nnoremap <Leader><Leader>w <Plug>(easymotion-overwin-w)
 
 " search word
 map  / <Plug>(easymotion-sn)
@@ -469,8 +382,6 @@ endif
 
 nnoremap <leader>u :UndotreeToggle<cr>
 
-" vim-eunuch and nvim-genghis {{{2
-
 
 "-----------------------------------------------------------
 " LUA CONFIGS
@@ -480,7 +391,6 @@ if has('nvim')
 
   lua require('lsp_cfg')
   lua require('nvim_dap')
-  lua require('null_ls')
   lua require('mason_cfg')
   lua require('resession_cfg')
   lua require('neotree_cfg')
