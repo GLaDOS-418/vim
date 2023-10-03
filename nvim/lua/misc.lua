@@ -7,14 +7,14 @@ require('nvim-devdocs').setup({
   end
 })
 
-
-
--- nvimdev/lspsaga
--- require('lspsaga').setup({})
-
-
 -- Bekaboo/dropbar.nvim
 require('dropbar').setup()
 
 -- norcalli/nvim-colorizer.lua
 require('colorizer').setup()
+
+-- -folke/todo-comments.nvim
+require('todo-comments').setup()
+
+-- folke/noice.nvim
+require('noice').setup()

@@ -80,6 +80,7 @@ if has('nvim')
   Plug 'ThePrimeagen/harpoon'
   Plug 'chrisgrieser/nvim-genghis'            " vim-eunuch alternative for nvim
   Plug 'hrsh7th/cmp-omni'                     " required by nvim-genghis for autocompletion of directories
+  Plug 'folke/todo-comments.nvim'
 
 else
   Plug 'preservim/nerdtree' |                 " open project drawer
@@ -492,6 +493,7 @@ if has('nvim')
   nnoremap <leader>fh <cmd>Telescope help_tags<cr>
   nnoremap <leader>fc <cmd>Telescope git_commits<cr>
   nnoremap <leader>fd <cmd>DevdocsOpenFloat<cr>
+  nnoremap <leader>td <cmd>TodoTelescope<cr>
 
   " lsp-zero {{{2
   nnoremap <leader>lf <cmd>LspZeroFormat<cr>
