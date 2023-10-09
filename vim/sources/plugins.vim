@@ -73,7 +73,7 @@ if has('nvim')
 
   Plug 'ThePrimeagen/harpoon'
   Plug 'folke/todo-comments.nvim'         " add and search todo comments in repo
-
+  " Plug 'sourcegraph/sg.nvim', { 'do': 'nvim -l build/init.lua' }
 else
   Plug 'preservim/nerdtree' |                 " open project drawer
   \ Plug 'Xuyuanp/nerdtree-git-plugin'        " mark files/dirs according to their status in drawer
@@ -114,14 +114,26 @@ if has('nvim')
   Plug 'williamboman/mason-lspconfig.nvim'               " Optional
   Plug 'williamboman/mason.nvim', {'do': ':MasonUpdate'} " Optional
   Plug 'neovim/nvim-lspconfig'                           " Required
-  Plug 'hrsh7th/nvim-cmp'         " Required
-  Plug 'hrsh7th/cmp-nvim-lsp'     " Required
-  Plug 'L3MON4D3/LuaSnip', {'tag': 'v1.*'}  " Required
   Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v3.x'}
 
-  " breadcrumbs
-  " Plug 'nvimdev/lspsaga.nvim'
-  Plug 'Bekaboo/dropbar.nvim'
+  " completion sources {{{5
+  Plug 'L3MON4D3/LuaSnip', {'tag': 'v2.*', 'do': 'make install_jsregexp'}  " Required. completion engine
+  Plug 'hrsh7th/nvim-cmp'         " Required
+  Plug 'rafamadriz/friendly-snippets'
+
+  " find list of sources at:
+  " https://github.com/hrsh7th/nvim-cmp/wiki/List-of-sources
+  Plug 'hrsh7th/cmp-nvim-lsp'     " Required
+  Plug 'hrsh7th/cmp-buffer'
+  Plug 'hrsh7th/cmp-nvim-lua'
+  Plug 'saadparwaiz1/cmp_luasnip'
+
+  " visual {{{5
+  Plug 'Bekaboo/dropbar.nvim'    " breadcrumbs
+  " Plug 'SmiteshP/nvim-navic'
+  Plug 'onsails/lspkind.nvim'    " icons for snippet completion source
+  " Plug 'kevinhwang91/nvim-ufo' " code folding
+
 else
  Plug 'neoclide/coc.nvim', {'branch': 'release',
       \ 'do': { -> coc#util#install()}} " NodeJS based with LSP support
@@ -137,18 +149,20 @@ Plug 'ray-x/guihua.lua' " recommended if need floating window support
 Plug 'mfussenegger/nvim-jdtls'
 
 " snippets {{{6
-if has('nvim')
-  Plug 'MarcWeber/vim-addon-mw-utils' | 
-    \ Plug 'tomtom/tlib_vim' |
-    \ Plug 'garbas/vim-snipmate' |
-    \ Plug 'honza/vim-snippets'
+" if has('nvim')
+"   Plug 'MarcWeber/vim-addon-mw-utils' | 
+"     \ Plug 'tomtom/tlib_vim' |
+"     \ Plug 'garbas/vim-snipmate' |
+"     \ Plug 'honza/vim-snippets'
+" endif
+
+if has('vim')
+  Plug 'sheerun/vim-polyglot'            " collection of language packs for vim
 endif
 
-Plug 'sheerun/vim-polyglot'            " collection of language packs for vim
 Plug 'alvan/vim-closetag'              " to close markup lang tags
 
 " Code View {{{3
-" Plug 'SmiteshP/nvim-navic'
 Plug 'lukas-reineke/indent-blankline.nvim'
 
 " Editing Utils {{{3
@@ -368,7 +382,7 @@ let g:show_current_context_start = 1
 " undotree {{{2
 
 if has("persistent_undo")
-   let target_path = expand('~/.local/share/.vimundodir/')
+   let target_path = $HOME . '/.local/share/.vimundodir/'
 
     " create the directory and any parent directories
     " if the location does not exist.
@@ -402,8 +416,14 @@ if has('nvim')
   nnoremap <leader>fb <cmd>Telescope buffers<cr>
   nnoremap <leader>fh <cmd>Telescope help_tags<cr>
   nnoremap <leader>fc <cmd>Telescope git_commits<cr>
+  nnoremap <leader>fk <cmd>Telescope keymaps<cr>
+  nnoremap <leader>fl <cmd>Telescope loclist<cr>
+
+
   nnoremap <leader>fd <cmd>DevdocsOpenFloat<cr>
   nnoremap <leader>td <cmd>TodoTelescope<cr>
+  
+  " nnoremap <leader>sg <cmd>lua require('sg.extensions.telescope').fuzzy_search_results()<cr>
 
   " lsp-zero {{{2
   nnoremap <leader>lf <cmd>LspZeroFormat<cr>
