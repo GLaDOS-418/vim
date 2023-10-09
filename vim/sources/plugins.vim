@@ -82,8 +82,8 @@ else
   Plug 'junegunn/fzf.vim'
 endif
 
-
-Plug 'tpope/vim-eunuch'               " file modification commands
+Plug 'vim-scripts/LargeFile'            " handling largefiles in vim
+Plug 'tpope/vim-eunuch'                 " file modification commands
 Plug 'easymotion/vim-easymotion'        " better movements
 Plug 'christoomey/vim-tmux-navigator'   " navigate seamlessy between vim and tmux
 
@@ -271,7 +271,7 @@ call plug#end()
 " neotree {{{2
 
   if has('nvim')
-    noremap <leader>d :Neotree toggle filesystem float<cr>
+    noremap <leader>d :Neotree toggle filesystem float dir=./<cr>
   endif
 
 

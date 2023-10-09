@@ -14,7 +14,7 @@
 " nnoremap <s-tab><s-tab> :%s/<++>//g<CR>
 inoremap j<tab> <esc>/<++><CR>:nohl<CR>"_c4l
 inoremap k<tab> <++><esc>4h?<++><CR>:nohl<CR>"_c4l
-inoremap <leader>m <++><esc>
+inoremap xx    <++><esc>
 
 "------------------------------------------------------------
 " PAIR HANDLING {{{1

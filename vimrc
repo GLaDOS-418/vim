@@ -4,8 +4,8 @@
 
 " leaders before loading any plugin otherwise they remain vim
 " default and doesn't work with these bindings
-let mapleader=','               " leader is comma
-let maplocalleader="\<space>"   " localleader is space
+let mapleader      = " "    " leader is a global mapping
+let maplocalleader = ","    " localleader is for buffer local commands
 
 
 " vim-polyglot needs this variable before loading the script
@@ -18,6 +18,7 @@ if has("nvim")
   "For Neovim 0.1.3 and 0.1.4
   let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 endif
+
 "For Neovim > 0.1.5 and Vim > patch 7.4.1799
 if has("termguicolors")
   set termguicolors
@@ -65,7 +66,7 @@ set title                       " change the terminal's title
 set spelllang=en                " 'en_gb' sets region to British English. 'en' for all regions
 set noswapfile                  " stops vim from creating a .swp file
 set textwidth=0                 " no automatic linefeeds in insert mode
-set wrap                        " word wrap the text(normal/visual)
+set nowrap                      " word wrap the text(normal/visual)
 set visualbell                  " don't beep
 set noerrorbells                " don't beep
 set colorcolumn=100             " highlight on col 100
@@ -85,7 +86,7 @@ endif
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear or gets resolved.
 if has("nvim")
-  set signcolumn=auto:2-4
+  set signcolumn=yes:1
 elseif has("patch-8.1.1564")
   " merge signcolumn and number column into one
   set signcolumn=number
@@ -198,9 +199,9 @@ set expandtab         " tabs are spaces
 " set tabstop=2       " commented: r/vim/wiki/tabstop
 set shiftwidth=2      " when (un)indenting lines shift with 1unit shiftwidth
 set softtabstop=2     " number of spaces in TAB when editing
-if !has('nvim')
-  set pastetoggle=<F6>  " toggle insert(paste) mode
-endif
+" if !has('nvim')
+"   set pastetoggle=<F6>  " toggle insert(paste) mode
+" endif
 
 " Remove the Windows ^M - when the encodings gets messed up
 " noremap <silent> <c-m> mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
@@ -289,8 +290,9 @@ vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
 set foldenable          " enable folding
 set foldlevelstart=5    " open most folds by default
 set foldnestmax=5       " max 10 nested folds
+
 " space open/closes folds in current block
-nnoremap <space> za
+nnoremap ff za
 
 augroup ft_markers
   au!
@@ -344,12 +346,12 @@ nnoremap N Nzzzv
 "------------------------------------------------------------
 
 " toggle line numbers
-nnoremap <silent> <leader>nn :set number!<CR>
-nnoremap <silent> <leader>rn :set relativenumber!<CR>
+" nnoremap <silent> <leader>nn :set number!<CR>
+" nnoremap <silent> <leader>rn :set relativenumber!<CR>
 
 " edit/load vimrc
 nnoremap <silent> <leader>ev :e $MYVIMRC<CR>
-nnoremap <silent> <leader>sv :source $MYVIMRC<CR>
+" nnoremap <silent> <leader>sv :source $MYVIMRC<CR>
 
 " save session.
 " nnoremap <leader>s :mksession<CR>
@@ -359,18 +361,23 @@ nnoremap <silent> <leader>ts mmHmt:%s/\s\+$//ge<cr>'tzt'm
 vnoremap <silent> <leader>ts :s/\s\+$//ge<cr>
 
 " stage current file in git
-nnoremap <leader>ga :!git add %<CR>
+" nnoremap <leader>ga :!git add %<CR>
 
 " paste in insert mode without auto-formatting
-inoremap <leader>p <esc><cmd>set paste<cr>p<cr><cmd>set nopaste<cr>a<cr>
-nnoremap <leader>p <esc><cmd>set paste<cr>p<cr><cmd>set nopaste<cr>a<cr>
+if has('vim')
+  inoremap <c-p> <esc><cmd>set paste<cr>p<cr><cmd>set nopaste<cr>a<cr>
+  " nnoremap <leader>p <esc><cmd>set paste<cr>p<cr><cmd>set nopaste<cr>a<cr>
+endif
+
+" paste clipboard over the selection but, do not copy the current selection
+xnoremap <leader>p "_dP
 
 " markdown style link paste from os clipboard
 nnoremap <leader>ll mk:read !curl --silent --location <C-R>=shellescape(@+)<cr> <bar> tr --delete '\n' <bar> grep -oP "<title.*?>.*?<\/title>" <bar> head -n 1 <bar> sed -E -e "s@<title.*?>[[:space:]]*(.*?)[[:space:]]*</title>@\1@g" -e "s/[[:space:]]+/ /g"<CR>i[<esc>A]( <C-R>+ )<esc>0D`kPJx
 inoremap <c-l> <esc>mk:read !curl --silent --location <C-R>=shellescape(@+)<cr> <bar> tr --delete '\n' <bar> grep -oP "<title.*?>.*?<\/title>" <bar> head -n 1 <bar> sed -E -e "s@<title.*?>[[:space:]]*(.*?)[[:space:]]*</title>@\1@g" -e "s/[[:space:]]+/ /g"<CR>i[<esc>A]( <C-R>+ )<esc>0D`kPJx
 
 " get file name w/o ext
-inoremap <leader>f <esc>mk:put =expand('%:t:r')<cr>v$hx`kpa
+inoremap <c-f> <esc>mk:put =expand('%:t:r')<cr>v$hx`kpa
 
 " change pwd to root git dir
 nnoremap <leader>gr :call CD_Git_Root()<cr>
@@ -386,9 +393,9 @@ function! Cpp( )
     " refer below for 'gpp'
     " https://github.com/GLaDOS-418/dotfiles/blob/8ebc04ec054b8c109bc57e22a3864912edc19781/bash_functions#L28
     nnoremap <C-c> :w <bar> !gpp -Dfio % -o %:p:h/%:t:r.out && time ./%:r.out<cr>
-    inoremap <leader>io <esc>:r ~/.vim/personal_snips/cpp_fast_io.cpp<CR>i
-    inoremap <leader>r <esc>:r ~/.vim/personal_snips/cpp_algo_start.cpp<CR>i
-    nnoremap <c-s> :!kdbg <c-r>=expand("%:r:h") <cr>&<cr>
+    " inoremap <leader>io <esc>:r ~/.vim/personal_snips/cpp_fast_io.cpp<CR>i
+    " inoremap <leader>r <esc>:r ~/.vim/personal_snips/cpp_algo_start.cpp<CR>i
+    " nnoremap <c-s> :!kdbg <c-r>=expand("%:r:h") <cr>&<cr> " try to use LSP
 endfunction
 
 function! Rust( )
