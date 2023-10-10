@@ -394,6 +394,7 @@ nnoremap <leader>u :UndotreeToggle<cr>
 
 if has('nvim')
 
+  lua require('treesitter_cfg')
   lua require('lsp_cfg')
   lua require('nvim_dap')
   lua require('mason_cfg')

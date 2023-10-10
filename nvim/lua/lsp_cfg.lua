@@ -35,6 +35,7 @@ end)
 -----------------------------------------
 
 -- find names for servers at:
+-- https://mason-registry.dev/registry/list
 -- https://github.com/williamboman/mason-lspconfig.nvim#available-lsp-servers
 require("mason").setup()
 require("mason-lspconfig").setup({
@@ -84,7 +85,7 @@ require("mason-tool-installer").setup({
 		"clang-format",
 		"cpplint",
 
-		"htmlbeautifier",
+		-- "htmlbeautifier",
 		"prettierd",
 
 		"codespell",
