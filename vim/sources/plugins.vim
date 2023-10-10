@@ -1,5 +1,5 @@
 " contents -
-"   - PLUGIN MANGER
+"   - PLUGIN MANAGER
 "   - PLUGIN SETTINGS
 
 "------------------------------------------------------------
@@ -35,8 +35,8 @@ endif
 
 " Visual {{{3
 if has('nvim')
-  
-  Plug 'Eandrju/cellular-automaton.nvim'  " fun 
+
+  Plug 'Eandrju/cellular-automaton.nvim'  " fun
   " Plug 'goolord/alpha-nvim'     " A startup page
   Plug 'folke/noice.nvim' |       " floating command mode
     " \ Plug 'rcarriga/nvim-notify'
@@ -48,9 +48,10 @@ if has('nvim')
 
   Plug 'luckasRanarison/nvim-devdocs'
   Plug 'stevearc/dressing.nvim'           " UI hooks in nvim for input
-  
+
   " interface for github.com/tree-sitter/tree-sitter
-  Plug 'nvim-treesitter/nvim-treesitter', 
+  " TODO: add auto installation of treesitter serversj
+  Plug 'nvim-treesitter/nvim-treesitter',
        \{'do': ':TSUpdate'}               "   it's a parser generator
 endif
 
@@ -85,38 +86,28 @@ endif
 Plug 'vim-scripts/LargeFile'            " handling largefiles in vim
 Plug 'tpope/vim-eunuch'                 " file modification commands
 Plug 'easymotion/vim-easymotion'        " better movements
-Plug 'christoomey/vim-tmux-navigator'   " navigate seamlessy between vim and tmux
+Plug 'christoomey/vim-tmux-navigator'   " navigate seamlessly between vim and tmux
 
 " Architecture & Notes {{{3
-Plug 'scrooloose/vim-slumlord'         " inline previews for plantuml acitvity dia
-Plug 'aklt/plantuml-syntax'            " syntax/linting for plantuml
-
-
-" Debug {{{3
-
-" TODO : SET UP VIMSPECTOR FOR VIM
-" Plug 'puremourning/vimspector', {
-"    \  'do' : ':VimspectorUpdate'
-"    \ }
+Plug 'scrooloose/vim-slumlord'         " inline previews for plantuml activity dia
 
 if has('nvim')
-  Plug 'mfussenegger/nvim-dap'
-  Plug 'rcarriga/nvim-dap-ui'
-  Plug 'theHamsta/nvim-dap-virtual-text'
+  " LSP Support {{{4
+  Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v3.x'}   " lsp config
+  Plug 'williamboman/mason.nvim', {'do': ':MasonUpdate'} " install LSP servers
+  Plug 'williamboman/mason-lspconfig.nvim'               " bridge between lspconfig and mason
+  Plug 'WhoIsSethDaniel/mason-tool-installer.nvim'       " install third party tools
+  Plug 'neovim/nvim-lspconfig'                           " lspconfig
 
-  " language specific dap servers
-  Plug 'leoluz/nvim-dap-go'
-endif
-"
-" LSP Support {{{4
+  " language specific lsp {{{5
+  " golang
+  Plug 'ray-x/go.nvim'
+  Plug 'ray-x/guihua.lua' " recommended if need floating window support
 
-if has('nvim')
-  Plug 'williamboman/mason-lspconfig.nvim'               " Optional
-  Plug 'williamboman/mason.nvim', {'do': ':MasonUpdate'} " Optional
-  Plug 'neovim/nvim-lspconfig'                           " Required
-  Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v3.x'}
+  " java
+  Plug 'mfussenegger/nvim-jdtls'
 
-  " completion sources {{{5
+  " Snippets {{{4
   Plug 'L3MON4D3/LuaSnip', {'tag': 'v2.*', 'do': 'make install_jsregexp'}  " Required. completion engine
   Plug 'hrsh7th/nvim-cmp'         " Required
   Plug 'rafamadriz/friendly-snippets'
@@ -128,36 +119,42 @@ if has('nvim')
   Plug 'hrsh7th/cmp-nvim-lua'
   Plug 'saadparwaiz1/cmp_luasnip'
 
-  " visual {{{5
-  Plug 'Bekaboo/dropbar.nvim'    " breadcrumbs
-  " Plug 'SmiteshP/nvim-navic'
+  " Code Formatting {{{4
+  Plug 'stevearc/conform.nvim'
+
+  " Code Linting {{{4
+  Plug 'mfussenegger/nvim-lint'
+
+  " Visual {{{4
   Plug 'onsails/lspkind.nvim'    " icons for snippet completion source
-  " Plug 'kevinhwang91/nvim-ufo' " code folding
+  Plug 'Bekaboo/dropbar.nvim'    " breadcrumbs
+  " Plug 'SmiteshP/nvim-navic'   "  TODO: replace dropbar with nvim-navic + lsp-zero
+  " Plug 'kevinhwang91/nvim-ufo' "  TODO: code folding
+
+  " Debugging {{{4
+  Plug 'mfussenegger/nvim-dap'
+  Plug 'rcarriga/nvim-dap-ui'
+  Plug 'theHamsta/nvim-dap-virtual-text'
+  " jPlug 'jay-babu/mason-nvim-dap.nvim' "  TODO: auto install dap servers
+
+
+  " language specific dap servers {{{5
+  " golang
+  Plug 'leoluz/nvim-dap-go'
 
 else
- Plug 'neoclide/coc.nvim', {'branch': 'release',
+  " lspconfig {{{5
+  Plug 'neoclide/coc.nvim', {'branch': 'release',
       \ 'do': { -> coc#util#install()}} " NodeJS based with LSP support
-endif
 
-" Language Specific {{{3
+  " debugging {{{5
+  " TODO : SET UP VIMSPECTOR FOR VIM
+  " Plug 'puremourning/vimspector', {
+  "    \  'do' : ':VimspectorUpdate'
+  "    \ }
 
-" golang
-Plug 'ray-x/go.nvim'
-Plug 'ray-x/guihua.lua' " recommended if need floating window support
-
-" java
-Plug 'mfussenegger/nvim-jdtls'
-
-" snippets {{{6
-" if has('nvim')
-"   Plug 'MarcWeber/vim-addon-mw-utils' | 
-"     \ Plug 'tomtom/tlib_vim' |
-"     \ Plug 'garbas/vim-snipmate' |
-"     \ Plug 'honza/vim-snippets'
-" endif
-
-if has('vim')
   Plug 'sheerun/vim-polyglot'            " collection of language packs for vim
+  Plug 'aklt/plantuml-syntax'            " syntax/linting for plantuml
 endif
 
 Plug 'alvan/vim-closetag'              " to close markup lang tags
@@ -168,12 +165,6 @@ Plug 'lukas-reineke/indent-blankline.nvim'
 " Editing Utils {{{3
 
 " Plug 'ervandew/supertab'             " use tab for all insert mode completions
-
-" gtags-cscope support is removed in nvim 0.9+
-" https://github.com/neovim/neovim/pull/20545
-if has('nvim')
-  Plug 'dhananjaylatkar/cscope_maps.nvim'
-endif
 Plug 'majutsushi/tagbar'               " show tags in sidebar using ctags
 Plug 'tpope/vim-surround'              " surround text with tags
 Plug 'godlygeek/tabular'               " text alignment
@@ -422,7 +413,7 @@ if has('nvim')
 
   nnoremap <leader>fd <cmd>DevdocsOpenFloat<cr>
   nnoremap <leader>td <cmd>TodoTelescope<cr>
-  
+
   " nnoremap <leader>sg <cmd>lua require('sg.extensions.telescope').fuzzy_search_results()<cr>
 
   " lsp-zero {{{2
