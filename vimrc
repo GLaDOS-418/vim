@@ -264,7 +264,7 @@ let g:netrw_list_hide = &wildignore " respect custom wildignore
 
 set ignorecase    " use case insensitive search
 set smartcase     " except when using capital letters
-set incsearch     " incremental search. search as chars are enetered
+set incsearch     " incremental search. search as chars are entered
 set hlsearch      " highlight matches
 set nogdefault    " don't set default 'g' flag during :s
 set magic         " Enable extended regexes.
@@ -292,7 +292,7 @@ set foldlevelstart=5    " open most folds by default
 set foldnestmax=5       " max 10 nested folds
 
 " space open/closes folds in current block
-nnoremap ff za
+nnoremap <leader>a za
 
 augroup ft_markers
   au!
@@ -370,11 +370,11 @@ if has('vim')
 endif
 
 " paste clipboard over the selection but, do not copy the current selection
-xnoremap <leader>p "_dP
+vnoremap <leader>p "_dP
 
 " markdown style link paste from os clipboard
-nnoremap <leader>ll mk:read !curl --silent --location <C-R>=shellescape(@+)<cr> <bar> tr --delete '\n' <bar> grep -oP "<title.*?>.*?<\/title>" <bar> head -n 1 <bar> sed -E -e "s@<title.*?>[[:space:]]*(.*?)[[:space:]]*</title>@\1@g" -e "s/[[:space:]]+/ /g"<CR>i[<esc>A]( <C-R>+ )<esc>0D`kPJx
-inoremap <c-l> <esc>mk:read !curl --silent --location <C-R>=shellescape(@+)<cr> <bar> tr --delete '\n' <bar> grep -oP "<title.*?>.*?<\/title>" <bar> head -n 1 <bar> sed -E -e "s@<title.*?>[[:space:]]*(.*?)[[:space:]]*</title>@\1@g" -e "s/[[:space:]]+/ /g"<CR>i[<esc>A]( <C-R>+ )<esc>0D`kPJx
+nnoremap <leader>ll mk:read !curl --silent --location <C-R>=shellescape(@+)<cr> <bar> tr --delete '\n' <bar> grep -oP "<title.*?>.*?<\/title>" <bar> head -n 1 <bar> sed -E -e "s@<title.*?>[[:space:]]*(.*?)[[:space:]]*</title>@\1@g" -e "s/[[:space:]]+/ /g"<CR>i[<esc>A]( <C-R>+ )<esc>0D`kPJ
+inoremap :mlink: <esc>mk:read !curl --silent --location <C-R>=shellescape(@+)<cr> <bar> tr --delete '\n' <bar> grep -oP "<title.*?>.*?<\/title>" <bar> head -n 1 <bar> sed -E -e "s@<title.*?>[[:space:]]*(.*?)[[:space:]]*</title>@\1@g" -e "s/[[:space:]]+/ /g"<CR>i[<esc>A]( <C-R>+ )<esc>0D`kPJ
 
 " get file name w/o ext
 inoremap <c-f> <esc>mk:put =expand('%:t:r')<cr>v$hx`kpa
