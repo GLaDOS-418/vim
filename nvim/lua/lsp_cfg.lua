@@ -43,12 +43,13 @@ local lsp_augroup = vim.api.nvim_create_augroup("Lsp", { clear = true })
 require("mason").setup()
 require("mason-lspconfig").setup({
 	ensure_installed = {
-		"clangd", -- cpp  lsp
-		"rust_analyzer", -- rust lsp
-		"gopls", -- go lsp
-		"jdtls", -- java lsp
-		"lua_ls", -- lua lsp
-		"html", -- html LSP
+		"clangd", -- cpp
+		"rust_analyzer", -- rust
+		"gopls", -- go
+		"jdtls", -- java
+		"lua_ls", -- lua
+		"html", -- html
+		"cssls", -- css
 	},
 	handlers = {
 		lsp_zero.default_setup,
