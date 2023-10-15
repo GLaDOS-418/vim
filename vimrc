@@ -351,7 +351,7 @@ nnoremap N Nzzzv
 
 " edit/load vimrc
 nnoremap <silent> <leader>ev :e $MYVIMRC<CR>
-" nnoremap <silent> <leader>sv :source $MYVIMRC<CR>
+nnoremap <silent> <leader>sv :source $MYVIMRC<CR>
 
 " save session.
 " nnoremap <leader>s :mksession<CR>

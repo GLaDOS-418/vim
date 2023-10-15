@@ -99,37 +99,34 @@ if has('nvim')
   Plug 'WhoIsSethDaniel/mason-tool-installer.nvim'       " install third party tools
   Plug 'neovim/nvim-lspconfig'                           " lspconfig
 
-  " language specific lsp {{{5
-  " golang
-  Plug 'ray-x/go.nvim'
-  Plug 'ray-x/guihua.lua' " recommended if need floating window support
-
-  " java
-  Plug 'mfussenegger/nvim-jdtls'
-
   " Snippets {{{4
   Plug 'L3MON4D3/LuaSnip', {'tag': 'v2.*', 'do': 'make install_jsregexp'}  " Required. completion engine
   Plug 'hrsh7th/nvim-cmp'         " Required
-  Plug 'rafamadriz/friendly-snippets'
+  Plug '~/code/friendly-snippets' " synced at: GLaDOS-418/friendly-snippets
+  " Plug 'rafamadriz/friendly-snippets'
 
   " find list of sources at:
   " https://github.com/hrsh7th/nvim-cmp/wiki/List-of-sources
   Plug 'hrsh7th/cmp-nvim-lsp'     " Required
   Plug 'hrsh7th/cmp-buffer'
   Plug 'hrsh7th/cmp-nvim-lua'
+  Plug 'hrsh7th/cmp-emoji'
+  Plug 'hrsh7th/cmp-path'
   Plug 'saadparwaiz1/cmp_luasnip'
+  Plug 'honza/vim-snippets'
 
   " Code Formatting {{{4
   Plug 'stevearc/conform.nvim'
+  Plug 'onsails/lspkind.nvim'    " icons for snippet completion source
 
   " Code Linting {{{4
   Plug 'mfussenegger/nvim-lint'
 
   " Visual {{{4
-  Plug 'onsails/lspkind.nvim'    " icons for snippet completion source
   Plug 'Bekaboo/dropbar.nvim'    " breadcrumbs
-  " Plug 'SmiteshP/nvim-navic'   "  TODO: replace dropbar with nvim-navic + lsp-zero
-  " Plug 'kevinhwang91/nvim-ufo' "  TODO: code folding
+  " Plug 'SmiteshP/nvim-navic'   "  TODO: check dropbar vs nvim-navic + lsp-zero
+  " Plug 'kevinhwang91/nvim-ufo'   " TODO: set up code folding
+  " Plug 'kevinhwang91/promise-async' " required for nvim-ufo
 
   " Debugging {{{4
   Plug 'mfussenegger/nvim-dap'
@@ -138,9 +135,18 @@ if has('nvim')
   " jPlug 'jay-babu/mason-nvim-dap.nvim' "  TODO: auto install dap servers
 
 
-  " language specific dap servers {{{5
+  " language specific plugins {{{5
   " golang
+  Plug 'ray-x/go.nvim'
+  Plug 'ray-x/guihua.lua' " required with go.nvim
   Plug 'leoluz/nvim-dap-go'
+
+  " java
+  Plug 'mfussenegger/nvim-jdtls'
+
+  " html/css
+  " Plug 'Jezda1337/nvim-html-css'  " TODO: external script completion setup
+  Plug 'windwp/nvim-ts-autotag'
 
 else
   " lspconfig {{{5
@@ -155,9 +161,10 @@ else
 
   Plug 'sheerun/vim-polyglot'            " collection of language packs for vim
   Plug 'aklt/plantuml-syntax'            " syntax/linting for plantuml
+
+  Plug 'alvan/vim-closetag'              " to close markup lang tags
 endif
 
-Plug 'alvan/vim-closetag'              " to close markup lang tags
 
 " Code View {{{3
 Plug 'lukas-reineke/indent-blankline.nvim'
@@ -179,7 +186,7 @@ if has('nvim')
 endif
 Plug 'tpope/vim-abolish'    " working with word replacements
 Plug 'tpope/vim-repeat'     " repeat vim commands, and not just the native ones
-Plug 'airblade/vim-rooter'  " changes the cwd to project rootj
+Plug 'airblade/vim-rooter'  " changes the cwd to project root
 
 call plug#end()
 
@@ -351,10 +358,6 @@ let g:EasyMotion_do_mapping  = 0 " Disable default mappings
 let g:EasyMotion_smartcase   = 1
 let g:EasyMotion_startofline = 0 " keep cursor column when JK motion
 
-
-" s{char}{char} to move to {char}{char}
-nmap s <Plug>(easymotion-s2)
-nmap t <Plug>(easymotion-t2)
 
 " search word
 map  / <Plug>(easymotion-sn)

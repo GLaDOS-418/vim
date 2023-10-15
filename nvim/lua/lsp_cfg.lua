@@ -30,6 +30,9 @@ lsp_zero.on_attach(function(client, bufnr)
 	end, opts)
 end)
 
+-- required later during formatter/linter auto setup
+local lsp_augroup = vim.api.nvim_create_augroup("Lsp", { clear = true })
+
 -----------------------------------------
 ---  INSTALL  LSP SERVERS
 -----------------------------------------
@@ -76,7 +79,7 @@ require("mason-tool-installer").setup({
 		"luacheck",
 
 		"golines",
-		"goimports",
+		"goimports-reviser",
 		"gofumpt",
 		"gomodifytags",
 		"gotests",
@@ -87,8 +90,9 @@ require("mason-tool-installer").setup({
 
 		-- "htmlbeautifier",
 		"prettierd",
+		"jq",
 
-		"codespell",
+		-- "codespell",
 	},
 })
 
@@ -103,51 +107,61 @@ require("conform").setup({
 		lua = { "stylua" },
 		rust = { "rustfmt" },
 		html = { "htmlbeautifier" },
+		-- json = { "jq" },
 
 		-- Conform will run multiple formatters sequentially
 		python = { "isort", "black" },
 
 		-- Use a sub-list to run only the first available formatter
 		javascript = { { "prettierd", "prettier" } },
-		go = { "golines", "goimports", { "gofumpt", "gofmt" } },
+		go = { "golines", "goimports-reviser", "gofumpt" },
 
 		-- "*" filetype to run formatters on all filetypes.
-		["*"] = { "codespell" },
+		-- ["*"] = { "codespell" },
 
 		-- "_" filetype to run formatters on filetypes that don't have other formatters configured.
 		["_"] = { "trim_whitespace" },
 	},
-	format_on_save = {
-		-- These options will be passed to conform.format()
-		timeout_ms = 500,
-		async = false,
-		lsp_fallback = true,
-	},
+	-- format_on_save = {
+	-- 	-- These options will be passed to conform.format()
+	-- 	timeout_ms = 500,
+	-- 	async = false,
+	-- 	lsp_fallback = true,
+	-- },
 })
 
 -- automatically format buffer on save
--- vim.api.nvim_create_autocmd("BufWritePre", {
--- 	pattern = "*",
--- 	callback = function(args)
--- 		require("conform").format({ bufnr = args.buf })
--- 	end,
--- })
+vim.api.nvim_create_autocmd("BufWritePre", {
+	group = lsp_augroup,
+	pattern = "*",
+	callback = function(args)
+		require("conform").format({ bufnr = args.buf })
+	end,
+})
 
 -----------------------------------------
 ---  LINTING
 -----------------------------------------
 
-require("lint").linters_by_ft = {
+-- mfussenegger/nvim-lint
+local lint = require("lint")
+
+lint.linters_by_ft = {
 	c = { "cpplint" },
 	cpp = { "cpplint" },
-	go = { "golangci-lint" },
+	-- go = { "golangci-lint" },
 	lua = { "luacheck" },
 }
 
+-- luacheck ignore "vim" global variable error diagnostics
+table.insert(lint.linters.luacheck.args, "--globals")
+table.insert(lint.linters.luacheck.args, "vim")
+
 -- automatically lint buffer after save
-vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
+	group = lsp_augroup,
 	callback = function()
-		require("lint").try_lint()
+		lint.try_lint()
 	end,
 })
 
@@ -173,11 +187,25 @@ local cmp_format = require("lsp-zero").cmp_format({
 		mode = "symbol", -- show only symbol annotations
 		maxwidth = 50, -- prevent the popup from showing more than provided characters
 		ellipsis_char = "...", -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead
+		menu = {
+			nvim_lsp = "[LSP]",
+			nvim_lua = "[LUA]",
+			buffer = "[BUF]",
+			emoji = "[EMOJI]",
+			path = "[PATH]",
+			luasnip = "[SNIP]",
+		},
+		-- before = function(entry, vim_item)
+		-- 	if entry.source.name == "html-css" then
+		-- 		vim_item.menu = entry.completion_item.menu
+		-- 	end
+		-- 	return vim_item
+		-- end,
 	}),
 })
 
 require("luasnip.loaders.from_vscode").lazy_load() -- load friendly-snippets into nvim-cmp
--- require('luasnip.loaders.from_snipmate').lazy_load()  -- load honza/vim-snippets into nvim-cmp
+-- require("luasnip.loaders.from_snipmate").lazy_load() -- load honza/vim-snippets into nvim-cmp
 
 cmp.setup({
 	mapping = {
@@ -198,10 +226,28 @@ cmp.setup({
 		{ name = "nvim_lsp" },
 		{ name = "nvim_lua" }, -- hrsh7th/cmp-nvim-lua
 		{ name = "buffer" }, -- hrsh7th/cmp-buffer
+		{ name = "emoji" }, -- hrsh7th/cmp-emoji
+		{ name = "path" }, -- hrsh7th/cmp-path
 		{ name = "luasnip" }, -- saadparwaiz1/cmp_luasnip
-		-- { name = 'vsnip' },     -- For vsnip users.
-		-- { name = 'ultisnips' }, -- For ultisnips users.
-		-- { name = 'snippy' },    -- For snippy users.
+		-- { name = 'vsnip'     } , -- For vsnip users.
+		-- { name = 'ultisnips' } , -- For ultisnips users.
+		-- { name = 'snippy'    } , -- For snippy users.
+		-- {
+		-- 	name = "html-css", -- Jezda1337/nvim-html-css
+		-- 	option = {
+		-- 		max_count = {}, -- not ready yet
+		-- 		enable_on = {
+		-- 			"html",
+		-- 		}, -- set the file types you want the plugin to work on
+		-- 		file_extensions = { "css", "sass", "less" }, -- set the local filetypes from which you want to derive classes
+		-- 		style_sheets = {
+		-- 			-- example of remote styles, only css no js for now
+		-- 			"https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css",
+		-- 			"https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css",
+		-- 		},
+		-- 		-- your configuration here
+		-- 	},
+		-- },
 	},
 
 	-- show source name in completion menu
@@ -220,6 +266,10 @@ cmp.setup({
 	},
 })
 
+-- friendly-snippets - extend snippet groups
+require("luasnip").filetype_extend("c", { "cdoc" })
+require("luasnip").filetype_extend("cpp", { "cppdoc" })
+
 -----------------------------------------
 -- https://github.com/ray-x/go.nvim
 -----------------------------------------
@@ -234,3 +284,12 @@ require("go").setup()
 -- 	end,
 -- 	group = format_sync_grp,
 -- })
+
+-------------------------------------------------
+--- https://github.com/Jezda1337/nvim-html-css
+-------------------------------------------------
+
+-------------------------------------------------
+--- https://github.com/windwp/nvim-ts-autotag
+-------------------------------------------------
+require("nvim-ts-autotag").setup()
