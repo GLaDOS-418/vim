@@ -22,6 +22,7 @@ endif
 "For Neovim > 0.1.5 and Vim > patch 7.4.1799
 if has("termguicolors")
   set termguicolors
+  set t_Co=256
 endif
 
 if has('win32') ||  has('win64')
@@ -313,12 +314,11 @@ noremap k gk
 noremap E $
 noremap B ^
 
-" now managed by : 'christoomey/vim-tmux-navigator'
 " split navigations
-nnoremap <m-j> <c-w><c-j>
-nnoremap <m-k> <c-w><c-k>
-nnoremap <m-l> <c-w><c-l>
-nnoremap <m-h> <c-w><c-h>
+nnoremap <c-j> <c-w><c-j>
+nnoremap <c-k> <c-w><c-k>
+nnoremap <c-l> <c-w><c-l>
+nnoremap <c-h> <c-w><c-h>
 
 " buffer movements and delete
 nnoremap <silent> <c-f> :bn<cr>

@@ -40,7 +40,7 @@ if has('nvim')
   " Plug 'goolord/alpha-nvim'     " A startup page
   Plug 'folke/noice.nvim' |       " floating command mode
     " \ Plug 'rcarriga/nvim-notify'
-  Plug 'norcalli/nvim-colorizer.lua' " highlight colors in neovim
+  Plug 'NvChad/nvim-colorizer.lua' " highlight colors in neovim
 
 " colorschemes
   Plug 'rebelot/kanagawa.nvim'    " use kanagawa-dragon
@@ -216,6 +216,14 @@ call plug#end()
   highlight GitGutterChange guifg=#bbbb00 guibg=#bbbb00 ctermfg=3 ctermbg=3
   highlight GitGutterDelete guifg=#ff2222 guibg=#ff2222 ctermfg=1 ctermbg=1
 
+" vim-tmux-navigator {{{2
+let g:tmux_navigator_no_mappings = 1
+
+noremap <silent> <m-h> <cmd><c-u>TmuxNavigateLeft<cr>
+noremap <silent> <m-j> <cmd><c-u>TmuxNavigateDown<cr>
+noremap <silent> <m-k> <cmd><c-u>TmuxNavigateUp<cr>
+noremap <silent> <m-l> <cmd><c-u>TmuxNavigateRight<cr>
+noremap <silent> <m-\> <cmd><c-u>TmuxNavigatePrevious<cr>
 
 " vim-closetag - plugin config {{{2
   let g:closetag_filenames = '*.xml,*.xslt,*.htm,*.html,*.xhtml,*.phtml,*.tmpl'
