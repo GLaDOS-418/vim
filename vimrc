@@ -351,7 +351,12 @@ nnoremap N Nzzzv
 
 " edit/load vimrc
 nnoremap <silent> <leader>ev :e $MYVIMRC<CR>
-nnoremap <silent> <leader>sv :source $MYVIMRC<CR>
+
+if has('vim')
+  nnoremap <silent> <leader>sv :source $MYVIMRC<CR>
+else
+  nnoremap <silent> <leader>sv :source $XDG_CONFIG_HOME/nvim/init.lua<CR>
+endif
 
 " save session.
 " nnoremap <leader>s :mksession<CR>
@@ -442,11 +447,12 @@ augroup default_group
     " https://stackoverflow.com/questions/2157914/can-vim-monitor-realtime-changes-to-a-file/48296697#48296697
     " needs low updatetime and autoread set. checks if file is changed on disk and reloads, doesn't if buffer is not saved
     " useful if you're using multiple editors e.g. vim for writing and vscode for debugging
-    autocmd CursorHold *  checktime | call feedkeys("lh")
+    " for neovim, check this open issue : https://github.com/neovim/neovim/issues/1380
+    " autocmd CursorHold *  checktime | call feedkeys("lh")
 
     " auto reload when vim config is modified
-    autocmd! bufwritepost init.vim source %
-    autocmd! bufwritepost .vimrc source %
+    autocmd! bufwritepost $XDG_CONFIG_HOME/nvim/init.lua source %
+    autocmd! bufwritepost $MYVIMRC source %
 augroup END
 
 let g:gitroot =  Git_Repo_Cdup()
