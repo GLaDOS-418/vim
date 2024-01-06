@@ -414,8 +414,9 @@ if has('nvim')
   lua require('misc')
 
   " telescope {{{2
-  nnoremap <leader>ff <cmd>Telescope find_files find_command=rg,--ignore,--hidden,--files,--glob=!.git/*,--smart-case<cr>
-  nnoremap <leader>fg <cmd>Telescope live_grep find_command=rg,--ignore,--hidden,--files,--glob=!.git/*,--smart-case<cr>
+  nnoremap <leader>ff <cmd>lua require('telescope_cfg').find_files_from_project_git_root()<cr>
+  nnoremap <leader>fg <cmd>lua require('telescope_cfg').live_grep_from_project_git_root()<cr>
+
   nnoremap <leader>fb <cmd>Telescope buffers<cr>
   nnoremap <leader>fh <cmd>Telescope help_tags<cr>
   nnoremap <leader>fc <cmd>Telescope git_commits<cr>
