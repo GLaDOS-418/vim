@@ -62,10 +62,8 @@
 * [r/vim]( https://reddit.com/r/vim )
 * [r/neovim]( https://www.reddit.com/r/neovim/ )
 
-### snippet sources used
-* [GitHub - rafamadriz/friendly-snippets: Set of preconfigured snippets for different languages.]( https://github.com/rafamadriz/friendly-snippets/ )
-* [GitHub - hrsh7th/nvim-cmp: A completion plugin for neovim coded in Lua.]( https://github.com/hrsh7th/nvim-cmp/tree/main )
-
+### WIP
+* [GitHub - jmbuhr/otter.nvim: Just ask an otter! 🦦]( https://github.com/jmbuhr/otter.nvim )
 
 ### KNOWN ISSUES
 * when using airblade/vim-rooter: Changes Vim working directory to project root.( https://github.com/airblade/vim-rooter ) - doesn't work well with nerdtree because it unsets `autochdir` and because of that, I can't open NerdTree in the VCS root on vim start.

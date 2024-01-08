@@ -296,7 +296,7 @@ require("luasnip.loaders.from_vscode").lazy_load()
 -- require("luasnip.loaders.from_snipmate").lazy_load() -- load honza/vim-snippets into nvim-cmp
 
 -- for custom snippets
-require("luasnip.loaders.from_vscode").lazy_load({ paths = { vim.fn.stdpath("config") .. "/snippets" } })
+require("luasnip.loaders.from_vscode").lazy_load({ paths = { vim.fn.stdpath("config") .. "/snips" } })
 
 -- friendly-snippets - extend snippet groups
 require("luasnip").filetype_extend("c", { "cdoc" })
