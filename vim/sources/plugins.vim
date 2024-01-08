@@ -302,7 +302,7 @@ noremap <silent> <m-\> <cmd><c-u>TmuxNavigatePrevious<cr>
 " neotree {{{2
 
   if has('nvim')
-    noremap <leader>d :Neotree toggle filesystem float dir=./<cr>
+    noremap <leader>dd :Neotree toggle filesystem float dir=./<cr>
   endif
 
 
@@ -444,10 +444,10 @@ if has('nvim')
   nnoremap <leader>lf <cmd>LspZeroFormat<cr>
 
   " harpoon {{{2
-  nnoremap <c-s> <cmd>lua require("harpoon.mark").add_file()<cr>
-  nnoremap <c-g> <cmd>lua require("harpoon.ui").toggle_quick_menu()<cr>
-  nnoremap <c-n> <cmd>lua require("harpoon.ui").nav_next()<cr>
-  nnoremap <c-p> <cmd>lua require("harpoon.ui").nav_prev()<cr>
+  nnoremap <silent> <leader>ha <cmd>lua require("harpoon.mark").add_file()<cr>
+  nnoremap <silent> <leader>hq <cmd>lua require("harpoon.ui").toggle_quick_menu()<cr>
+  nnoremap <silent> <c-n> <cmd>lua require("harpoon.ui").nav_next()<cr>
+  nnoremap <silent> <c-p> <cmd>lua require("harpoon.ui").nav_prev()<cr>
 
   let g:snipMate = { 'snippet_version' : 1 }
 
