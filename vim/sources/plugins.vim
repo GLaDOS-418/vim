@@ -50,7 +50,7 @@ if has('nvim')
   Plug 'stevearc/dressing.nvim'           " UI hooks in nvim for input
 
   " interface for github.com/tree-sitter/tree-sitter
-  " TODO: add auto installation of treesitter serversj
+  " TODO: add auto installation of treesitter servers
   Plug 'nvim-treesitter/nvim-treesitter',
        \{'do': ':TSUpdate'}               "   it's a parser generator
 endif
@@ -102,18 +102,23 @@ if has('nvim')
   " Snippets {{{4
   Plug 'L3MON4D3/LuaSnip', {'tag': 'v2.*', 'do': 'make install_jsregexp'}  " Required. completion engine
   Plug 'hrsh7th/nvim-cmp'         " Required
-  Plug '~/code/friendly-snippets' " synced at: GLaDOS-418/friendly-snippets
-  " Plug 'rafamadriz/friendly-snippets'
+  Plug 'GLaDOS-418/friendly-snippets' " fork of: 'rafamadriz/friendly-snippets'
+
+  " other snippets
+  Plug 'honza/vim-snippets'
 
   " find list of sources at:
   " https://github.com/hrsh7th/nvim-cmp/wiki/List-of-sources
-  Plug 'hrsh7th/cmp-nvim-lsp'     " Required
-  Plug 'hrsh7th/cmp-buffer'
-  Plug 'hrsh7th/cmp-nvim-lua'
-  Plug 'hrsh7th/cmp-emoji'
-  Plug 'hrsh7th/cmp-path'
+  Plug 'hrsh7th/cmp-nvim-lsp'                " Required
+  Plug 'hrsh7th/cmp-buffer'                  " nvim-cmp source for buffer words
+  Plug 'hrsh7th/cmp-nvim-lua'                " nvim-cmp source for neovim Lua API
+  Plug 'hrsh7th/cmp-emoji'                   " nvim-cmp source for emojis
+  Plug 'hrsh7th/cmp-path'                    " nvim-cmp source for filesystem paths
+  Plug 'hrsh7th/cmp-calc'                    " evaluate mathematical expressions
+  Plug 'hrsh7th/cmp-nvim-lsp-signature-help' " displaying function signatures with the current parameter emphasized
+  Plug 'petertriho/cmp-git'                  " git source for nvim-cmp
+  Plug 'octaltree/cmp-look'                  " source for linux 'look' tool
   Plug 'saadparwaiz1/cmp_luasnip'
-  Plug 'honza/vim-snippets'
 
   " Code Formatting {{{4
   Plug 'stevearc/conform.nvim'

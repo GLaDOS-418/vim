@@ -2,9 +2,9 @@
 ---  LSP CONFIG
 -----------------------------------------
 
-local lsp_zero = require("lsp-zero")
+local zero = require("lsp-zero")
 
-lsp_zero.on_attach(function(client, bufnr)
+zero.on_attach(function(_, bufnr)
 	local opts = { buffer = bufnr, remap = false }
 
 	vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", opts)
@@ -53,8 +53,8 @@ require("mason-lspconfig").setup({
 		"biome", -- json
 	},
 	handlers = {
-		lsp_zero.default_setup,
-		jdtls = lsp_zero.noop,
+		zero.default_setup,
+		jdtls = zero.noop,
 	},
 })
 
@@ -63,7 +63,7 @@ require("mason-lspconfig").setup({
 -----------------------------------------
 
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-require("lspconfig").lua_ls.setup(lsp_zero.nvim_lua_ls()) -- provides vim globals in lua
+require("lspconfig").lua_ls.setup(zero.nvim_lua_ls()) -- provides vim globals in lua
 require("lspconfig").clangd.setup({
 	single_file_support = true,
 })
@@ -149,8 +149,8 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 local lint = require("lint")
 
 lint.linters_by_ft = {
-	c = { "cpplint" },
-	cpp = { "cpplint" },
+	-- c = { "cpplint" },
+	-- cpp = { "cpplint" },
 	-- go = { "golangci-lint" },
 	lua = { "luacheck" },
 }
@@ -170,7 +170,7 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
 -----------------------------------------
 ---  DIAGNOSTICS
 -----------------------------------------
-lsp_zero.set_sign_icons({
+zero.set_sign_icons({
 	error = "✘",
 	warn = "▲",
 	hint = "H",
@@ -181,33 +181,129 @@ lsp_zero.set_sign_icons({
 ---  COMPLETION/SNNIPPETS
 -----------------------------------------
 
+--- ************************
+--- COMPLETION FORMAT
+--- ************************
+
 local cmp = require("cmp")
 local cmp_action = require("lsp-zero").cmp_action()
-local cmp_format = require("lsp-zero").cmp_format({
-	fields = { "abbr", "kind", "menu" },
-	format = require("lspkind").cmp_format({
-		mode = "symbol", -- show only symbol annotations
-		maxwidth = 50, -- prevent the popup from showing more than provided characters
-		ellipsis_char = "...", -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead
-		menu = {
-			nvim_lsp = "[LSP]",
-			nvim_lua = "[LUA]",
-			buffer = "[BUF]",
-			emoji = "[EMOJI]",
-			path = "[PATH]",
-			luasnip = "[SNIP]",
+-- local cmp_format = require("lsp-zero").cmp_format({
+local cmp_format = {
+	fields = { "kind", "abbr", "menu" },
+	format = function(entry, item)
+		local kind = require("lspkind").cmp_format({
+			mode = "symbol_text", -- show only symbol annotations
+			maxwidth = 50,
+			ellipsis_char = "~", -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead
+			menu = {
+				nvim_lsp = "[LSP]",
+				nvim_lua = "[LUA]",
+				buffer = "[BUF]",
+				emoji = "[EMO]",
+				path = "[PATH]",
+				luasnip = "[SNIP]",
+				calc = "[CALC]",
+				nvim_lsp_signature_help = "[SIG]",
+				look = "[LOOK]",
+			},
+		})(entry, item)
+
+		local custom_menu_icon = {
+			--NOTE: requires a nerdfont to be rendered
+			calc = " 󰃬 Text",
+		}
+
+		if entry.source.name == "calc" then
+			-- Get the custom icon for thesource and
+			-- Replace the kind glyph with the custom icon
+			kind.kind = custom_menu_icon.calc
+		end
+
+		-- get types on the left, and offset the menu
+		local strings = vim.split(kind.kind, "%s", { trimempty = true })
+		kind.kind = string.format("%-4s", " " .. (strings[1] or "") .. " ")
+
+		-- padded at 13 chars because 'TypeParameter' is the longest item in lspkind (12c)
+		local paddedKind = string.format("%-13s", " " .. (strings[2] or ""))
+		kind.menu = kind.menu:sub(1, kind.menu:find("]")) -- remove function signature
+		kind.menu = paddedKind .. kind.menu .. " "
+
+		return kind
+	end,
+}
+
+--- ************************
+--- COMPLETION SOURCES
+--- ************************
+
+local bufIsBig = function(bufnr)
+	local max_filesize = 100 * 1024 -- 100 KB
+	local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(bufnr))
+	if ok and stats and stats.size > max_filesize then
+		return true
+	else
+		return false
+	end
+end
+
+-- default sources for all buffers
+local default_cmp_sources = cmp.config.sources({
+
+	{ name = "nvim_lsp" },
+	{ name = "nvim_lua" }, -- hrsh7th/cmp-nvim-lua
+	{ name = "buffer" }, -- hrsh7th/cmp-buffer
+	{ name = "emoji" }, -- hrsh7th/cmp-emoji
+	{ name = "path" }, -- hrsh7th/cmp-path
+	{ name = "luasnip" }, -- saadparwaiz1/cmp_luasnip
+	{ name = "nvim_lsp_signature_help" }, -- hrsh7th/cmp-nvim-lsp-signature-help
+	{ name = "calc" }, -- hrsh7th/cmp-calc
+	{ name = "git" }, -- petertriho/cmp-git
+	{
+		name = "look",
+		keyword_length = 2,
+		option = {
+			convert_case = true,
+			loud = true,
+			--dict = '/usr/share/dict/words'
 		},
-		-- before = function(entry, vim_item)
-		-- 	if entry.source.name == "html-css" then
-		-- 		vim_item.menu = entry.completion_item.menu
-		-- 	end
-		-- 	return vim_item
-		-- end,
-	}),
+	},
 })
 
-require("luasnip.loaders.from_vscode").lazy_load() -- load friendly-snippets into nvim-cmp
+-- If a file is too large, I don't want to add to it's cmp sources treesitter, see:
+-- https://github.com/hrsh7th/nvim-cmp/issues/1522
+vim.api.nvim_create_autocmd("BufReadPre", {
+	callback = function(t)
+		local sources = default_cmp_sources
+		if not bufIsBig(t.buf) then
+			sources[#sources + 1] = { name = "treesitter", group_index = 2 }
+		end
+		cmp.setup.buffer({
+			sources = sources,
+		})
+	end,
+})
+
+--- ************************
+--- SNIPPETS
+--- ************************
+
+-- shortcut to load personal lua snippets
+vim.keymap.set("n", "<leader><leader>s", "<cmd>source ~/.config/nvim/after/plugin/luasnip.lua<cr>")
+
+-- for friendly snippets
+require("luasnip.loaders.from_vscode").lazy_load()
 -- require("luasnip.loaders.from_snipmate").lazy_load() -- load honza/vim-snippets into nvim-cmp
+
+-- for custom snippets
+require("luasnip.loaders.from_vscode").lazy_load({ paths = { vim.fn.stdpath("config") .. "/snippets" } })
+
+-- friendly-snippets - extend snippet groups
+require("luasnip").filetype_extend("c", { "cdoc" })
+require("luasnip").filetype_extend("cpp", { "cppdoc" })
+
+--- ************************
+--- FINAL COMPLETION SETUP
+--- ************************
 
 cmp.setup({
 	mapping = {
@@ -216,41 +312,22 @@ cmp.setup({
 		["<s-tab>"] = cmp_action.luasnip_shift_supertab(),
 		["<cr>"] = cmp.mapping.confirm({
 			behavior = cmp.ConfirmBehavior.Replace,
-			select = true,
+			select = false, -- do not insert first item on list on <cr>
 		}),
 		-- scroll up and down the documentation window
 		["<c-u>"] = cmp.mapping.scroll_docs(-4),
 		["<c-d>"] = cmp.mapping.scroll_docs(4),
 	},
 
-	-- completion sources
-	sources = {
-		{ name = "nvim_lsp" },
-		{ name = "nvim_lua" }, -- hrsh7th/cmp-nvim-lua
-		{ name = "buffer" }, -- hrsh7th/cmp-buffer
-		{ name = "emoji" }, -- hrsh7th/cmp-emoji
-		{ name = "path" }, -- hrsh7th/cmp-path
-		{ name = "luasnip" }, -- saadparwaiz1/cmp_luasnip
-		-- { name = 'vsnip'     } , -- For vsnip users.
-		-- { name = 'ultisnips' } , -- For ultisnips users.
-		-- { name = 'snippy'    } , -- For snippy users.
-		-- {
-		-- 	name = "html-css", -- Jezda1337/nvim-html-css
-		-- 	option = {
-		-- 		max_count = {}, -- not ready yet
-		-- 		enable_on = {
-		-- 			"html",
-		-- 		}, -- set the file types you want the plugin to work on
-		-- 		file_extensions = { "css", "sass", "less" }, -- set the local filetypes from which you want to derive classes
-		-- 		style_sheets = {
-		-- 			-- example of remote styles, only css no js for now
-		-- 			"https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css",
-		-- 			"https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css",
-		-- 		},
-		-- 		-- your configuration here
-		-- 	},
-		-- },
+	snippet = {
+		-- REQUIRED - you must specify a snippet engine
+		expand = function(args)
+			require("luasnip").lsp_expand(args.body) -- For `luasnip` users.
+		end,
 	},
+
+	-- completion sources
+	sources = default_cmp_sources,
 
 	-- show source name in completion menu
 	formatting = cmp_format,
@@ -259,18 +336,22 @@ cmp.setup({
 	window = {
 		completion = cmp.config.window.bordered(),
 		documentation = cmp.config.window.bordered(),
+		-- completion = {
+		-- 	winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
+		-- 	col_offset = -3,
+		-- 	side_padding = 0,
+		-- },
 	},
 
 	-- Make the first item in completion menu always be selected
-	preselect = "item",
-	completion = {
-		completeopt = "menu,menuone,noinsert",
-	},
+	-- preselect = "item",
+	-- completion = {
+	-- 	completeopt = "menu,menuone,noinsert",
+	-- },
 })
 
--- friendly-snippets - extend snippet groups
-require("luasnip").filetype_extend("c", { "cdoc" })
-require("luasnip").filetype_extend("cpp", { "cppdoc" })
+-- TODO: setup git completion source
+require("cmp_git").setup()
 
 -----------------------------------------
 -- https://github.com/ray-x/go.nvim
