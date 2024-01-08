@@ -46,7 +46,7 @@ if has('nvim')
   Plug 'rebelot/kanagawa.nvim'    " use kanagawa-dragon
   Plug 'EdenEast/nightfox.nvim'   " use terafox
 
-  Plug 'luckasRanarison/nvim-devdocs'
+  " Plug 'luckasRanarison/nvim-devdocs'
   Plug 'stevearc/dressing.nvim'           " UI hooks in nvim for input
 
   " interface for github.com/tree-sitter/tree-sitter
@@ -90,6 +90,7 @@ Plug 'christoomey/vim-tmux-navigator'   " navigate seamlessly between vim and tm
 
 " Architecture & Notes {{{3
 Plug 'scrooloose/vim-slumlord'         " inline previews for plantuml activity dia
+Plug 'richardbizik/nvim-toc'           " create TOC for markdown files
 
 if has('nvim')
   " LSP Support {{{4
@@ -180,7 +181,12 @@ Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'majutsushi/tagbar'               " show tags in sidebar using ctags
 Plug 'tpope/vim-surround'              " surround text with tags
 Plug 'godlygeek/tabular'               " text alignment
-Plug 'tpope/vim-commentary'            " comments lines, paragraphs etc.
+
+if has('nvim')
+  Plug 'numToStr/Comment.nvim'
+else
+  Plug 'tpope/vim-commentary'            " comments lines, paragraphs etc.
+endif
 Plug 'tpope/vim-speeddating'           " incr/decr dates with <c-a> & <c-x>
 Plug 'mbbill/undotree',                " gives a file changes tree
       \ {'on': 'UndotreeToggle'}
@@ -429,7 +435,7 @@ if has('nvim')
   nnoremap <leader>fl <cmd>Telescope loclist<cr>
 
 
-  nnoremap <leader>fd <cmd>DevdocsOpenFloat<cr>
+  " nnoremap <leader>fd <cmd>DevdocsOpenFloat<cr>
   nnoremap <leader>td <cmd>TodoTelescope<cr>
 
   " nnoremap <leader>sg <cmd>lua require('sg.extensions.telescope').fuzzy_search_results()<cr>

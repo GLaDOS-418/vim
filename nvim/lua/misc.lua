@@ -1,10 +1,10 @@
 -- devdocs
 
-require("nvim-devdocs").setup({
-	after_open = function(bufnr)
-		vim.api.nvim_buf_set_keymap(bufnr, "n", "<Esc>", ":close<CR>", {})
-	end,
-})
+-- require("nvim-devdocs").setup({
+-- 	after_open = function(bufnr)
+-- 		vim.api.nvim_buf_set_keymap(bufnr, "n", "<Esc>", ":close<CR>", {})
+-- 	end,
+-- })
 
 -- Bekaboo/dropbar.nvim
 require("dropbar").setup()
@@ -29,3 +29,11 @@ require("dressing").setup()
 
 -- sourcegraph/sg.nvim
 -- require("sg").setup ()
+
+-- richardbizik/nvim-toc
+require("nvim-toc").setup({
+	toc_header = "Outline",
+})
+
+-- numToStr/Comment.nvim
+require("Comment").setup()
