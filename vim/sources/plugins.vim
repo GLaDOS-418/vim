@@ -62,6 +62,7 @@ Plug 'machakann/vim-highlightedyank'    " flash highlight yanked region
 " Source Control {{{3
 Plug 'tpope/vim-fugitive'              " handle git commands
 Plug 'airblade/vim-gitgutter'          " see git diff in buffer
+Plug 'sindrets/diffview.nvim'
 
 " Navigation {{{3
 if has('nvim')
