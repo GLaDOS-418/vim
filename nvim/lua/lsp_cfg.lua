@@ -194,7 +194,7 @@ local cmp_format = {
 		local kind = require("lspkind").cmp_format({
 			mode = "symbol_text", -- show only symbol annotations
 			maxwidth = 50,
-			ellipsis_char = "~", -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead
+			ellipsis_char = "...", -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead
 			menu = {
 				nvim_lsp = "[LSP]",
 				nvim_lua = "[LUA]",
@@ -221,12 +221,12 @@ local cmp_format = {
 
 		-- get types on the left, and offset the menu
 		local strings = vim.split(kind.kind, "%s", { trimempty = true })
-		kind.kind = string.format("%-4s", " " .. (strings[1] or "") .. " ")
+		kind.kind = string.format("%-4s", (strings[1] or ""))
 
 		-- padded at 13 chars because 'TypeParameter' is the longest item in lspkind (12c)
 		local paddedKind = string.format("%-13s", " " .. (strings[2] or ""))
 		kind.menu = kind.menu:sub(1, kind.menu:find("]")) -- remove function signature
-		kind.menu = paddedKind .. kind.menu .. " "
+		kind.menu = paddedKind .. string.format("%-8s", kind.menu)
 
 		return kind
 	end,
@@ -247,6 +247,7 @@ local bufIsBig = function(bufnr)
 end
 
 -- default sources for all buffers
+-- https://github.com/hrsh7th/nvim-cmp/wiki/List-of-sources
 local default_cmp_sources = cmp.config.sources({
 
 	{ name = "nvim_lsp" },
@@ -334,13 +335,18 @@ cmp.setup({
 
 	-- add borders to completion menu
 	window = {
-		completion = cmp.config.window.bordered(),
+		-- completion = cmp.config.window.bordered(),
 		documentation = cmp.config.window.bordered(),
-		-- completion = {
-		-- 	winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
-		-- 	col_offset = -3,
-		-- 	side_padding = 0,
-		-- },
+		completion = {
+			--  winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
+			winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
+			col_offset = 3,
+			side_padding = 2,
+			scrollbar = true,
+			scrolloff = 1,
+			zindex = 1001,
+			border = "rounded",
+		},
 	},
 
 	-- Make the first item in completion menu always be selected
