@@ -451,8 +451,8 @@ augroup default_group
     " autocmd CursorHold *  checktime | call feedkeys("lh")
 
     " auto reload when vim config is modified
-    autocmd! bufwritepost $XDG_CONFIG_HOME/nvim/init.lua source %
-    autocmd! bufwritepost $MYVIMRC source %
+    autocmd! bufwritepost source $XDG_CONFIG_HOME/nvim/init.lua
+    autocmd! bufwritepost source $MYVIMRC
 augroup END
 
 let g:gitroot =  Git_Repo_Cdup()
