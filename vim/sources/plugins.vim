@@ -428,6 +428,7 @@ if has('nvim')
   " telescope {{{2
   nnoremap <leader>ff <cmd>lua require('telescope_cfg').find_files_from_project_git_root()<cr>
   nnoremap <leader>fg <cmd>lua require('telescope_cfg').live_grep_from_project_git_root()<cr>
+  nnoremap <leader>fs <cmd>lua require('telescope_cfg').find_files_with_string()<cr>
 
   nnoremap <leader>fb <cmd>Telescope buffers<cr>
   nnoremap <leader>fh <cmd>Telescope help_tags<cr>

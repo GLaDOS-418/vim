@@ -21,7 +21,7 @@ zero.on_attach(function(_, bufnr)
 	vim.keymap.set("i", "<C-h>", "<cmd>lua vim.lsp.buf.signature_help()<cr>", opts)
 	vim.keymap.set("n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
 	--- vim.keymap.set({ 'n', 'x' }, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
-	vim.keymap.set({ "n", "v" }, "<F3>", function()
+	vim.keymap.set({ "n", "x" }, "<F3>", function()
 		require("conform").format({
 			timeout_ms = 500,
 			async = false,
@@ -133,13 +133,14 @@ require("conform").setup({
 })
 
 -- automatically format buffer on save
-vim.api.nvim_create_autocmd("BufWritePre", {
-	group = lsp_augroup,
-	pattern = "*",
-	callback = function(args)
-		require("conform").format({ bufnr = args.buf })
-	end,
-})
+-- NOTE: breaks for std::ranges in cpp. use format mapping to manually format.
+-- vim.api.nvim_create_autocmd("BufWritePre", {
+-- 	group = lsp_augroup,
+-- 	pattern = "*",
+-- 	callback = function(args)
+-- 		require("conform").format({ bufnr = args.buf })
+-- 	end,
+-- })
 
 -----------------------------------------
 ---  LINTING
