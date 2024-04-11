@@ -78,7 +78,7 @@ require("lspconfig").clangd.setup({
 require("mason-tool-installer").setup({
 	ensure_installed = {
 		"stylua",
-		"luacheck",
+		-- "luacheck",
 
 		"golines",
 		"goimports-reviser",
@@ -153,12 +153,12 @@ lint.linters_by_ft = {
 	-- c = { "cpplint" },
 	-- cpp = { "cpplint" },
 	-- go = { "golangci-lint" },
-	lua = { "luacheck" },
+	-- lua = { "luacheck" },
 }
 
 -- luacheck ignore "vim" global variable error diagnostics
-table.insert(lint.linters.luacheck.args, "--globals")
-table.insert(lint.linters.luacheck.args, "vim")
+-- table.insert(lint.linters.luacheck.args, "--globals")
+-- table.insert(lint.linters.luacheck.args, "vim")
 
 -- automatically lint buffer after save
 vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {

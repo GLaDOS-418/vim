@@ -137,6 +137,7 @@ if has('nvim')
 
   " Debugging {{{4
   Plug 'mfussenegger/nvim-dap'
+  Plug 'nvim-neotest/nvim-nio'
   Plug 'rcarriga/nvim-dap-ui'
   Plug 'theHamsta/nvim-dap-virtual-text'
   " jPlug 'jay-babu/mason-nvim-dap.nvim' "  TODO: auto install dap servers
