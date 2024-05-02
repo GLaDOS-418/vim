@@ -180,13 +180,14 @@ Plug 'lukas-reineke/indent-blankline.nvim'
 " Editing Utils {{{3
 
 " Plug 'ervandew/supertab'             " use tab for all insert mode completions
-Plug 'majutsushi/tagbar'               " show tags in sidebar using ctags
 Plug 'tpope/vim-surround'              " surround text with tags
 Plug 'godlygeek/tabular'               " text alignment
 
 if has('nvim')
   Plug 'numToStr/Comment.nvim'
+  Plug 'stevearc/aerial.nvim'            " alternative to majutsushi/tagbar
 else
+  Plug 'majutsushi/tagbar'               " show tags in sidebar using ctags
   Plug 'tpope/vim-commentary'            " comments lines, paragraphs etc.
 endif
 Plug 'tpope/vim-speeddating'           " incr/decr dates with <c-a> & <c-x>
@@ -267,7 +268,11 @@ noremap <silent> <m-\> <cmd><c-u>TmuxNavigatePrevious<cr>
 
 
 " tagbar - plugin config{{{2
+if has('nvim')
+  nnoremap <silent> <F8> :AerialToggle<cr>
+else
   nnoremap <silent> <F8> :TagbarOpen fj<cr>
+endif
 
 
 " Nerdtree {{{2
@@ -294,18 +299,24 @@ noremap <silent> <m-\> <cmd><c-u>TmuxNavigatePrevious<cr>
                   \ }
 
 
-" vim-rooter {{{2
-  let g:rooter_patterns = ['.git', '.hg', '.svn', '.root', 'Makefile', '*.sln', 'build/env.sh', '=src', 'go.mod']
-  let g:rooter_change_directory_for_non_project_files = 'current'
-  let g:rooter_resolve_links = 1
-  let g:rooter_cd_cmd = 'lcd'
-
-
 " neotree {{{2
 
   if has('nvim')
     noremap <leader>dd :Neotree toggle filesystem float dir=./<cr>
   endif
+
+  " vim-rooter {{{2
+  let g:rooter_patterns = [
+        \ 'Makefile', 'CMakeLists.txt' ,
+        \ '*.sln', '*.csproj', 'build/env.sh', 'go.mod',
+        \'.git', '.hg', '.svn', '.root'
+        \]
+
+  let g:rooter_silent_chdir = 1
+  let g:rooter_change_directory_for_non_project_files = 'current'
+  let g:rooter_resolve_links = 1
+  let g:rooter_cd_cmd = 'silent! lcd'
+
 
 
 " coc.nvim {{{2
@@ -427,9 +438,9 @@ if has('nvim')
   lua require('misc')
 
   " telescope {{{2
-  nnoremap <leader>ff <cmd>lua require('telescope_cfg').find_files_from_project_git_root()<cr>
-  nnoremap <leader>fg <cmd>lua require('telescope_cfg').live_grep_from_project_git_root()<cr>
-  nnoremap <leader>fs <cmd>lua require('telescope_cfg').find_files_with_string()<cr>
+
+  nnoremap <leader>ff <cmd>lua require('telescope_cfg').find_files_from_project_root()<cr>
+  nnoremap <leader>fg <cmd>lua require('telescope_cfg').live_grep_from_project_root()<cr>
 
   nnoremap <leader>fb <cmd>Telescope buffers<cr>
   nnoremap <leader>fh <cmd>Telescope help_tags<cr>
@@ -448,7 +459,7 @@ if has('nvim')
 
   " harpoon {{{2
   nnoremap <silent> <leader>ha <cmd>lua require("harpoon.mark").add_file()<cr>
-  nnoremap <silent> <leader>hq <cmd>lua require("harpoon.ui").toggle_quick_menu()<cr>
+  nnoremap <silent> <leader>hl <cmd>lua require("harpoon.ui").toggle_quick_menu()<cr>
   nnoremap <silent> <c-n> <cmd>lua require("harpoon.ui").nav_next()<cr>
   nnoremap <silent> <c-p> <cmd>lua require("harpoon.ui").nav_prev()<cr>
 

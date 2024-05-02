@@ -37,3 +37,7 @@ require("nvim-toc").setup({
 
 -- numToStr/Comment.nvim
 require("Comment").setup()
+
+
+-- stevearc/aerial.nvim
+require("aerial").setup()

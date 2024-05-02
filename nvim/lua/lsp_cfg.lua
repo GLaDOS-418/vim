@@ -290,7 +290,7 @@ vim.api.nvim_create_autocmd("BufReadPre", {
 --- ************************
 
 -- shortcut to load personal lua snippets
-vim.keymap.set("n", "<leader><leader>s", "<cmd>source ~/.config/nvim/after/plugin/luasnip.lua<cr>")
+-- vim.keymap.set("n", "<leader><leader>ls", "<cmd>source ~/.config/nvim/after/plugin/luasnip.lua<cr>")
 
 -- for friendly snippets
 require("luasnip.loaders.from_vscode").lazy_load()

@@ -205,7 +205,7 @@ set softtabstop=2     " number of spaces in TAB when editing
 " endif
 
 " Remove the Windows ^M - when the encodings gets messed up
-" noremap <silent> <c-m> mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
+noremap <silent> <c-m> mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 
 " indentation control in visual mode
 vnoremap > >gv
@@ -389,6 +389,9 @@ nnoremap <leader>gr :call CD_Git_Root()<cr>
 
 " add wildignore filetypes from .gitignore
 nnoremap <leader>cti :call WildignoreFromGitignore()<cr>
+
+" yank whole file
+nnoremap <silent> <leader>yy :%y+<cr>
 
 "------------------------------------------------------------
 " ENVIRONMENT PROFILES   {{{1
