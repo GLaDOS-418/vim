@@ -73,11 +73,12 @@ if has('nvim')
   Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' } |
     \ Plug 'nvim-lua/plenary.nvim'
 
+  
   " Telescope Extensions
   Plug 'nvim-telescope/telescope-project.nvim'
   Plug 'nvim-telescope/telescope-file-browser.nvim'
-
-  Plug 'ThePrimeagen/harpoon'
+  
+  Plug 'ThePrimeagen/harpoon', { 'branch': 'harpoon2' }
   Plug 'folke/todo-comments.nvim'         " add and search todo comments in repo
   " Plug 'sourcegraph/sg.nvim', { 'do': 'nvim -l build/init.lua' }
 else
@@ -144,6 +145,7 @@ if has('nvim')
   Plug 'mfussenegger/nvim-dap'
   Plug 'nvim-neotest/nvim-nio'
   Plug 'rcarriga/nvim-dap-ui'
+  Plug 'nvim-neotest/nvim-nio'
   Plug 'theHamsta/nvim-dap-virtual-text'
   " jPlug 'jay-babu/mason-nvim-dap.nvim' "  TODO: auto install dap servers
 
@@ -220,8 +222,8 @@ call plug#end()
   let g:gitgutter_highlight_lines = 0
   nnoremap gn :GitGutterNextHunk<CR>
   nnoremap gp :GitGutterPrevHunk<CR>
-  nnoremap <leader>hs :GitGutterStageHunk<CR>
-  nnoremap <leader>hu :GitGutterUndoHunk<CR>
+  nnoremap ga :GitGutterStageHunk<CR>
+  nnoremap gu :GitGutterUndoHunk<CR>
   nnoremap <leader>hp :GitGutterPreviewHunk<CR>
   if !exists('&signcolumn')  " < vim 7.4.2201+
     let g:gitgutter_sign_column_always = 1

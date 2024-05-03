@@ -4,7 +4,7 @@
 local dap = require('dap')  -- required by nvim-dap-ui as well
 dap.adapters.lldb = {
   type = 'executable',
-  command = '/usr/bin/lldb-vscode-16', -- must be absolute path
+  command = '/usr/bin/lldb-vscode-17', -- must be absolute path
   name = 'lldb'
 }
 
