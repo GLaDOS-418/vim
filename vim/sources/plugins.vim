@@ -108,6 +108,7 @@ if has('nvim')
 
   " other snippets
   Plug 'honza/vim-snippets'
+  Plug 'danymat/neogen'             " generate annotations for your code
 
   " find list of sources at:
   " https://github.com/hrsh7th/nvim-cmp/wiki/List-of-sources
@@ -439,23 +440,32 @@ if has('nvim')
 
   " telescope {{{2
 
-  nnoremap <leader>ff <cmd>lua require('telescope_cfg').find_files_from_project_root()<cr>
-  nnoremap <leader>fg <cmd>lua require('telescope_cfg').live_grep_from_project_root()<cr>
+  nnoremap <silent> <leader>ff <cmd>lua require('telescope_cfg').find_files_from_project_root()<cr>
+  nnoremap <silent> <leader>fg <cmd>lua require('telescope_cfg').live_grep_from_project_root()<cr>
 
-  nnoremap <leader>fb <cmd>Telescope buffers<cr>
-  nnoremap <leader>fh <cmd>Telescope help_tags<cr>
-  nnoremap <leader>fc <cmd>Telescope git_commits<cr>
-  nnoremap <leader>fk <cmd>Telescope keymaps<cr>
-  nnoremap <leader>fl <cmd>Telescope loclist<cr>
+  nnoremap <silent> <leader>fb <cmd>Telescope buffers<cr>
+  nnoremap <silent> <leader>fh <cmd>Telescope help_tags<cr>
+  nnoremap <silent> <leader>fc <cmd>Telescope git_commits<cr>
+  nnoremap <silent> <leader>fk <cmd>Telescope keymaps<cr>
+  nnoremap <silent> <leader>fl <cmd>Telescope loclist<cr>
 
 
+  " nvim-devdocs{{{2
   " nnoremap <leader>fd <cmd>DevdocsOpenFloat<cr>
-  nnoremap <leader>td <cmd>TodoTelescope<cr>
 
+
+  " todo-comments {{{2
+  nnoremap <silent> <leader>td <cmd>TodoTelescope<cr>
+
+
+  " sourcegraph/sg {{{2
   " nnoremap <leader>sg <cmd>lua require('sg.extensions.telescope').fuzzy_search_results()<cr>
 
+  " neogen {{{2
+  nnoremap <silent> <leader>n <cmd>Neogen<cr>
+
   " lsp-zero {{{2
-  nnoremap <leader>lf <cmd>LspZeroFormat<cr>
+  nnoremap <silent> <leader>lf <cmd>LspZeroFormat<cr>
 
   " harpoon {{{2
   nnoremap <silent> <leader>ha <cmd>lua require("harpoon.mark").add_file()<cr>

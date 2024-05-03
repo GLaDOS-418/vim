@@ -41,3 +41,9 @@ require("Comment").setup()
 
 -- stevearc/aerial.nvim
 require("aerial").setup()
+
+
+-- danymat/neogen
+require('neogen').setup()
+
+
