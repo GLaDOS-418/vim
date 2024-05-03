@@ -73,6 +73,10 @@ if has('nvim')
   Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' } |
     \ Plug 'nvim-lua/plenary.nvim'
 
+  " Telescope Extensions
+  Plug 'nvim-telescope/telescope-project.nvim'
+  Plug 'nvim-telescope/telescope-file-browser.nvim'
+
   Plug 'ThePrimeagen/harpoon'
   Plug 'folke/todo-comments.nvim'         " add and search todo comments in repo
   " Plug 'sourcegraph/sg.nvim', { 'do': 'nvim -l build/init.lua' }
@@ -202,6 +206,7 @@ endif
 Plug 'tpope/vim-abolish'    " working with word replacements
 Plug 'tpope/vim-repeat'     " repeat vim commands, and not just the native ones
 Plug 'airblade/vim-rooter'  " changes the cwd to project root
+
 
 call plug#end()
 
@@ -443,6 +448,7 @@ if has('nvim')
   nnoremap <silent> <leader>ff <cmd>lua require('telescope_cfg').find_files_from_project_root()<cr>
   nnoremap <silent> <leader>fg <cmd>lua require('telescope_cfg').live_grep_from_project_root()<cr>
 
+  nnoremap <silent> <leader>fp <cmd>:lua require'telescope'.extensions.project.project{}<cr>
   nnoremap <silent> <leader>fb <cmd>Telescope buffers<cr>
   nnoremap <silent> <leader>fh <cmd>Telescope help_tags<cr>
   nnoremap <silent> <leader>fc <cmd>Telescope git_commits<cr>
