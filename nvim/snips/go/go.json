@@ -1,0 +1,11 @@
+
+{
+  "eif": {
+    "prefix": "eif",
+    "body": [
+      "if ${1:err} != nil {",
+      "return ${2:nil,} errors.Wrap($1,\"\")",
+      "}$0"
+    ],
+    "description": "a fast console io."
+  }}
