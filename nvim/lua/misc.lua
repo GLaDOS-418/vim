@@ -46,4 +46,8 @@ require("aerial").setup()
 -- danymat/neogen
 require('neogen').setup()
 
+-- lukas-reineke/indent-blankline.nvim
+require("ibl").setup()
 
+-- HampusHauffman/block.nvim
+require("block").setup()

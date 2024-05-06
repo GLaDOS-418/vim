@@ -96,6 +96,7 @@ Plug 'christoomey/vim-tmux-navigator'   " navigate seamlessly between vim and tm
 
 " Architecture & Notes {{{3
 Plug 'scrooloose/vim-slumlord'         " inline previews for plantuml activity dia
+Plug 'aklt/plantuml-syntax'            " plantuml syntax highlight
 Plug 'richardbizik/nvim-toc'           " create TOC for markdown files
 
 if has('nvim')
@@ -183,6 +184,7 @@ endif
 
 " Code View {{{3
 Plug 'lukas-reineke/indent-blankline.nvim'
+Plug 'HampusHauffman/block.nvim'
 
 " Editing Utils {{{3
 
