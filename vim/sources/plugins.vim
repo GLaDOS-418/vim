@@ -477,12 +477,6 @@ if has('nvim')
   " lsp-zero {{{2
   nnoremap <silent> <leader>lf <cmd>LspZeroFormat<cr>
 
-  " harpoon {{{2
-  nnoremap <silent> <leader>ha <cmd>lua require("harpoon.mark").add_file()<cr>
-  nnoremap <silent> <leader>hl <cmd>lua require("harpoon.ui").toggle_quick_menu()<cr>
-  nnoremap <silent> <c-n> <cmd>lua require("harpoon.ui").nav_next()<cr>
-  nnoremap <silent> <c-p> <cmd>lua require("harpoon.ui").nav_prev()<cr>
-
   let g:snipMate = { 'snippet_version' : 1 }
 
   " nvim-dap {{{2
