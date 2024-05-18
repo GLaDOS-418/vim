@@ -1,14 +1,23 @@
 -- telescope_cfg.lua
+require("telescope").setup({
+	defaults = {
+		pickers = {
+			find_files = {
+				theme = "dropdown",
+			},
+		},
+	},
+})
 
 local TelescopeCustomFunctions = {}
 
 local function is_git_repo()
-        vim.fn.system("git rev-parse --is-inside-work-tree")
-        return vim.v.shell_error == 0
+	vim.fn.system("git rev-parse --is-inside-work-tree")
+	return vim.v.shell_error == 0
 end
 local function get_git_root()
-        local dot_git_path = vim.fn.finddir(".git", ".;")
-        return vim.fn.fnamemodify(dot_git_path, ":h")
+	local dot_git_path = vim.fn.finddir(".git", ".;")
+	return vim.fn.fnamemodify(dot_git_path, ":h")
 end
 
 local function find_from_project_root()
@@ -25,7 +34,7 @@ local function find_from_project_root()
 		},
 	}
 
-        -- let 'airblade/vim-rooter' set the project root
+	-- let 'airblade/vim-rooter' set the project root
 	-- if is_git_repo() then
 	-- 	opts.cwd = get_git_root()
 	-- end

@@ -50,14 +50,3 @@ require("ibl").setup()
 -- HampusHauffman/block.nvim
 require("block").setup()
 
--- ThePrimeagen/harpoon
-local harpoon = require("harpoon")
-harpoon:setup({ settings = {
-	save_on_toggle = true,
-	ui_nav_wrap = true,
-} })
-
-vim.keymap.set("n", "<leader>ha", function() harpoon:list():add() end)
-vim.keymap.set("n", "<leader>hl", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
-vim.keymap.set("n", "<c-p>", function() harpoon:list():prev({ ui_nav_wrap = true }) end)
-vim.keymap.set("n", "<c-n>", function() harpoon:list():next({ ui_nav_wrap = true }) end)

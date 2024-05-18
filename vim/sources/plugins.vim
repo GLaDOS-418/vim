@@ -316,8 +316,9 @@ endif
   endif
 
   " vim-rooter {{{2
+  " 'CMakeLists.txt' , 'Makefile', 'build.sh',
   let g:rooter_patterns = [
-        \ 'Makefile', 'CMakeLists.txt' ,
+        \ '.clangd',
         \ '*.sln', '*.csproj', 'build/env.sh', 'go.mod',
         \'.git', '.hg', '.svn', '.root'
         \]
@@ -440,6 +441,7 @@ nnoremap <leader>u :UndotreeToggle<cr>
 if has('nvim')
 
   lua require('treesitter_cfg')
+  lua require('harpoon_cfg')
   lua require('lsp_cfg')
   lua require('nvim_dap')
   lua require('mason_cfg')
@@ -453,11 +455,12 @@ if has('nvim')
   nnoremap <silent> <leader>fg <cmd>lua require('telescope_cfg').live_grep_from_project_root()<cr>
 
   nnoremap <silent> <leader>fp <cmd>:lua require'telescope'.extensions.project.project{}<cr>
-  nnoremap <silent> <leader>fb <cmd>Telescope buffers<cr>
+  nnoremap <silent> <leader>fb <cmd>Telescope buffers<cr><esc>
   nnoremap <silent> <leader>fh <cmd>Telescope help_tags<cr>
-  nnoremap <silent> <leader>fc <cmd>Telescope git_commits<cr>
+  nnoremap <silent> <leader>fc <cmd>Telescope git_commits<cr><esc>
   nnoremap <silent> <leader>fk <cmd>Telescope keymaps<cr>
-  nnoremap <silent> <leader>fl <cmd>Telescope loclist<cr>
+  nnoremap <silent> <leader>fl <cmd>Telescope loclist<cr><esc>
+  nnoremap <silent> <leader>fq <cmd>Telescope quickfix<cr><esc>
 
 
   " nvim-devdocs{{{2

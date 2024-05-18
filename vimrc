@@ -297,7 +297,7 @@ nnoremap <leader>a za
 
 augroup ft_markers
   au!
-  autocmd filetype cpp,go,rust,c,js,java,ts,css setlocal foldmethod=marker foldmarker={,}
+  autocmd filetype c,cpp,css,go,js,java,rust,sh,ts setlocal foldmethod=marker foldmarker={,}
   autocmd filetype python   setlocal foldmethod=indent
   autocmd filetype vim      setlocal foldmethod=marker
 augroup END
@@ -418,6 +418,12 @@ function! Java( )
     nnoremap <C-c> :w <bar> !time javac %:p:h/%:t:r.java && java  -enableassertions %:t:r<CR>
 endfunction
 
+function! Latex( )
+  " latex compilation shell commands. req: (pdf|xe)latex
+  " nnoremap <buffer> <leader>t :!pdflatex % <CR>
+  nnoremap <buffer> <C-c> :!xelatex % <CR>
+endfunction
+
 "------------------------------------------------------------
 " AUTO COMMANDS   {{{1
 "------------------------------------------------------------
@@ -427,9 +433,8 @@ augroup default_group
     " Remove all auto-commands from the group autogroup
     autocmd!
 
-    " latex compilation shell commands. req: (pdf|xe)latex
-    " autocmd filetype tex nnoremap <buffer> <leader>t :!pdflatex % <CR>
-    autocmd filetype tex nnoremap <buffer> <C-c> :!xelatex % <CR>
+    " https://superuser.com/questions/815416/hitting-enter-in-the-quickfix-window-doesnt-work
+    autocmd BufReadPost quickfix nnoremap <buffer> <cr> <cr>
 
     autocmd BufNewFile,BufRead *.uml,*.pu,*.plantuml,.*puml set filetype=plantuml
     autocmd BufNewFile,BufRead *.md,*.mdown,*.markdown,.*mkd set filetype=markdown
@@ -440,6 +445,7 @@ augroup default_group
     autocmd filetype java call Java()
     autocmd filetype python nnoremap <C-c> :w <bar> !python % <CR>
     autocmd filetype plantuml nnoremap <C-c> :call BuildUml() <cr>
+    autocmd filetype tex call Latex()
 
     " Set scripts to be executable from the shell
     autocmd BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "/bin/" | silent execute "!chmod a+x <afile>" | endif | endif
