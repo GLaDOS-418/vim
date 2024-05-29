@@ -79,6 +79,7 @@ set updatetime=300              " slower update time leads to poor UX
 syntax enable                   " enable syntax processing
 "set mouse+=a                   " use mouse to place cursor and copy w/o line num
 set shortmess+=c                " req for `coc.nvim` : github.com/neoclide/coc.nvim
+set conceallevel=1              " check: https://github.com/epwalsh/obsidian.nvim/issues/286
 
 if !has('nvim')
   set esckeys                   " Allow cursor keys in insert mode.

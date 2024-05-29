@@ -44,6 +44,7 @@ require("mason").setup()
 require("mason-lspconfig").setup({
 	ensure_installed = {
 		"clangd", -- cpp
+		"cmake", -- cmake
 		"rust_analyzer", -- rust
 		"gopls", -- go
 		"jdtls", -- java
@@ -51,6 +52,7 @@ require("mason-lspconfig").setup({
 		"html", -- html
 		"cssls", -- css
 		"biome", -- json
+		"bashls", -- bash
 	},
 	handlers = {
 		zero.default_setup,
@@ -95,6 +97,9 @@ require("mason-tool-installer").setup({
 		"jq",
 
 		-- "codespell",
+		"bash-language-server",
+		"shellcheck",
+		"shellharden",
 	},
 })
 
@@ -154,6 +159,7 @@ lint.linters_by_ft = {
 	-- cpp = { "cpplint" },
 	-- go = { "golangci-lint" },
 	-- lua = { "luacheck" },
+	bash = { "shellcheck", "shellharden" },
 }
 
 -- luacheck ignore "vim" global variable error diagnostics

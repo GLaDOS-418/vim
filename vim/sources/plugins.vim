@@ -99,6 +99,9 @@ Plug 'scrooloose/vim-slumlord'         " inline previews for plantuml activity d
 Plug 'aklt/plantuml-syntax'            " plantuml syntax highlight
 Plug 'richardbizik/nvim-toc'           " create TOC for markdown files
 
+" TODO: setup obsidian.vim
+Plug 'epwalsh/obsidian.nvim'           " access obsidian from nvim
+
 if has('nvim')
   " LSP Support {{{4
   Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v3.x'}   " lsp config
