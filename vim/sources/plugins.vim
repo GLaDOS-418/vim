@@ -244,13 +244,13 @@ call plug#end()
   highlight GitGutterDelete guifg=#ff2222 guibg=#ff2222 ctermfg=1 ctermbg=1
 
 " vim-tmux-navigator {{{2
-let g:tmux_navigator_no_mappings = 1
+  let g:tmux_navigator_no_mappings = 1
 
-noremap <silent> <m-h> <cmd><c-u>TmuxNavigateLeft<cr>
-noremap <silent> <m-j> <cmd><c-u>TmuxNavigateDown<cr>
-noremap <silent> <m-k> <cmd><c-u>TmuxNavigateUp<cr>
-noremap <silent> <m-l> <cmd><c-u>TmuxNavigateRight<cr>
-noremap <silent> <m-\> <cmd><c-u>TmuxNavigatePrevious<cr>
+  noremap <silent> <m-h> :<c-u>TmuxNavigateLeft<cr>
+  noremap <silent> <m-j> :<c-u>TmuxNavigateDown<cr>
+  noremap <silent> <m-k> :<c-u>TmuxNavigateUp<cr>
+  noremap <silent> <m-l> :<c-u>TmuxNavigateRight<cr>
+  noremap <silent> <m-\> :<c-u>TmuxNavigatePrevious<cr>
 
 " vim-closetag - plugin config {{{2
   let g:closetag_filenames = '*.xml,*.xslt,*.htm,*.html,*.xhtml,*.phtml,*.tmpl'
@@ -457,7 +457,7 @@ if has('nvim')
   nnoremap <silent> <leader>ff <cmd>lua require('telescope_cfg').find_files_from_project_root()<cr>
   nnoremap <silent> <leader>fg <cmd>lua require('telescope_cfg').live_grep_from_project_root()<cr>
 
-  nnoremap <silent> <leader>fp <cmd>:lua require'telescope'.extensions.project.project{}<cr>
+  nnoremap <silent> <leader>fp <cmd>lua require'telescope'.extensions.project.project{}<cr>
   nnoremap <silent> <leader>fb <cmd>Telescope buffers<cr><esc>
   nnoremap <silent> <leader>fh <cmd>Telescope help_tags<cr>
   nnoremap <silent> <leader>fc <cmd>Telescope git_commits<cr><esc>
