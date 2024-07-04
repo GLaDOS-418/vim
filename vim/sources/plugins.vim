@@ -43,8 +43,10 @@ if has('nvim')
   Plug 'NvChad/nvim-colorizer.lua' " highlight colors in neovim
 
 " colorschemes
-  Plug 'rebelot/kanagawa.nvim'    " use kanagawa-dragon
-  Plug 'EdenEast/nightfox.nvim'   " use terafox
+  Plug 'rebelot/kanagawa.nvim'        " use kanagawa-dragon
+  Plug 'EdenEast/nightfox.nvim'       " use terafox
+  Plug 'folke/tokyonight.nvim'        " use tokyonight-night
+  Plug 'marko-cerovac/material.nvim'  " use material-deep-ocean
 
   " Plug 'luckasRanarison/nvim-devdocs'
   Plug 'stevearc/dressing.nvim'           " UI hooks in nvim for input
@@ -105,7 +107,7 @@ Plug 'epwalsh/obsidian.nvim'           " access obsidian from nvim
 if has('nvim')
   " LSP Support {{{4
   Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v3.x'}   " lsp config
-  Plug 'williamboman/mason.nvim', {'do': ':MasonUpdate'} " install LSP servers
+  Plug 'williamboman/mason.nvim', {'do': ':MasonUpdate', 'branch': 'v2.x' } " install LSP servers
   Plug 'williamboman/mason-lspconfig.nvim'               " bridge between lspconfig and mason
   Plug 'WhoIsSethDaniel/mason-tool-installer.nvim'       " install third party tools
   Plug 'neovim/nvim-lspconfig'                           " lspconfig
@@ -321,7 +323,7 @@ endif
   " vim-rooter {{{2
   " 'CMakeLists.txt' , 'Makefile', 'build.sh',
   let g:rooter_patterns = [
-        \ '.clangd',
+        \ '.clangd', 'Earthfile',
         \ '*.sln', '*.csproj', 'build/env.sh', 'go.mod',
         \'.git', '.hg', '.svn', '.root'
         \]

@@ -53,6 +53,7 @@ require("mason-lspconfig").setup({
 		"cssls", -- css
 		"biome", -- json
 		"bashls", -- bash
+                "pylsp", -- python
 	},
 	handlers = {
 		zero.default_setup,

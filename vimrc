@@ -289,19 +289,27 @@ vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
 " nnoremap gV `[v`]
 
 " Folding {{{2
-set foldenable          " enable folding
-set foldlevelstart=5    " open most folds by default
-set foldnestmax=5       " max 10 nested folds
+set foldnestmax=5       " max 5 nested folds
+set foldminlines=2      " fold items where folded lines is more than this
+
+if has('nvim')
+  set nofoldenable                     " Disable folding at startup.
+  set foldmethod=expr
+  set foldexpr=nvim_treesitter#foldexpr()
+else 
+  set foldenable          " enable folding
+  set foldlevelstart=5    " open most folds by default
+
+  augroup ft_markers
+    au!
+    autocmd filetype c,cpp,css,go,js,java,rust,sh,ts setlocal foldmethod=marker foldmarker={,}
+    autocmd filetype python   setlocal foldmethod=indent
+    autocmd filetype vim      setlocal foldmethod=marker
+  augroup END
+endif
 
 " space open/closes folds in current block
 nnoremap <leader>a za
-
-augroup ft_markers
-  au!
-  autocmd filetype c,cpp,css,go,js,java,rust,sh,ts setlocal foldmethod=marker foldmarker={,}
-  autocmd filetype python   setlocal foldmethod=indent
-  autocmd filetype vim      setlocal foldmethod=marker
-augroup END
 
 "------------------------------------------------------------
 " MOVEMENTS  {{{1
