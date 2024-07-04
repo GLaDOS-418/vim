@@ -47,6 +47,7 @@ if has('nvim')
   Plug 'EdenEast/nightfox.nvim'       " use terafox
   Plug 'folke/tokyonight.nvim'        " use tokyonight-night
   Plug 'marko-cerovac/material.nvim'  " use material-deep-ocean
+  Plug 'catppuccin/nvim'
 
   " Plug 'luckasRanarison/nvim-devdocs'
   Plug 'stevearc/dressing.nvim'           " UI hooks in nvim for input
@@ -153,10 +154,15 @@ if has('nvim')
   Plug 'rcarriga/nvim-dap-ui'
   Plug 'nvim-neotest/nvim-nio'
   Plug 'theHamsta/nvim-dap-virtual-text'
-  " jPlug 'jay-babu/mason-nvim-dap.nvim' "  TODO: auto install dap servers
+  " Plug 'jay-babu/mason-nvim-dap.nvim' "  TODO: auto install dap servers
 
 
   " language specific plugins {{{5
+
+  " cpp
+  Plug 'Civitasv/cmake-tools.nvim'
+  Plug 'p00f/clangd_extensions.nvim'
+
   " golang
   Plug 'ray-x/go.nvim'
   Plug 'ray-x/guihua.lua' " required with go.nvim
@@ -168,6 +174,9 @@ if has('nvim')
   " html/css
   " Plug 'Jezda1337/nvim-html-css'  " TODO: external script completion setup
   Plug 'windwp/nvim-ts-autotag'
+
+  " terminal
+  Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
 
 else
   " lspconfig {{{5
@@ -498,7 +507,15 @@ if has('nvim')
 
 endif
 
+" akinsho/toggleterm.nvim {{{2
+autocmd TermEnter term://*toggleterm#*
+      \ tnoremap <silent><c-t> <Cmd>exe v:count1 . "ToggleTerm"<CR>
 
+" By applying the mappings this way you can pass a count to your
+" mapping to open a specific window.
+" For example: 2<C-t> will open terminal 2
+nnoremap <silent><c-t> <Cmd>exe v:count1 . "ToggleTerm"<CR>
+inoremap <silent><c-t> <Esc><Cmd>exe v:count1 . "ToggleTerm"<CR>
 
 "------------------------------------------------------------
 " END {{{1

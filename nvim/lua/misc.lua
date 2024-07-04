@@ -50,6 +50,9 @@ require("ibl").setup()
 -- HampusHauffman/block.nvim
 require("block").setup()
 
+-- akinsho/toggleterm.nvim
+require("toggleterm").setup{}
+
 --epwalsh/obsidian.nvim
 require("obsidian").setup({
 	workspaces = {
