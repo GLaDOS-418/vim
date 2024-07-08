@@ -74,7 +74,7 @@ require("mason-lspconfig").setup({
 		"lua_ls", -- lua
 		"html", -- html
 		"cssls", -- css
-		"biome", -- json
+		"jqls", -- json
 		"bashls", -- bash
 		"pylsp", -- python
 	},
@@ -138,7 +138,7 @@ require("conform").setup({
 		lua = { "stylua" },
 		rust = { "rustfmt" },
 		html = { "htmlbeautifier" },
-		json = { "clang_format" }, -- jq can be used alternatively
+		json = { "jq" }, -- clang_format can be used alternatively
 
 		-- Conform will run multiple formatters sequentially
 		python = { "isort", "black" },

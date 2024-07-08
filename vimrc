@@ -328,6 +328,8 @@ nnoremap <c-j> <c-w><c-j>
 nnoremap <c-k> <c-w><c-k>
 nnoremap <c-l> <c-w><c-l>
 nnoremap <c-h> <c-w><c-h>
+nnoremap <c-r> <c-w>r
+nnoremap <c-s-r> <c-w>R
 
 " buffer movements and delete
 nnoremap <silent> <c-f> :bn<cr>
