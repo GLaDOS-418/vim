@@ -348,6 +348,20 @@ nnoremap <silent> <c-f> :bn<cr>
 nnoremap <silent> <c-b> :bp<cr>
 nnoremap <silent> <c-q> :bd<cr>
 
+" cycle through tabs
+
+" Go to last active tab 
+augroup tabcycle
+  autocmd!
+  au TabLeave * let g:lasttab = tabpagenr()
+augroup END
+
+nnoremap <silent> T :exe "tabn ".g:lasttab<cr>
+nnoremap H :tabprevious<CR>
+nnoremap L :tabnext<CR>
+nnoremap Q :tabclose<CR>
+
+
 " move selections up or down
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
@@ -408,7 +422,7 @@ inoremap :mlink: <esc>mk:read !curl --silent --location <C-R>=shellescape(@+)<cr
 inoremap <c-f> <esc>mk:put =expand('%:t:r')<cr>v$hx`kpa
 
 " change pwd to root git dir
-nnoremap <leader>gr :call CD_Git_Root()<cr>
+nnoremap <leader>gg :call CD_Git_Root()<cr>
 
 " add wildignore filetypes from .gitignore
 nnoremap <leader>cti :call WildignoreFromGitignore()<cr>
@@ -418,6 +432,11 @@ nnoremap <silent> <leader>yy :%y+<cr>
 
 " code shopping
 nnoremap <leader>o "Oyy<cr>
+
+" git merge using vimdiff
+nnoremap <silent> <leader>gl <cmd>diffget LO<cr> " get LOCAL(TO)
+nnoremap <silent> <leader>gb <cmd>diffget BA<cr> " get BASE(common ancestor of to & from)
+nnoremap <silent> <leader>gr <cmd>diffget RE<cr> " get REMOTE(FROM)
 
 "------------------------------------------------------------
 " ENVIRONMENT PROFILES   {{{1
