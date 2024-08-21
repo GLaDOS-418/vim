@@ -119,8 +119,12 @@ set t_vb=
 " set t_RS=
 " set t_SH=
 
-" jk is escape
+" jk is escape. kj is accidental jk
 inoremap jk <ESC>
+inoremap kj <ESC>
+
+" redo
+nnoremap U <c-r>
 
 " an attempt to prevent one key press
 noremap ; :
@@ -272,7 +276,7 @@ set nogdefault    " don't set default 'g' flag during :s
 set magic         " Enable extended regexes.
 
 " turn off search highlight
-nnoremap <leader><space> :nohlsearch<CR>
+nnoremap <leader><leader> :nohlsearch<CR>
 
 " Visual mode pressing * or # searches for the current selection
 " visual selection is custom function. [see the section]
@@ -293,12 +297,14 @@ set foldnestmax=5       " max 5 nested folds
 set foldminlines=2      " fold items where folded lines is more than this
 
 if has('nvim')
-  set nofoldenable                     " Disable folding at startup.
+  set nofoldenable                    " Disable folding at startup.
   set foldmethod=expr
   set foldexpr=nvim_treesitter#foldexpr()
-else 
-  set foldenable          " enable folding
-  set foldlevelstart=5    " open most folds by default
+
+  autocmd FileType vim setlocal foldmethod=marker
+else
+  set foldenable                      " Enable folding
+  set foldlevelstart=5                " Open most folds by default
 
   augroup ft_markers
     au!
@@ -309,7 +315,7 @@ else
 endif
 
 " space open/closes folds in current block
-nnoremap <leader>a za
+nnoremap ff za
 
 "------------------------------------------------------------
 " MOVEMENTS  {{{1
@@ -328,8 +334,8 @@ nnoremap <c-j> <c-w><c-j>
 nnoremap <c-k> <c-w><c-k>
 nnoremap <c-l> <c-w><c-l>
 nnoremap <c-h> <c-w><c-h>
-nnoremap <c-r> <c-w>r
-nnoremap <c-s-r> <c-w>R
+nnoremap <leader>rl <c-w>r
+nnoremap <leader>rr <c-w>R
 
 " buffer movements and delete
 nnoremap <silent> <c-f> :bn<cr>
@@ -403,6 +409,9 @@ nnoremap <leader>cti :call WildignoreFromGitignore()<cr>
 
 " yank whole file
 nnoremap <silent> <leader>yy :%y+<cr>
+
+" code shopping
+nnoremap <leader>o "Oyy<cr>
 
 "------------------------------------------------------------
 " ENVIRONMENT PROFILES   {{{1

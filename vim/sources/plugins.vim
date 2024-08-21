@@ -48,6 +48,7 @@ if has('nvim')
   Plug 'folke/tokyonight.nvim'        " use tokyonight-night
   Plug 'marko-cerovac/material.nvim'  " use material-deep-ocean
   Plug 'catppuccin/nvim'
+  Plug 'rose-pine/neovim'
 
   " Plug 'luckasRanarison/nvim-devdocs'
   Plug 'stevearc/dressing.nvim'           " UI hooks in nvim for input
@@ -489,6 +490,7 @@ if has('nvim')
   " nnoremap <leader>sg <cmd>lua require('sg.extensions.telescope').fuzzy_search_results()<cr>
 
   " neogen {{{2
+  " generate annotation
   nnoremap <silent> <leader>n <cmd>Neogen<cr>
 
   " lsp-zero {{{2
