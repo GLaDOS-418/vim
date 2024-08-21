@@ -146,8 +146,9 @@ if has('nvim')
   " Visual {{{4
   Plug 'Bekaboo/dropbar.nvim'    " breadcrumbs
   " Plug 'SmiteshP/nvim-navic'   "  TODO: check dropbar vs nvim-navic + lsp-zero
-  " Plug 'kevinhwang91/nvim-ufo'   " TODO: set up code folding
-  " Plug 'kevinhwang91/promise-async' " required for nvim-ufo
+
+  Plug 'kevinhwang91/nvim-ufo'      " set up code folding
+  Plug 'kevinhwang91/promise-async' " required for nvim-ufo
 
   " Debugging {{{4
   Plug 'mfussenegger/nvim-dap'

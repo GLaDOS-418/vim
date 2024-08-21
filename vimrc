@@ -230,6 +230,7 @@ set scrolloff=8     " minimum line offset to present on screen while scrolling.
 " increase window size
 nnoremap + <C-W>+
 nnoremap > <C-W>>
+
 " decrease window size
 nnoremap - <C-W>-
 nnoremap < <C-W><
@@ -297,11 +298,16 @@ set foldnestmax=5       " max 5 nested folds
 set foldminlines=2      " fold items where folded lines is more than this
 
 if has('nvim')
-  set nofoldenable                    " Disable folding at startup.
-  set foldmethod=expr
-  set foldexpr=nvim_treesitter#foldexpr()
+  set foldenable                    " Disable folding at startup.
+  set foldlevel=99 " Using ufo provider need a large value, feel free to decrease the value
+  set foldlevelstart=99
 
-  autocmd FileType vim setlocal foldmethod=marker
+  augroup ft_markers
+    au!
+    autocmd FileType vim setlocal foldmethod=marker
+  augroup END
+
+ 
 else
   set foldenable                      " Enable folding
   set foldlevelstart=5                " Open most folds by default

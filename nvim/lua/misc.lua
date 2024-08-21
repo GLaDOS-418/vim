@@ -47,6 +47,14 @@ require("neogen").setup()
 -- lukas-reineke/indent-blankline.nvim
 require("ibl").setup()
 
+-- kevinhwang91/nvim-ufo
+-- performance and stability are better than `foldmethod=nvim_treesitter#foldexpr()`
+require('ufo').setup({
+    provider_selector = function(_, _, _)
+        return {'treesitter', 'indent'}
+    end
+})
+
 -- HampusHauffman/block.nvim
 require("block").setup()
 
