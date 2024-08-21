@@ -81,6 +81,7 @@ if has('nvim')
   " Telescope Extensions
   Plug 'nvim-telescope/telescope-project.nvim'
   Plug 'nvim-telescope/telescope-file-browser.nvim'
+  Plug 'nvim-telescope/telescope-symbols.nvim'
   
   Plug 'ThePrimeagen/harpoon', { 'branch': 'harpoon2' }
   Plug 'folke/todo-comments.nvim'         " add and search todo comments in repo
