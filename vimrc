@@ -65,12 +65,13 @@ set encoding=utf-8              " set vim encoding to utf-8
 set fileencoding=utf-8          " set vim encoding to utf-8
 set title                       " change the terminal's title
 set spelllang=en                " 'en_gb' sets region to British English. 'en' for all regions
+set spell
 set noswapfile                  " stops vim from creating a .swp file
 set textwidth=0                 " no automatic linefeeds in insert mode
 set nowrap                      " word wrap the text(normal/visual)
 set visualbell                  " don't beep
 set noerrorbells                " don't beep
-set colorcolumn=100             " highlight on col 100
+set colorcolumn=120             " highlight on col 120
 set backspace=indent,eol,start  " allow backspacing over everything in insert mode
 set diffopt+=vertical           " vim-fugitive vertical split on diff
 set viminfo='100,<1000,s10,h    " increases the memory limit from 50 lines to 1000 lines
@@ -173,9 +174,10 @@ set background=dark
 
 try
   if has('nvim')
-    colorscheme terafox
+    " colorscheme terafox
     " colorscheme kanagawa-dragon
     " colorscheme gruvbox8
+    colorscheme rose-pine
   else
     colorscheme gruvbox8
   endif
@@ -203,8 +205,8 @@ set autoindent
 set cindent           " better alternative to smartindent
 set expandtab         " tabs are spaces
 " set tabstop=2       " commented: r/vim/wiki/tabstop
-set shiftwidth=2      " when (un)indenting lines shift with 1unit shiftwidth
-set softtabstop=2     " number of spaces in TAB when editing
+set shiftwidth=4      " when (un)indenting lines shift with 1unit shiftwidth
+set softtabstop=4     " number of spaces in TAB when editing
 " if !has('nvim')
 "   set pastetoggle=<F6>  " toggle insert(paste) mode
 " endif

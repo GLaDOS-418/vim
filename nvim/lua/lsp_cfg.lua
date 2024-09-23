@@ -92,6 +92,8 @@ require("mason-lspconfig").setup({
 require("lspconfig").lua_ls.setup(zero.nvim_lua_ls()) -- provides vim globals in lua
 require("lspconfig").clangd.setup({
 	single_file_support = true,
+	capabilities = capabilities,
+	cmd = { "clangd", "--background-index", "--clang-tidy" },
 })
 
 -- default setup of servers
