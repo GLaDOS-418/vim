@@ -42,24 +42,24 @@ require("Comment").setup()
 require("aerial").setup()
 
 -- danymat/neogen
-require("neogen").setup()
+require("neogen").setup({ snippet_engine = "luasnip" })
 
 -- lukas-reineke/indent-blankline.nvim
 require("ibl").setup()
 
 -- kevinhwang91/nvim-ufo
 -- performance and stability are better than `foldmethod=nvim_treesitter#foldexpr()`
-require('ufo').setup({
-    provider_selector = function(_, _, _)
-        return {'treesitter', 'indent'}
-    end
+require("ufo").setup({
+	provider_selector = function(_, _, _)
+		return { "treesitter", "indent" }
+	end,
 })
 
 -- HampusHauffman/block.nvim
 require("block").setup()
 
 -- akinsho/toggleterm.nvim
-require("toggleterm").setup{}
+require("toggleterm").setup({})
 
 --epwalsh/obsidian.nvim
 require("obsidian").setup({

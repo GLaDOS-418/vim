@@ -333,10 +333,10 @@ endif
   endif
 
   " vim-rooter {{{2
-  " 'CMakeLists.txt' , 'Makefile', 'build.sh',
+  " 'CMakeLists.txt' , 'Makefile', 'build.sh', 'Earthfile'
   let g:rooter_patterns = [
-        \ '.clangd', 'Earthfile',
-        \ '*.sln', '*.csproj', 'build/env.sh', 'go.mod',
+        \ '.clangd',
+        \ '*.sln', '*.csproj', 'build/env.sh', 'go.mod', 'Jenkinsfile',
         \'.git', '.hg', '.svn', '.root'
         \]
 
