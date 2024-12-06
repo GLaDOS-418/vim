@@ -95,8 +95,19 @@ else
 endif
 
 Plug 'vim-scripts/LargeFile'            " handling largefiles in vim
-Plug 'tpope/vim-eunuch'                 " file modification commands
-Plug 'easymotion/vim-easymotion'        " better movements
+if has('nvim')
+    " https://github.com/tpope/vim-eunuch/issues/56
+    " SudoWrite doesn't work with eunuch due to a neovim limitation.
+    Plug 'lambdalisue/vim-suda'
+else
+    Plug 'tpope/vim-eunuch'                 " file modification commands
+endif
+
+" if has('nvim')
+"   Plug 'folke/flash.nvim'
+" else
+  Plug 'easymotion/vim-easymotion'        " better movements
+" endif
 Plug 'christoomey/vim-tmux-navigator'   " navigate seamlessly between vim and tmux
 
 " Architecture & Notes {{{3
@@ -464,6 +475,7 @@ if has('nvim')
   lua require('mason_cfg')
   lua require('resession_cfg')
   lua require('neotree_cfg')
+  " lua require('ufo_cfg')
   lua require('misc')
 
   " telescope {{{2
