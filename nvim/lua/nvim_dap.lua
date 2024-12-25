@@ -57,7 +57,6 @@ end
 require('dap-go').setup()
 
 
-
 -------------------------------------------------------
 -- https://github.com/theHamsta/nvim-dap-virtual-text
 -------------------------------------------------------
@@ -67,6 +66,5 @@ require("nvim-dap-virtual-text").setup {
   all_frames = true,
   show_stop_reason = true,
 }
-
 
 

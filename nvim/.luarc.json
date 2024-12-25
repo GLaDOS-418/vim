@@ -1,9 +1,35 @@
 {
-    "diagnostics.globals": [
-        "vim",
-        "provider_selector"
+  "$schema": "https://raw.githubusercontent.com/sumneko/vscode-lua/master/setting/schema.json",
+  "workspace": {
+    "library": [
+      "${3rd}/luv/library",       // Include LuaJIT and Luv library
+      "${3rd}/nvim/library"       // Include Neovim's runtime library
     ],
-    "diagnostics.disable": [
-        "undefined-global"
+    "checkThirdParty": false       // Disable prompts for third-party library updates
+  },
+  "diagnostics": {
+    "globals": [
+      "vim"                       // Global `vim` object provided by Neovim
+    ],
+    "disable": [
+      "undefined-global",         // Disable warnings for undefined globals (optional)
+      "lowercase-global"          // Ignore lowercase global usage warnings (optional)
     ]
+  },
+  "runtime": {
+    "version": "LuaJIT",          // Use LuaJIT, as Neovim is built on it
+    "path": [
+      "?.lua",
+      "?/init.lua",
+      vim.fn.stdpath("config") .. "/lua/?.lua",
+      vim.fn.stdpath("config") .. "/lua/?/init.lua"
+    ]
+  },
+  "completion": {
+    "enable": true,               // Enable autocompletion
+    "callSnippet": "Both"         // Enable call snippet generation for functions
+  },
+  "format": {
+    "enable": true                // Enable formatting support
+  }
 }

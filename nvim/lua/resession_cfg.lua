@@ -1,65 +1,51 @@
 local resession = require('resession')
 
--- Periodically save the current session
+-- Setup resession with autosave configuration
 resession.setup({
   autosave = {
     enabled = true,
-    interval = 60,
+    interval = 60, -- Save every 60 seconds
     notify = false,
   },
 })
 
--- Resession does NOTHING automagically, so we have to set up some keymaps
--- Bind `save_tab` instead of `save`
-vim.keymap.set('n', '<leader>ss', resession.save_tab)
-vim.keymap.set('n', '<leader>sl', resession.load)
-vim.keymap.set('n', '<leader>sd', resession.delete)
-
--- Automatically save a session when you exit Neovim
-vim.api.nvim_create_autocmd("VimLeavePre", {
-  callback = function()
-    -- Always save a special session named "last"
-    resession.save("last")
-  end,
-})
-
--- Create one session per directory
-vim.api.nvim_create_autocmd("VimEnter", {
-  callback = function()
-    -- Only load the session if nvim was started with no args
-    if vim.fn.argc(-1) == 0 then
-      -- Save these to a different directory, so our manual sessions don't get polluted
-      resession.load(vim.fn.getcwd(), { dir = "dirsession", silence_errors = true })
-    end
-  end,
-})
-vim.api.nvim_create_autocmd("VimLeavePre", {
-  callback = function()
-    resession.save(vim.fn.getcwd(), { dir = "dirsession", notify = false })
-  end,
-})
-
-
--- Create one session per git branch
+-- Helper function to get session name based on git branch
 local function get_session_name()
-  local name = vim.fn.getcwd()
+  local cwd = vim.fn.getcwd()
   local branch = vim.trim(vim.fn.system("git branch --show-current"))
-  if vim.v.shell_error == 0 then
-    return name .. branch
-  else
-    return name
+  if vim.v.shell_error == 0 and branch ~= "" then
+    return cwd .. "-" .. branch
   end
+  return cwd
 end
-vim.api.nvim_create_autocmd("VimEnter", {
-  callback = function()
-    -- Only load the session if nvim was started with no args
-    if vim.fn.argc(-1) == 0 then
-      resession.load(get_session_name(), { dir = "dirsession", silence_errors = true })
-    end
-  end,
-})
+
+-- Check if the current directory is home or root
+local function is_home_or_root(cwd)
+  local home = vim.fn.expand("~")
+  return cwd == home or cwd == "/"
+end
+
+-- Keymaps for manual session management
+vim.keymap.set('n', '<leader>ss', resession.save_tab, { desc = "Save tab session" })
+vim.keymap.set('n', '<leader>sl', function()
+  resession.load(get_session_name(), { dir = "dirsession" })
+end, { desc = "Load session" })
+vim.keymap.set('n', '<leader>sd', resession.delete, { desc = "Delete session" })
+
+-- Unified save logic in a single autocommand
 vim.api.nvim_create_autocmd("VimLeavePre", {
   callback = function()
-    resession.save(get_session_name(), { dir = "dirsession", notify = false })
+    local cwd = vim.fn.getcwd()
+
+    -- Skip saving if in HOME or ROOT directory
+    if is_home_or_root(cwd) then
+      return
+    end
+
+    -- Determine session name: branch-based if possible, else directory-based
+    local session_name = get_session_name()
+
+    -- Save session
+    resession.save(session_name, { dir = "dirsession", notify = false })
   end,
 })

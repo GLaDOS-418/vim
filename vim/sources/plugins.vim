@@ -74,6 +74,8 @@ if has('nvim')
   Plug 'nvim-tree/nvim-web-devicons'
   Plug 'MunifTanjim/nui.nvim'
 
+  Plug 'stevearc/oil.nvim' " edit filesystem like buffer
+
   Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' } |
     \ Plug 'nvim-lua/plenary.nvim'
 
@@ -209,6 +211,8 @@ else
   Plug 'alvan/vim-closetag'              " to close markup lang tags
 endif
 
+" Code Completion {{{3
+Plug 'github/copilot.vim'
 
 " Code View {{{3
 Plug 'lukas-reineke/indent-blankline.nvim'
