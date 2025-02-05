@@ -4,6 +4,14 @@
 "------------------------------------------------------------
 " CUSTOM FUNCTIONS {{{1
 "------------------------------------------------------------
+" cycle between colorschemes
+let g:current_colorscheme = 0
+
+function! CycleColorscheme()
+  let g:current_colorscheme = (g:current_colorscheme + 1) % len(g:colorschemes)
+  execute 'colorscheme ' . g:colorschemes[g:current_colorscheme]
+  echo "colorscheme: " . g:colorschemes[g:current_colorscheme]
+endfunction
 
 function! BuildUml() " {{{2
   if $PLANTUML != ''

@@ -197,6 +197,16 @@ hi! User4 ctermfg=white ctermbg=blue   cterm=bold guifg=white guibg=blue   gui=b
 hi! User5 ctermfg=white ctermbg=red    cterm=bold guifg=white guibg=red    gui=bold
 hi! User6 ctermfg=black ctermbg=white  cterm=bold guifg=black guibg=white  gui=bold
 
+" define colorschemes for vim and neovim
+if has('nvim')
+  let g:colorschemes = ['kanagawa-dragon', 'terafox', 'rose-pine', 'catppuccin']
+else
+  let g:colorschemes = ['gruvbox8']
+endif
+
+" cycle between colorschemes
+nnoremap <c-c> :call CycleColorscheme()<CR>
+
 "------------------------------------------------------------
 " SPACES AND TABS  {{{1
 "------------------------------------------------------------
