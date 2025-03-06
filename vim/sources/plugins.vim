@@ -97,12 +97,11 @@ else
 endif
 
 Plug 'vim-scripts/LargeFile'            " handling largefiles in vim
+Plug 'tpope/vim-eunuch'                 " file modification commands
 if has('nvim')
     " https://github.com/tpope/vim-eunuch/issues/56
     " SudoWrite doesn't work with eunuch due to a neovim limitation.
     Plug 'lambdalisue/vim-suda'
-else
-    Plug 'tpope/vim-eunuch'                 " file modification commands
 endif
 
 " if has('nvim')
@@ -465,6 +464,8 @@ endif
 
 nnoremap <leader>u :UndotreeToggle<cr>
 
+" oil {{{2 
+nnoremap <leader>oo <cmd>Oil<cr>
 
 "-----------------------------------------------------------
 " LUA CONFIGS

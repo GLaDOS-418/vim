@@ -136,6 +136,7 @@ require("conform").setup({
 	formatters_by_ft = {
 		c = { "clang_format" },
 		cpp = { "clang_format" },
+		tpp = { "clang_format" },
 		cmake = { "cmake_format" },
 		lua = { "stylua" },
 		rust = { "rustfmt" },

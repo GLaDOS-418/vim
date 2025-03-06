@@ -103,13 +103,13 @@ set nowritebackup               " don't write backup to a file
 " set backupdir=~/.cache/backup " keep backup in this folder
 
 " this augroup isn't req anymore but, still here for documentation purpose
-augroup backup
-  au!
-  " remove all old backups on vim start
-  au VimEnter * silent! execute '!rm ~/.cache/backup/*~ 2>/dev/null'
-  " make sure backup dir exists
-  au VimEnter * silent! execute '!mkdir ~/.cache/backup 2>/dev/null'
-augroup END
+" augroup backup
+"   au!
+"   " remove all old backups on vim start
+"   au VimEnter * silent! execute '!rm ~/.cache/backup/*~ 2>/dev/null'
+"   " make sure backup dir exists
+"   au VimEnter * silent! execute '!mkdir ~/.cache/backup 2>/dev/null'
+" augroup END
 
 " clearing the t_vb variable deactivates flashing
 set t_vb=
@@ -180,14 +180,13 @@ try
     colorscheme rose-pine
   else
     colorscheme gruvbox8
+
+    " gruvbox - plugin config
+    let g:gruvbox_contrast_dark='soft'
   endif
 catch
   colorscheme desert
 endtry
-
-" gruvbox - plugin config
-let g:gruvbox_contrast_dark='soft'
-
 
 " user highlight group colors
 hi! User1 ctermfg=black ctermbg=yellow cterm=bold guifg=black guibg=yellow gui=bold
@@ -426,6 +425,10 @@ endif
 " paste clipboard over the selection but, do not copy the current selection
 vnoremap <leader>p "_dP
 
+" paste a yanked line without changing the cursor position
+nnoremap <silent> p :let save_col = col('.')<CR>p:call cursor(line('.'), save_col)<CR>
+nnoremap <silent> P :let save_col = col('.')<CR>P:call cursor(line('.'), save_col)<CR>
+
 " markdown style link paste from os clipboard
 nnoremap <leader>ll mk:read !curl --silent --location <C-R>=shellescape(@+)<cr> <bar> tr --delete '\n' <bar> grep -oP "<title.*?>.*?<\/title>" <bar> head -n 1 <bar> sed -E -e "s@<title.*?>[[:space:]]*(.*?)[[:space:]]*</title>@\1@g" -e "s/[[:space:]]+/ /g"<CR>i[<esc>A]( <C-R>+ )<esc>0D`kPJ
 inoremap :mlink: <esc>mk:read !curl --silent --location <C-R>=shellescape(@+)<cr> <bar> tr --delete '\n' <bar> grep -oP "<title.*?>.*?<\/title>" <bar> head -n 1 <bar> sed -E -e "s@<title.*?>[[:space:]]*(.*?)[[:space:]]*</title>@\1@g" -e "s/[[:space:]]+/ /g"<CR>i[<esc>A]( <C-R>+ )<esc>0D`kPJ
@@ -443,7 +446,8 @@ nnoremap <leader>cti :call WildignoreFromGitignore()<cr>
 nnoremap <silent> <leader>yy :%y+<cr>
 
 " code shopping
-nnoremap <leader>o "Oyy<cr>
+nnoremap <leader>op "Op<cr>
+vnoremap <leader>oi "Oy<cr>
 
 " git merge using vimdiff
 nnoremap <silent> <leader>gl <cmd>diffget LO<cr> " get LOCAL(TO)
