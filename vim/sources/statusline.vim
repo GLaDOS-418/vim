@@ -61,23 +61,26 @@ endfunction
 function! ChangeModeColor() " {{{2
   " \v means 'very magic'
   if (mode() =~# '\v(n|no)')
-    exe 'hi! StatuslineColorGroup ctermfg=black ctermbg=yellow cterm=bold guifg=black guibg=yellow gui=bold'
+    exe 'hi! StatuslineColorGroup ctermfg=235 ctermbg=214 cterm=bold guifg=#282828 guibg=#fabd2f gui=bold' 
   elseif (mode() =~# '\v(v|V)' || get(g:currentmode,strtrans(mode())) ==# 'v·block' )
     " visual block needed special handling because it is <c-v>
-    exe 'hi! StatuslineColorGroup ctermfg=white ctermbg=darkblue cterm=bold guifg=white guibg=darkblue gui=bold'
+    exe 'hi! StatuslineColorGroup ctermfg=223 ctermbg=66 cterm=bold guifg=#ebdbb2 guibg=#458588 gui=bold'
   elseif (mode() ==# 'i')
-    exe 'hi! StatuslineColorGroup ctermfg=white ctermbg=darkred cterm=bold guifg=white guibg=darkred gui=bold'
+    exe 'hi! StatuslineColorGroup ctermfg=223 ctermbg=124 cterm=bold guifg=#ebdbb2 guibg=#cc241d gui=bold'
   elseif (mode() ==# 'c'|| mode() ==# 't')
-    exe 'hi! StatuslineColorGroup ctermfg=black ctermbg=cyan cterm=bold guifg=black guibg=cyan gui=bold'
+    exe 'hi! StatuslineColorGroup ctermfg=235 ctermbg=109 cterm=bold guifg=#282828 guibg=#83a598 gui=bold'
   elseif (mode() ==# '\v(R|Rv)')
-    exe 'hi! StatuslineColorGroup ctermfg=black ctermbg=green cterm=bold guifg=black guibg=green gui=bold'
+    exe 'hi! StatuslineColorGroup ctermfg=235 ctermbg=142 cterm=bold guifg=#282828 guibg=#b8bb26 gui=bold'
   else
-    exe 'hi! StatuslineColorGroup ctermfg=black ctermbg=white cterm=bold guifg=black guibg=white gui=bold'
+    exe 'hi! StatuslineColorGroup ctermfg=235 ctermbg=223 cterm=bold guifg=#282828 guibg=#ebdbb2 gui=bold'
   endif
   return ''
 endfunction
 
-exe 'hi! SGit ctermfg=white ctermbg=black cterm=bold guifg=white guibg=black gui=bold'
+exe 'hi! SGit ctermfg=223 ctermbg=235 cterm=bold guifg=#ebdbb2 guibg=#282828 gui=bold'
+
+" Define the custom highlight group for the filename
+hi FixedFilename ctermfg=White ctermbg=Black guifg=#FFFFFF guibg=#000000
 
 " General Format: %-0{minwid}.{maxwid}{item}
 " Higlight Groups: #<format-name>#  -> see :help hl for more group names
@@ -94,7 +97,7 @@ function! ActiveStatus() " {{{2
   let statusline.="%#SGit#%.17{GitBranchFugitive()}" " git branch[max width=17]
 
   let statusline.="%#WildMenu#"               " hl group style: dir listing
-  let statusline.="\ %f"                      " file name
+  let statusline.="%#FixedFilename#\ %f"      " file name
   let statusline.="%r"                        " read only flag
   let statusline.="\ %m"                      " modifi(ed|able) flag
   let statusline.="%="                        " switching to the right side

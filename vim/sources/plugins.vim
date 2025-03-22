@@ -45,9 +45,6 @@ if has('nvim')
 " colorschemes
   Plug 'rebelot/kanagawa.nvim'        " use kanagawa-dragon
   Plug 'EdenEast/nightfox.nvim'       " use terafox
-  Plug 'folke/tokyonight.nvim'        " use tokyonight-night
-  Plug 'marko-cerovac/material.nvim'  " use material-deep-ocean
-  Plug 'catppuccin/nvim'
   Plug 'rose-pine/neovim'
 
   " Plug 'luckasRanarison/nvim-devdocs'

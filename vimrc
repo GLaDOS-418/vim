@@ -176,8 +176,10 @@ try
   if has('nvim')
     " colorscheme terafox
     " colorscheme kanagawa-dragon
-    " colorscheme gruvbox8
     colorscheme rose-pine
+
+    " other schemes that I tried but didn't like
+    " catppuccin, tokyonight, material
   else
     colorscheme gruvbox8
 
