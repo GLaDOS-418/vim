@@ -538,6 +538,10 @@ autocmd TermEnter term://*toggleterm#*
 nnoremap <silent><c-t> <Cmd>exe v:count1 . "ToggleTerm"<CR>
 inoremap <silent><c-t> <Esc><Cmd>exe v:count1 . "ToggleTerm"<CR>
 
+" copilot.vim {{{2
+inoremap <silent><script><expr> <c-j> copilot#Accept("\<cr>")
+let g:copilot_no_tab_map = v:true
+
 "------------------------------------------------------------
 " END {{{1
 "------------------------------------------------------------

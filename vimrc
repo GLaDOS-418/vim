@@ -448,6 +448,7 @@ nnoremap <silent> <leader>yy :%y+<cr>
 " code shopping
 nnoremap <leader>op "Op<cr>
 vnoremap <leader>oi "Oy<cr>
+nnoremap <leader>oi "Oyy<cr>
 
 " git merge using vimdiff
 nnoremap <silent> <leader>gl <cmd>diffget LO<cr> " get LOCAL(TO)
