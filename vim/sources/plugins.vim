@@ -79,12 +79,12 @@ if has('nvim')
   Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' } |
     \ Plug 'nvim-lua/plenary.nvim'
 
-  
+
   " Telescope Extensions
   Plug 'nvim-telescope/telescope-project.nvim'
   Plug 'nvim-telescope/telescope-file-browser.nvim'
   Plug 'nvim-telescope/telescope-symbols.nvim'
-  
+
   Plug 'ThePrimeagen/harpoon', { 'branch': 'harpoon2' }
   Plug 'folke/todo-comments.nvim'         " add and search todo comments in repo
   " Plug 'sourcegraph/sg.nvim', { 'do': 'nvim -l build/init.lua' }
@@ -210,8 +210,11 @@ else
   Plug 'alvan/vim-closetag'              " to close markup lang tags
 endif
 
-" Code Completion {{{3
-Plug 'github/copilot.vim'
+" AI Tools {{{3
+Plug 'github/copilot.vim' " Copilot setup
+if has("nvim")
+    Plug 'olimorris/codecompanion.nvim'    " AI completion
+endif
 
 " Code View {{{3
 Plug 'lukas-reineke/indent-blankline.nvim'
@@ -464,7 +467,7 @@ endif
 
 nnoremap <leader>u :UndotreeToggle<cr>
 
-" oil {{{2 
+" oil {{{2
 nnoremap <leader>oo <cmd>Oil<cr>
 
 "-----------------------------------------------------------

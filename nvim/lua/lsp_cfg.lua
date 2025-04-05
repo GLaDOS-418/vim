@@ -117,6 +117,7 @@ require("mason-tool-installer").setup({
 
 		"clang-format",
 		"cpplint",
+                -- "cmake-format", -- not sure about the name
 
 		-- "htmlbeautifier",
 		"prettierd",
@@ -149,6 +150,7 @@ require("conform").setup({
 		-- Use a sub-list to run only the first available formatter
 		javascript = { { "prettierd", "prettier" } },
 		go = { "golines", "goimports-reviser", "gofumpt" },
+		yaml = { "yamlfmt" },
 
 		-- "*" filetype to run formatters on all filetypes.
 		-- ["*"] = { "codespell" },
@@ -265,6 +267,31 @@ local cmp_format = {
 		return kind
 	end,
 }
+
+--------------------------
+--- AI COMPLETION SETUP
+--------------------------
+
+-- read an environment variable using lua
+-- Ref: https://github.com/olimorris/codecompanion.nvim/blob/57bc5689a64a15b12251a8cd3c28dddd0d52c0cc/minimal.lua#L4
+vim.env["CODECOMPANION_TOKEN_PATH"] = vim.fn.expand("~/.config")
+
+-- olimorris/codecompanion.nvim
+-- Out of the box, the plugin supports completion with both nvim-cmp
+-- TODO: Is this enough?
+require("codecompanion").setup({
+	strategies = {
+		chat = {
+			adapter = "copilot",
+		},
+		inline = {
+			adapter = "copilot",
+		},
+	},
+	opts = {
+		log_level = "DEBUG",
+	},
+})
 
 --- ************************
 --- COMPLETION SOURCES
