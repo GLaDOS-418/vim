@@ -23,7 +23,7 @@ zero.on_attach(function(_, bufnr)
 	--- vim.keymap.set({ 'n', 'x' }, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
 	vim.keymap.set({ "n", "x" }, "<F3>", function()
 		require("conform").format({
-			timeout_ms = 500,
+			timeout_ms = 1000,
 			async = false,
 			lsp_fallback = true,
 		})

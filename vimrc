@@ -218,9 +218,18 @@ set expandtab         " tabs are spaces
 " set tabstop=2       " commented: r/vim/wiki/tabstop
 set shiftwidth=4      " when (un)indenting lines shift with 1unit shiftwidth
 set softtabstop=4     " number of spaces in TAB when editing
+
+" TODO: does it need a keybinding?
 " if !has('nvim')
 "   set pastetoggle=<F6>  " toggle insert(paste) mode
 " endif
+
+" enable list mode to see tabs and spaces
+set list
+
+" strings to use in list mode
+" set listchars=tab:▸\ ,eol:¬,lead:•,trail:·,extends:>,precedes:<,nbsp:_
+set listchars=tab:▸\ ,lead:·,trail:·,extends:>,precedes:<,nbsp:_
 
 " Remove the Windows ^M - when the encodings gets messed up
 noremap <silent> <c-m> mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm

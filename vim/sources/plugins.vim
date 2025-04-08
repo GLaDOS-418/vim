@@ -36,7 +36,9 @@ endif
 " Visual {{{3
 if has('nvim')
 
-  Plug 'Eandrju/cellular-automaton.nvim'  " fun
+
+    Plug 'dstein64/vim-startuptime'  " measure startup time
+  " Plug 'Eandrju/cellular-automaton.nvim'  " fun
   " Plug 'goolord/alpha-nvim'     " A startup page
   Plug 'folke/noice.nvim' |       " floating command mode
     " \ Plug 'rcarriga/nvim-notify'
@@ -518,13 +520,13 @@ if has('nvim')
   let g:snipMate = { 'snippet_version' : 1 }
 
   " nvim-dap {{{2
-  nnoremap <silent> <F6>  <cmd>lua require'dap'.toggle_breakpoint()<cr>
-  nnoremap <silent> <F5>  <cmd>lua require'dap'.continue()<cr>
-  nnoremap <silent> <F10> <cmd>lua require'dap'.step_over()<cr>
-  nnoremap <silent> <F11> <cmd>lua require'dap'.step_into()<cr>
-  nnoremap <silent> <F4>  <cmd>lua require'dap'.repl.open()<cr>
-  nnoremap <silent> <leader>dt <cmd>lua require('dap-go').debug_test()<cr>
-  nnoremap <silent> <leader>dtl <cmd>lua require('dap-go').debug_last_test()<cr>
+  " nnoremap <silent> <F5>  <cmd>lua require'dap'.continue()<cr>
+  " nnoremap <silent> <F9>  <cmd>lua require'dap'.toggle_breakpoint()<cr>
+  " nnoremap <silent> <F10> <cmd>lua require'dap'.step_over()<cr>
+  " nnoremap <silent> <F11> <cmd>lua require'dap'.step_into()<cr>
+  " nnoremap <silent> <F4>  <cmd>lua require'dap'.repl.open()<cr>
+  " nnoremap <silent> <leader>dt <cmd>lua require('dap-go').debug_test()<cr>
+  " nnoremap <silent> <leader>dtl <cmd>lua require('dap-go').debug_last_test()<cr>
 
 endif
 
