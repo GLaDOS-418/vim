@@ -63,6 +63,10 @@ local lsp_augroup = vim.api.nvim_create_augroup("Lsp", { clear = true })
 -- find names for servers at:
 -- https://mason-registry.dev/registry/list
 -- https://github.com/williamboman/mason-lspconfig.nvim#available-lsp-servers
+-- NOTE: don't add earthlyls. It hangs on certain Earthfile.
+--- To check what LSP server is active on current file run
+--- :lua print(vim.inspect(vim.lsp.get_active_clients()))
+
 require("mason").setup()
 require("mason-lspconfig").setup({
 	ensure_installed = {

@@ -511,6 +511,7 @@ augroup default_group
 
     autocmd BufNewFile,BufRead *.uml,*.pu,*.plantuml,.*puml set filetype=plantuml
     autocmd BufNewFile,BufRead *.md,*.mdown,*.markdown,.*mkd set filetype=markdown
+    autocmd BufNewFile,BufRead *.tpp set filetype=cpp
 
     autocmd filetype go call Golang()
     autocmd filetype cpp call Cpp()
