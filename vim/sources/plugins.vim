@@ -35,13 +35,11 @@ endif
 
 " Visual {{{3
 if has('nvim')
-
-
-    Plug 'dstein64/vim-startuptime'  " measure startup time
+  " Plug 'dstein64/vim-startuptime'  " measure startup time
   " Plug 'Eandrju/cellular-automaton.nvim'  " fun
   " Plug 'goolord/alpha-nvim'     " A startup page
   Plug 'folke/noice.nvim' |       " floating command mode
-    " \ Plug 'rcarriga/nvim-notify'
+     " \ Plug 'rcarriga/nvim-notify'
   Plug 'NvChad/nvim-colorizer.lua' " highlight colors in neovim
 
 " colorschemes
