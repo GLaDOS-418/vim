@@ -19,7 +19,13 @@ require("colorizer").setup({
 })
 
 -- -folke/todo-comments.nvim
-require("todo-comments").setup()
+-- It's common to have TODO(author) but, the plugin does not support it out of the box. Below are two workarounds:
+-- https://github.com/folke/todo-comments.nvim/pull/255#issuecomment-2049839007
+-- https://github.com/folke/todo-comments.nvim/issues/10#issuecomment-2446101986
+require("todo-comments").setup({
+	search = { pattern = [[\b(KEYWORDS)(\([^\)]*\))?:]] },
+	highlight = { pattern = [[.*<((KEYWORDS)%(\(.{-1,}\))?):]] },
+})
 
 -- folke/noice.nvim
 -- require('noice').setup()
