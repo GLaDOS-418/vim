@@ -69,11 +69,10 @@
 * when using airblade/vim-rooter: Changes Vim working directory to project root.( https://github.com/airblade/vim-rooter ) - doesn't work well with nerdtree because it unsets `autochdir` and because of that, I can't open NerdTree in the VCS root on vim start.
 
 ### TODO
-I started with vim but now, I'm using neovim... the config has bloated quite a bit and its compatibility with vim is broken. I might try at some point in the future to fix that.
+I started with vim but now, I'm using neovim... the config has bloated quite a bit and its compatibility with vim may have been broken.
+At some point, I might have to split the config for vim and neovim exclusive.
 
-neovim has tree-sitter support, native lua support, more exclusive plugins, client-server architecture, 
-better out-of-the-box config, several other optimisations (e.g. [better file change detection](https://github.com/neovim/neovim/issues/1380)
-(you can use [this workaround](https://github.com/GLaDOS-418/vim/blob/ea23b01022f56358030163471ed2f484ad9d4407/vimrc#L430) ) ),
+neovim has tree-sittersupport, native lua support, more exclusive plugins, better out-of-the-box config, several other optimisations (e.g. [better file change detection](https://github.com/neovim/neovim/issues/1380) (you can use [this workaround](https://github.com/GLaDOS-418/vim/blob/ea23b01022f56358030163471ed2f484ad9d4407/vimrc#L430) ) ),
 it has an inbuilt library 'Checkhealth' to see if everything's installed properly or not. It has more robust async support (RPC API), native lsp support and a better dap support, embedded terminal support, floating windows etc.
 a few of which eventually found its ways to vim but, apparently nvim does them better.
 

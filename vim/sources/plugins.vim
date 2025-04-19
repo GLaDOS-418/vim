@@ -272,13 +272,25 @@ call plug#end()
   highlight GitGutterDelete guifg=#ff2222 guibg=#ff2222 ctermfg=1 ctermbg=1
 
 " vim-tmux-navigator {{{2
+
+  " Already using <c-h> <c-j> <c-k> <c-l> for panes' navigation
   let g:tmux_navigator_no_mappings = 1
 
-  noremap <silent> <m-h> :<c-u>TmuxNavigateLeft<cr>
-  noremap <silent> <m-j> :<c-u>TmuxNavigateDown<cr>
-  noremap <silent> <m-k> :<c-u>TmuxNavigateUp<cr>
-  noremap <silent> <m-l> :<c-u>TmuxNavigateRight<cr>
-  noremap <silent> <m-\> :<c-u>TmuxNavigatePrevious<cr>
+  " Disable tmux navigator when zooming the Vim pane
+  " let g:tmux_navigator_disable_when_zoomed = 1
+
+  " If the tmux window is zoomed, keep it zoomed when moving from Vim to another pane
+  " NOTE: I prefer preserving zoom than disabling tmux navigator
+  let g:tmux_navigator_preserve_zoom = 1
+
+  " for some reason this plugin doesn't work with vim out of the box (only the keymappings, explicit commands work)
+  " https://github.com/christoomey/vim-tmux-navigator/issues/294#issuecomment-841582996
+  " use the other external script in tmux.conf as pointed out in the above comment
+  noremap <silent> <m-h> <cmd>TmuxNavigateLeft<cr>
+  noremap <silent> <m-j> <cmd>TmuxNavigateDown<cr>
+  noremap <silent> <m-k> <cmd>TmuxNavigateUp<cr>
+  noremap <silent> <m-l> <cmd>TmuxNavigateRight<cr>
+  noremap <silent> <m-\> <cmd>TmuxNavigatePrevious<cr>
 
 " vim-closetag - plugin config {{{2
   let g:closetag_filenames = '*.xml,*.xslt,*.htm,*.html,*.xhtml,*.phtml,*.tmpl'
@@ -526,17 +538,20 @@ if has('nvim')
   " nnoremap <silent> <leader>dt <cmd>lua require('dap-go').debug_test()<cr>
   " nnoremap <silent> <leader>dtl <cmd>lua require('dap-go').debug_last_test()<cr>
 
+    " akinsho/toggleterm.nvim {{{2
+    augroup toggleterm
+        au!
+        autocmd TermEnter term://*toggleterm#*
+              \ tnoremap <silent><c-t> <Cmd>exe v:count1 . "ToggleTerm"<CR>
+    augroup END
+
+    " By applying the mappings this way you can pass a count to your
+    " mapping to open a specific window.
+    " For example: 2<C-t> will open terminal 2
+    nnoremap <silent><c-t> <Cmd>exe v:count1 . "ToggleTerm"<CR>
+    inoremap <silent><c-t> <Esc><Cmd>exe v:count1 . "ToggleTerm"<CR>
 endif
 
-" akinsho/toggleterm.nvim {{{2
-autocmd TermEnter term://*toggleterm#*
-      \ tnoremap <silent><c-t> <Cmd>exe v:count1 . "ToggleTerm"<CR>
-
-" By applying the mappings this way you can pass a count to your
-" mapping to open a specific window.
-" For example: 2<C-t> will open terminal 2
-nnoremap <silent><c-t> <Cmd>exe v:count1 . "ToggleTerm"<CR>
-inoremap <silent><c-t> <Esc><Cmd>exe v:count1 . "ToggleTerm"<CR>
 
 " copilot.vim {{{2
 inoremap <silent><script><expr> <c-j> copilot#Accept("\<cr>")
