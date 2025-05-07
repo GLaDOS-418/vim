@@ -93,12 +93,31 @@ require("mason-lspconfig").setup({
 -----------------------------------------
 
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-require("lspconfig").lua_ls.setup(zero.nvim_lua_ls()) -- provides vim globals in lua
-require("lspconfig").clangd.setup({
+local lspconfig = require("lspconfig")
+lspconfig.lua_ls.setup(zero.nvim_lua_ls()) -- provides vim globals in lua
+lspconfig.clangd.setup({
 	single_file_support = true,
 	capabilities = capabilities,
 	cmd = { "clangd", "--background-index", "--clang-tidy" },
 })
+
+-- require("sonarlint").setup({
+-- 	server = {
+-- 		cmd = {
+-- 			"sonarlint-language-server",
+-- 			-- Ensure that sonarlint-language-server uses stdio channel
+-- 			"-stdio",
+-- 		},
+-- 	},
+-- 	filetypes = {
+-- 		-- Tested and working
+-- 		"cs",
+-- 		"dockerfile",
+-- 		"python",
+-- 		"cpp",
+-- 		"java",
+-- 	},
+-- })
 
 -- default setup of servers
 -- do I need this after mason-lspconfig/handlers ?
@@ -121,7 +140,7 @@ require("mason-tool-installer").setup({
 
 		"clang-format",
 		"cpplint",
-                -- "cmake-format", -- not sure about the name
+		-- "cmake-format", -- not sure about the name
 
 		-- "htmlbeautifier",
 		"prettierd",
@@ -157,7 +176,7 @@ require("conform").setup({
 		yaml = { "yamlfmt" },
 
 		-- "*" filetype to run formatters on all filetypes.
-		-- ["*"] = { "codespell" },
+		["*"] = { "codespell" },
 
 		-- "_" filetype to run formatters on filetypes that don't have other formatters configured.
 		["_"] = { "trim_whitespace" },
@@ -196,8 +215,8 @@ lint.linters_by_ft = {
 }
 
 -- luacheck ignore "vim" global variable error diagnostics
--- table.insert(lint.linters.luacheck.args, "--globals")
--- table.insert(lint.linters.luacheck.args, "vim")
+table.insert(lint.linters.luacheck.args, "--globals")
+table.insert(lint.linters.luacheck.args, "vim")
 
 -- automatically lint buffer after save
 vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {

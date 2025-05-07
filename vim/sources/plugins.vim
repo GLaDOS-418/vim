@@ -35,7 +35,7 @@ endif
 
 " Visual {{{3
 if has('nvim')
-  " Plug 'dstein64/vim-startuptime'  " measure startup time
+  Plug 'dstein64/vim-startuptime'  " measure startup time
   " Plug 'Eandrju/cellular-automaton.nvim'  " fun
   " Plug 'goolord/alpha-nvim'     " A startup page
   Plug 'folke/noice.nvim' |       " floating command mode
@@ -62,7 +62,12 @@ Plug 'machakann/vim-highlightedyank'    " flash highlight yanked region
 
 " Source Control {{{3
 Plug 'tpope/vim-fugitive'              " handle git commands
-Plug 'airblade/vim-gitgutter'          " see git diff in buffer
+if has('nvim')
+    Plug 'lewis6991/gitsigns.nvim'
+    Plug 'folke/trouble.nvim'          " pretty list for showing diagnostics
+else
+    Plug 'airblade/vim-gitgutter'          " see git diff in buffer
+endif
 Plug 'sindrets/diffview.nvim'
 
 " Navigation {{{3
@@ -119,10 +124,11 @@ Plug 'epwalsh/obsidian.nvim'           " access obsidian from nvim
 if has('nvim')
   " LSP Support {{{4
   Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v3.x'}   " lsp config
-  Plug 'williamboman/mason.nvim', {'do': ':MasonUpdate', 'branch': 'v2.x' } " install LSP servers
+  Plug 'williamboman/mason.nvim', {'do': ':MasonUpdate' } " install LSP servers
   Plug 'williamboman/mason-lspconfig.nvim'               " bridge between lspconfig and mason
   Plug 'WhoIsSethDaniel/mason-tool-installer.nvim'       " install third party tools
   Plug 'neovim/nvim-lspconfig'                           " lspconfig
+  Plug 'https://gitlab.com/schrieveslaach/sonarlint.nvim'
 
   " Snippets {{{4
   Plug 'L3MON4D3/LuaSnip', {'tag': 'v2.*', 'do': 'make install_jsregexp'}  " Required. completion engine
@@ -249,6 +255,7 @@ call plug#end()
 " PLUGIN SETTINGS {{{1
 "------------------------------------------------------------
 
+if !has('nvim') " neovim uses gitsigns
 " gitgutter - plugin config {{{2
   set updatetime=1000                 "wait how much time to detect file update
   let g:gitgutter_max_signs = 500     "threshold upto which gitgutter shows sign
@@ -270,6 +277,7 @@ call plug#end()
   highlight GitGutterAdd    guifg=#009900 guibg=#009900 ctermfg=2 ctermbg=2
   highlight GitGutterChange guifg=#bbbb00 guibg=#bbbb00 ctermfg=3 ctermbg=3
   highlight GitGutterDelete guifg=#ff2222 guibg=#ff2222 ctermfg=1 ctermbg=1
+endif
 
 " vim-tmux-navigator {{{2
 

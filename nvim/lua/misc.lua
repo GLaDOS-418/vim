@@ -92,3 +92,42 @@ require("oil").setup({
 	preview_split = "auto",
 })
 vim.keymap.set("n", "=", "<cmd>Oil --float<cr>", { desc = "Open parent directory" })
+
+--- lewis6991/gitsigns.nvim
+require('gitsigns').setup {
+  signs = {
+    add          = {hl = 'GitSignsAdd'   , text = '│', numhl='GitSignsAddNr'   , linehl='GitSignsAddLn'},
+    change       = {hl = 'GitSignsChange', text = '│', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
+    delete       = {hl = 'GitSignsDelete', text = '_', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
+    topdelete    = {hl = 'GitSignsDelete', text = '-', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
+    changedelete = {hl = 'GitSignsChange', text = '~', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
+  },
+  signcolumn = true,  -- Always show sign column
+  update_debounce = 1000,  -- Equivalent to 'updatetime' for signs
+  numhl = false, -- disables number highlighting
+  linehl = false,
+  current_line_blame = false,
+
+  -- Mappings
+  on_attach = function(bufnr)
+    local gs = package.loaded.gitsigns
+
+    local function map(mode, lhs, rhs, opts)
+      opts = opts or {}
+      opts.buffer = bufnr
+      vim.keymap.set(mode, lhs, rhs, opts)
+    end
+
+    -- Navigation
+    map('n', 'gn', gs.next_hunk)
+    map('n', 'gp', gs.prev_hunk)
+
+    -- Actions
+    map('n', 'ga', gs.stage_hunk)
+    map('n', 'gu', gs.undo_stage_hunk)
+    map('n', '<leader>hp', gs.preview_hunk)
+  end
+}
+
+--- folke/trouble.nvim
+require('trouble').setup({})
