@@ -29,29 +29,44 @@ zero.on_attach(function(_, bufnr)
 		})
 	end, opts)
 
+	-- Inlay hints
+	vim.lsp.inlay_hint.enable(false, { bufnr = bufnr }) -- disabled by default
+
+	vim.keymap.set("n", "<leader>lh", function()
+		vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
+	end, opts)
+
+	-- Hide inlay hints in insert mode, restore only if they were enabled
+	local inlay_hints_were_enabled = false
+
+	vim.api.nvim_create_autocmd("InsertEnter", {
+		buffer = bufnr,
+		callback = function()
+			if vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }) then
+				inlay_hints_were_enabled = true
+				vim.lsp.inlay_hint.enable(false, { bufnr = bufnr })
+			else
+				inlay_hints_were_enabled = false
+			end
+		end,
+	})
+
+	vim.api.nvim_create_autocmd("InsertLeave", {
+		buffer = bufnr,
+		callback = function()
+			if inlay_hints_were_enabled then
+				vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+			end
+		end,
+	})
+
 	----------------------------------------------------
 	--- https://github.com/p00f/clangd_extensions.nvim
 	----------------------------------------------------
-	local group = vim.api.nvim_create_augroup("clangd_no_inlay_hints_in_insert", { clear = true })
-	vim.keymap.set("n", "<leader>lh", function()
-		if require("clangd_extensions.inlay_hints").toggle_inlay_hints() then
-			vim.api.nvim_create_autocmd("InsertEnter", {
-				group = group,
-				buffer = bufnr,
-				callback = require("clangd_extensions.inlay_hints").disable_inlay_hints,
-			})
-			vim.api.nvim_create_autocmd(
-				{ "TextChanged", "InsertLeave" },
-				{ group = group, buffer = bufnr, callback = require("clangd_extensions.inlay_hints").set_inlay_hints }
-			)
-		else
-			vim.api.nvim_clear_autocmds({ group = group, buffer = bufnr })
-		end
-	end, { buffer = bufnr, desc = "[l]sp [h]ints toggle" })
-
 	vim.keymap.set("n", "<leader>k", "<cmd>ClangdSwitchSourceHeader<cr>", opts)
 	vim.keymap.set("n", "<leader>th", "<cmd>ClangdTypeHierarchy<cr>", opts)
 end)
+
 
 -- required later during formatter/linter auto setup
 local lsp_augroup = vim.api.nvim_create_augroup("Lsp", { clear = true })

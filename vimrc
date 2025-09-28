@@ -187,7 +187,7 @@ try
     let g:gruvbox_contrast_dark='soft'
   endif
 catch
-  colorscheme desert
+  colorscheme sorbet
 endtry
 
 " user highlight group colors
@@ -200,13 +200,13 @@ hi! User6 ctermfg=black ctermbg=white  cterm=bold guifg=black guibg=white  gui=b
 
 " define colorschemes for vim and neovim
 if has('nvim')
-  let g:colorschemes = ['kanagawa-dragon', 'terafox', 'rose-pine', 'catppuccin']
+  let g:colorschemes = ['kanagawa-dragon', 'kanagawa-wave', 'github_dark_colorblind', 'terafox', 'rose-pine'] " , 'catppuccin'
 else
   let g:colorschemes = ['gruvbox8']
 endif
 
 " cycle between colorschemes
-nnoremap <c-c> :call CycleColorscheme()<CR>
+nnoremap <c-space> :call CycleColorscheme()<CR>
 
 "------------------------------------------------------------
 " SPACES AND TABS  {{{1

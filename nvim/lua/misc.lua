@@ -55,11 +55,37 @@ require("ibl").setup()
 
 -- kevinhwang91/nvim-ufo
 -- performance and stability are better than `foldmethod=nvim_treesitter#foldexpr()`
+
+-- vim.api.nvim_create_autocmd('FileType', {
+--     callback = function(args)
+--         local ft = args.match
+--         if ft == 'cs' then
+--             -- C# uses "#region" / "#endregion"
+--             vim.opt_local.foldmethod = 'marker'
+--             vim.opt_local.foldmarker = '#region,#endregion'
+--         elseif ft == 'cpp' or ft == 'c' or ft == 'java' then
+--             -- C++, C, Java use "// #region" / "// #endregion"
+--             vim.opt_local.foldmethod = 'marker'
+--             vim.opt_local.foldmarker = '// #region,// #endregion'
+--         elseif ft == 'python' then
+--             -- Python custom comment region style
+--             vim.opt_local.foldmethod = 'marker'
+--             vim.opt_local.foldmarker = '# region,# endregion'
+--         else
+--             -- Default to indent or expression
+--             vim.opt_local.foldmethod = 'indent'
+--         end
+--     end
+-- })
+
 require("ufo").setup({
 	provider_selector = function(_, _, _)
-		return { "treesitter", "indent" }
-	end,
+		return { 'treesitter', 'indent' }
+        end
 })
+
+-- nicolas-martin/region-folding.nvim
+-- require('region-folding').setup({})
 
 -- HampusHauffman/block.nvim
 require("block").setup()
@@ -93,41 +119,41 @@ require("oil").setup({
 })
 vim.keymap.set("n", "=", "<cmd>Oil --float<cr>", { desc = "Open parent directory" })
 
---- lewis6991/gitsigns.nvim
-require('gitsigns').setup {
-  signs = {
-    add          = {hl = 'GitSignsAdd'   , text = '│', numhl='GitSignsAddNr'   , linehl='GitSignsAddLn'},
-    change       = {hl = 'GitSignsChange', text = '│', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
-    delete       = {hl = 'GitSignsDelete', text = '_', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
-    topdelete    = {hl = 'GitSignsDelete', text = '-', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
-    changedelete = {hl = 'GitSignsChange', text = '~', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
-  },
-  signcolumn = true,  -- Always show sign column
-  update_debounce = 1000,  -- Equivalent to 'updatetime' for signs
-  numhl = false, -- disables number highlighting
-  linehl = false,
-  current_line_blame = false,
-
-  -- Mappings
-  on_attach = function(bufnr)
-    local gs = package.loaded.gitsigns
-
-    local function map(mode, lhs, rhs, opts)
-      opts = opts or {}
-      opts.buffer = bufnr
-      vim.keymap.set(mode, lhs, rhs, opts)
-    end
-
-    -- Navigation
-    map('n', 'gn', gs.next_hunk)
-    map('n', 'gp', gs.prev_hunk)
-
-    -- Actions
-    map('n', 'ga', gs.stage_hunk)
-    map('n', 'gu', gs.undo_stage_hunk)
-    map('n', '<leader>hp', gs.preview_hunk)
-  end
-}
-
---- folke/trouble.nvim
-require('trouble').setup({})
+-- --- lewis6991/gitsigns.nvim
+-- require('gitsigns').setup {
+--   signs = {
+--     add          = {hl = 'GitSignsAdd'   , text = '│', numhl='GitSignsAddNr'   , linehl='GitSignsAddLn'},
+--     change       = {hl = 'GitSignsChange', text = '│', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
+--     delete       = {hl = 'GitSignsDelete', text = '_', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
+--     topdelete    = {hl = 'GitSignsDelete', text = '-', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
+--     changedelete = {hl = 'GitSignsChange', text = '~', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
+--   },
+--   signcolumn = true,  -- Always show sign column
+--   update_debounce = 1000,  -- Equivalent to 'updatetime' for signs
+--   numhl = false, -- disables number highlighting
+--   linehl = false,
+--   current_line_blame = false,
+--
+--   -- Mappings
+--   on_attach = function(bufnr)
+--     local gs = package.loaded.gitsigns
+--
+--     local function map(mode, lhs, rhs, opts)
+--       opts = opts or {}
+--       opts.buffer = bufnr
+--       vim.keymap.set(mode, lhs, rhs, opts)
+--     end
+--
+--     -- Navigation
+--     map('n', 'gn', gs.next_hunk)
+--     map('n', 'gp', gs.prev_hunk)
+--
+--     -- Actions
+--     map('n', 'ga', gs.stage_hunk)
+--     map('n', 'gu', gs.undo_stage_hunk)
+--     map('n', '<leader>hp', gs.preview_hunk)
+--   end
+-- }
+--
+-- --- folke/trouble.nvim
+-- require('trouble').setup({})

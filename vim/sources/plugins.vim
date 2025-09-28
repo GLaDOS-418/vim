@@ -6,6 +6,25 @@
 " PLUGIN MANAGER {{{1
 "------------------------------------------------------------
 
+" do not parse this file for any *.log, *.txt files & files larger than 1MB.
+let g:skip_plugins = 0
+let s:ext = expand('%:e')
+
+if s:ext ==# 'log' || s:ext ==# 'txt'
+  let g:skip_plugins = 1
+else
+  " get file size in bytes
+  let s:filesize = getfsize(expand('%:p'))
+  " if file is larger than 1MB (1_048_576 bytes), skip plugins
+  if s:filesize > 1048576
+    let g:skip_plugins = 1
+  endif
+endif
+
+if exists('g:skip_plugins') && g:skip_plugins
+  finish
+endif
+
 " download vim-plug and install plugins if vim started without plug.
 if empty(glob('~/.vim/autoload/plug.vim')) && executable('curl')
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
@@ -46,6 +65,7 @@ if has('nvim')
   Plug 'rebelot/kanagawa.nvim'        " use kanagawa-dragon
   Plug 'EdenEast/nightfox.nvim'       " use terafox
   Plug 'rose-pine/neovim'
+  Plug 'projekt0n/github-nvim-theme'  " use gthub_dark_colorblind
 
   " Plug 'luckasRanarison/nvim-devdocs'
   Plug 'stevearc/dressing.nvim'           " UI hooks in nvim for input
@@ -62,12 +82,12 @@ Plug 'machakann/vim-highlightedyank'    " flash highlight yanked region
 
 " Source Control {{{3
 Plug 'tpope/vim-fugitive'              " handle git commands
-if has('nvim')
-    Plug 'lewis6991/gitsigns.nvim'
-    Plug 'folke/trouble.nvim'          " pretty list for showing diagnostics
-else
+" if has('nvim')
+"     Plug 'lewis6991/gitsigns.nvim'
+"     Plug 'folke/trouble.nvim'          " pretty list for showing diagnostics
+" else
     Plug 'airblade/vim-gitgutter'          " see git diff in buffer
-endif
+" endif
 Plug 'sindrets/diffview.nvim'
 
 " Navigation {{{3
@@ -164,6 +184,7 @@ if has('nvim')
   " Plug 'SmiteshP/nvim-navic'   "  TODO: check dropbar vs nvim-navic + lsp-zero
 
   Plug 'kevinhwang91/nvim-ufo'      " set up code folding
+  Plug 'nicolas-martin/region-folding.nvim' " region folding
   Plug 'kevinhwang91/promise-async' " required for nvim-ufo
 
   " Debugging {{{4
@@ -255,7 +276,7 @@ call plug#end()
 " PLUGIN SETTINGS {{{1
 "------------------------------------------------------------
 
-if !has('nvim') " neovim uses gitsigns
+" if !has('nvim') " neovim uses gitsigns
 " gitgutter - plugin config {{{2
   set updatetime=1000                 "wait how much time to detect file update
   let g:gitgutter_max_signs = 500     "threshold upto which gitgutter shows sign
@@ -277,7 +298,7 @@ if !has('nvim') " neovim uses gitsigns
   highlight GitGutterAdd    guifg=#009900 guibg=#009900 ctermfg=2 ctermbg=2
   highlight GitGutterChange guifg=#bbbb00 guibg=#bbbb00 ctermfg=3 ctermbg=3
   highlight GitGutterDelete guifg=#ff2222 guibg=#ff2222 ctermfg=1 ctermbg=1
-endif
+" endif
 
 " vim-tmux-navigator {{{2
 
@@ -502,6 +523,7 @@ if has('nvim')
   lua require('neotree_cfg')
   " lua require('ufo_cfg')
   lua require('misc')
+  lua require('custom_code')
 
   " telescope {{{2
 

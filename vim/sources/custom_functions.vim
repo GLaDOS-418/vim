@@ -164,6 +164,38 @@ function! MouseToggle() " {{{2
     endif
 endfunction
 
+function! RotateBuffers()
+    " Get the total number of windows
+    let totalWindows = winnr('$')
+
+    " If there's only one window, no rotation needed
+    if totalWindows == 1
+        return
+    endif
+
+    " Get the buffer number of the first window
+    let firstBuf = winbufnr(1)
+
+    " Iterate over windows starting from the second window
+    for winNum in range(2, totalWindows)
+
+        " Get the buffer number for winNum
+        let bufNum = winbufnr(winNum)
+
+        " Move to the previous window
+        execute (winNum - 1) . 'wincmd w'
+
+        " Set the buffer of the previous window to the current window's buffer
+        execute 'buffer ' . bufNum
+    endfor
+
+    " Set the buffer of the last window to the buffer of the first window
+    execute totalWindows . 'wincmd w'
+    execute 'buffer ' . firstBuf
+endfunction
+
+nnoremap <C-W><C-A> :call RotateBuffers()<CR>
+
 "------------------------------------------------------------
 " END {{{1
 "------------------------------------------------------------
