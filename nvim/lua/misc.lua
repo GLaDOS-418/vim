@@ -4,6 +4,8 @@
 -- 	after_open = function(bufnr)
 -- 		vim.api.nvim_buf_set_keymap(bufnr, "n", "<Esc>", ":close<CR>", {})
 -- 	end,
+-- 	previewer_cmd = "glow",
+-- 	picker_cmd = true,
 -- })
 
 -- Bekaboo/dropbar.nvim
@@ -30,8 +32,36 @@ require("todo-comments").setup({
 -- folke/noice.nvim
 -- require('noice').setup()
 
--- https://github.com/stevearc/dressing.nvim
+-- stevearc/dressing.nvim
 require("dressing").setup()
+
+-- epwalsh/obsidian.nvim
+-- require("obsidian").setup({
+--     workspaces = {
+--         {
+--             name = "personal",
+--             path = "~/notes/personal",
+--             overrides = {
+--                 daily_notes = {
+--                     folder = "_monthly",
+--                     date_format = "%Y-%m",
+--                 },
+--                 templates = {
+--                     subdir = "Templates",
+--                     new_note = "t_new_note.md",
+--                     -- default_tags = { "daily-notes" },
+--                     -- template = nil
+--                 },
+--                 notes_subdir = "Stage I",
+--             }
+--         }
+--     },
+--     completion = {
+--         nvim_cmp = true, -- if using nvim-cmp, otherwise set to false
+--         min_chars = 2, -- set to 0 to show completion immediately
+--     },
+--     preferred_link_style = "markdown",
+-- })
 
 -- sourcegraph/sg.nvim
 -- require("sg").setup ()

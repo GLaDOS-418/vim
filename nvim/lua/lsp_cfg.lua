@@ -202,6 +202,7 @@ require("conform").setup({
 	-- 	async = false,
 	-- 	lsp_fallback = true,
 	-- },
+	stop_after_first = true,
 })
 
 -- automatically format buffer on save

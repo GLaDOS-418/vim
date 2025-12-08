@@ -9,6 +9,7 @@ let maplocalleader = ","    " localleader is for buffer local commands
 
 
 " vim-polyglot needs this variable before loading the script
+" TODO: move this to plugins.vim
 let g:polyglot_disabled = ['go', 'sensible']
 
 " required earlier for nvim-colorizer.lus
@@ -56,6 +57,7 @@ endfor
 " set nocompatible              " commented: r/vim/wiki/vimrctips
 set hidden                      " allow moving around w/ saving the buffers
 set nostartofline               " Make j/k respect the columns
+" NOTE: clipboard settings may require something like xclip/xsel/wl-clipboard
 set clipboard=unnamedplus       " to use operating system clipboard
 set clipboard+=unnamed          " to use operating system clipboard
 set history=1000                " set how many lines of history vim has to remember

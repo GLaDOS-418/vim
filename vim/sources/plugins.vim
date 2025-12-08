@@ -67,7 +67,10 @@ if has('nvim')
   Plug 'rose-pine/neovim'
   Plug 'projekt0n/github-nvim-theme'  " use gthub_dark_colorblind
 
-  " Plug 'luckasRanarison/nvim-devdocs'
+  " Plug 'eldad/nvim-devdocs'        " devdocs integration. unofficial fork of 'luckasRanarison/nvim-devdocs'
+
+  Plug 'girishji/devdocs.vim'
+
   Plug 'stevearc/dressing.nvim'           " UI hooks in nvim for input
 
   " interface for github.com/tree-sitter/tree-sitter
@@ -138,7 +141,6 @@ Plug 'scrooloose/vim-slumlord'         " inline previews for plantuml activity d
 Plug 'aklt/plantuml-syntax'            " plantuml syntax highlight
 Plug 'richardbizik/nvim-toc'           " create TOC for markdown files
 
-" TODO: setup obsidian.vim
 Plug 'epwalsh/obsidian.nvim'           " access obsidian from nvim
 
 if has('nvim')
@@ -542,6 +544,10 @@ if has('nvim')
   " nvim-devdocs{{{2
   " nnoremap <leader>fd <cmd>DevdocsOpenFloat<cr>
 
+
+  if exists('g:loaded_devdocs')
+    nnoremap <leader>fd :DevdocsFind<CR>
+  endif
 
   " todo-comments {{{2
   nnoremap <silent> <leader>td <cmd>TodoTelescope<cr>

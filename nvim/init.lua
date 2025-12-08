@@ -29,3 +29,24 @@ vim.api.nvim_create_autocmd('BufRead', {
     })
   end,
 })
+
+-- WSL clipboard integration
+-- Requires win32yank.exe: install via `choco install win32yank` in powershell
+local is_wsl = vim.fn.has("wsl") == 1
+local win32yank_path = "/mnt/c/ProgramData/chocolatey/lib/win32yank/tools/win32yank.exe"
+local has_win32yank = vim.fn.filereadable(win32yank_path) == 1
+if is_wsl and has_win32yank then
+  vim.g.clipboard = {
+    name = "WslClipboard",
+    copy = {
+      ["+"] = "/mnt/c/ProgramData/chocolatey/lib/win32yank/tools/win32yank.exe -i --crlf",
+      ["*"] = "/mnt/c/ProgramData/chocolatey/lib/win32yank/tools/win32yank.exe -i --crlf",
+    },
+    paste = {
+      ["+"] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+      ["*"] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+    },
+    cache_enabled = 0,
+  }
+end
+
