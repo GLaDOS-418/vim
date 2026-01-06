@@ -392,9 +392,10 @@ endif
   " vim-rooter {{{2
   " 'CMakeLists.txt' , 'Makefile', 'build.sh', 'Earthfile'
   let g:rooter_patterns = [
-        \ '.clangd',
-        \ '*.sln', '*.csproj', 'build/env.sh', 'go.mod', 'Jenkinsfile',
-        \'.git', '.hg', '.svn', '.root'
+        \ '.clangd'
+        \,'*.sln', '*.csproj', 'build/env.sh', 'go.mod', 'Jenkinsfile'
+        \,'.git', '.hg', '.svn', '.root'
+        \,'package.json', 'package-lock.json', 'yarn.lock', 'pnpm-lock.yaml',
         \]
 
   let g:rooter_silent_chdir = 1
