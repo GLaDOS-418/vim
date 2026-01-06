@@ -108,9 +108,8 @@ require("mason-lspconfig").setup({
 -----------------------------------------
 
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-local lspconfig = require("lspconfig")
-lspconfig.lua_ls.setup(zero.nvim_lua_ls()) -- provides vim globals in lua
-lspconfig.clangd.setup({
+vim.lsp.config('lua_ls', zero.nvim_lua_ls()) -- provides vim globals in lua
+vim.lsp.config('clangd', {
 	single_file_support = true,
 	capabilities = capabilities,
 	cmd = { "clangd", "--background-index", "--clang-tidy" },
