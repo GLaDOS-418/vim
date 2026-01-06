@@ -112,7 +112,7 @@ require("mason-lspconfig").setup({
 vim.lsp.config('clangd', {
 	single_file_support = true,
 	capabilities = capabilities,
-	cmd = { "clangd", "--background-index", "--clang-tidy" },
+	cmd = { "clangd", "--background-index", "--clang-tidy" , "--completion-style=detailed", "--header-insertion=iwyu"},
 })
 
 -- NOTE: disabled because mason installed stylua requires a GLIBC version that's ABI-incompatible with my system.
