@@ -107,12 +107,51 @@ require("mason-lspconfig").setup({
 ---  SETUP LSP SERVERS
 -----------------------------------------
 
--- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-vim.lsp.config('lua_ls', zero.nvim_lua_ls()) -- provides vim globals in lua
+-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
+
 vim.lsp.config('clangd', {
 	single_file_support = true,
 	capabilities = capabilities,
 	cmd = { "clangd", "--background-index", "--clang-tidy" },
+})
+
+-- NOTE: disabled because mason installed stylua requires a GLIBC version that's ABI-incompatible with my system.
+-- vim.lsp.enable('stylua')
+
+vim.lsp.config('lua_ls', {
+  on_init = function(client)
+    if client.workspace_folders then
+      local path = client.workspace_folders[1].name
+      if
+        path ~= vim.fn.stdpath('config')
+        and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc'))
+      then
+        return
+      end
+    end
+
+    client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+      runtime = {
+        -- Tell the language server which version of Lua you're using (LuaJIT since it's Neovim)
+        version = 'LuaJIT',
+        -- Tell the language server how to find Lua modules same way as Neovim (see `:h lua-module-load`)
+        path = {
+          'lua/?.lua',
+          'lua/?/init.lua',
+        },
+      },
+      -- Make the server aware of Neovim runtime files
+      workspace = {
+        checkThirdParty = false,
+        library = {
+          vim.env.VIMRUNTIME
+        }
+      }
+    })
+  end,
+  settings = {
+    Lua = {}
+  }
 })
 
 -- require("sonarlint").setup({
@@ -142,7 +181,7 @@ vim.lsp.config('clangd', {
 -----------------------------------------
 require("mason-tool-installer").setup({
 	ensure_installed = {
-		"stylua",
+		-- "stylua",
 		-- "luacheck",
 
 		"golines",
@@ -176,7 +215,7 @@ require("conform").setup({
 		cpp = { "clang_format" },
 		tpp = { "clang_format" },
 		cmake = { "cmake_format" },
-		lua = { "stylua" },
+		-- lua = { "stylua" },
 		rust = { "rustfmt" },
 		html = { "htmlbeautifier" },
 		json = { "jq" }, -- clang_format can be used alternatively
