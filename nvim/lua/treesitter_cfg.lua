@@ -1,8 +1,9 @@
-require("nvim-treesitter.configs").setup({
+require("nvim-treesitter").setup({
 	-- A list of parser names, or "all" which must be installed.
 	ensure_installed = {
 		"bash",
 		"c",
+		"c_sharp",
 		"cmake",
                 "comment",
 		"cpp",

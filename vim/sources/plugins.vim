@@ -139,7 +139,8 @@ Plug 'christoomey/vim-tmux-navigator'   " navigate seamlessly between vim and tm
 " Architecture & Notes {{{3
 Plug 'scrooloose/vim-slumlord'         " inline previews for plantuml activity dia
 Plug 'aklt/plantuml-syntax'            " plantuml syntax highlight
-Plug 'richardbizik/nvim-toc'           " create TOC for markdown files
+" Plug 'richardbizik/nvim-toc'           " create TOC for markdown files
+Plug 'GLaDOS-418/nvim-toc'           " create TOC for markdown files
 
 Plug 'epwalsh/obsidian.nvim'           " access obsidian from nvim
 
