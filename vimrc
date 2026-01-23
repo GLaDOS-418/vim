@@ -28,10 +28,10 @@ endif
 
 if has('win32') ||  has('win64')
   let g:sep = '\'
-  let g:vim_home = fnamemodify(expand("$MYVIMRC"), ":p:h") . sep . 'vimfiles'
+  let g:vim_home = fnamemodify(expand("$MYVIMRC"), ":p:h") . g:sep . 'vimfiles'
 else
   let g:sep = '/'
-  let g:vim_home = fnamemodify(expand("$MYVIMRC"), ":p:h") . sep . '.vim'
+  let g:vim_home = fnamemodify(expand("$MYVIMRC"), ":p:h") . g:sep . '.vim'
 endif
 
 function! SourceFileName(fsep, ...)
@@ -41,7 +41,7 @@ endfunction
 let source_file_names=['plugins', 'statusline', 'abbreviations', 'custom_functions', 'environment']
 
 for file_name in  source_file_names
-  exe 'source ' . SourceFileName(sep, vim_home, 'sources', file_name . '.vim')
+  exe 'source ' . SourceFileName(g:sep, g:vim_home, 'sources', file_name . '.vim')
 endfor
 
 " " to maintain interoperability b/w diff OS, below can't be used
@@ -413,10 +413,10 @@ nnoremap N Nzzzv
 " edit/load vimrc
 nnoremap <silent> <leader>ev :e $MYVIMRC<CR>
 
-if has('vim')
-  nnoremap <silent> <leader>sv :source $MYVIMRC<CR>
-else
+if has('nvim')
   nnoremap <silent> <leader>sv :source $XDG_CONFIG_HOME/nvim/init.lua<CR>
+else
+  nnoremap <silent> <leader>sv :source $MYVIMRC<CR>
 endif
 
 " save session.
@@ -430,7 +430,7 @@ vnoremap <silent> <leader>ts :s/\s\+$//ge<cr>
 " nnoremap <leader>ga :!git add %<CR>
 
 " paste in insert mode without auto-formatting
-if has('vim')
+if !has('nvim')
   inoremap <c-p> <esc><cmd>set paste<cr>p<cr><cmd>set nopaste<cr>a<cr>
   " nnoremap <leader>p <esc><cmd>set paste<cr>p<cr><cmd>set nopaste<cr>a<cr>
 endif

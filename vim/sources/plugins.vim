@@ -101,7 +101,7 @@ if has('nvim')
 
   Plug 'stevearc/oil.nvim' " edit filesystem like buffer
 
-  Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' } |
+  Plug 'nvim-telescope/telescope.nvim' |
     \ Plug 'nvim-lua/plenary.nvim'
 
 
@@ -511,6 +511,19 @@ nnoremap <leader>u :UndotreeToggle<cr>
 
 " oil {{{2
 nnoremap <leader>oo <cmd>Oil<cr>
+
+" fugitive {{{2
+
+" Finds the first git commit that introduced the lines in the current visual selection
+function! s:GitIntroCommitRange(first, last) abort
+  execute 'Git log --reverse -n 1 --oneline -L '
+        \ . a:first . ',' . a:last . ':%'
+endfunction
+" Normal: current line
+nnoremap <silent> <leader>gi :<C-u>call <SID>GitIntroCommitRange(line('.'), line('.'))<CR>
+
+" Visual: selected line range (linewise/charwise/blockwise all OK; we use line numbers)
+xnoremap <silent> <leader>gi :<C-u>call <SID>GitIntroCommitRange(line("'<"), line("'>"))<CR>
 
 "-----------------------------------------------------------
 " LUA CONFIGS
