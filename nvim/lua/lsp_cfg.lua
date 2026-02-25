@@ -397,6 +397,7 @@ local default_cmp_sources = cmp.config.sources({
 	{ name = "nvim_lsp_signature_help" }, -- hrsh7th/cmp-nvim-lsp-signature-help
 	{ name = "calc" }, -- hrsh7th/cmp-calc
 	{ name = "git" }, -- petertriho/cmp-git
+	{ name = "codecompanion" },
 	{
 		name = "look",
 		keyword_length = 2,

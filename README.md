@@ -64,6 +64,7 @@
 
 ### WIP
 * [GitHub - jmbuhr/otter.nvim: Just ask an otter! 🦦]( https://github.com/jmbuhr/otter.nvim )
+* [Neorg · GitHub]( https://github.com/nvim-neorg )
 
 ### KNOWN ISSUES
 * when using airblade/vim-rooter: Changes Vim working directory to project root.( https://github.com/airblade/vim-rooter ) - doesn't work well with nerdtree because it unsets `autochdir` and because of that, I can't open NerdTree in the VCS root on vim start.
