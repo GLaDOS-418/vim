@@ -109,7 +109,6 @@ Plug 'hrsh7th/cmp-nvim-lua'                " nvim-cmp source for neovim Lua API
 Plug 'hrsh7th/cmp-emoji'                   " nvim-cmp source for emojis
 Plug 'hrsh7th/cmp-path'                    " nvim-cmp source for filesystem paths
 Plug 'hrsh7th/cmp-calc'                    " evaluate mathematical expressions
-Plug 'hrsh7th/cmp-nvim-lsp-signature-help' " displaying function signatures with the current parameter emphasized
 Plug 'petertriho/cmp-git'                  " git source for nvim-cmp
 Plug 'octaltree/cmp-look'                  " source for linux 'look' tool
 Plug 'saadparwaiz1/cmp_luasnip'
