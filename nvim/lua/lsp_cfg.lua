@@ -247,7 +247,7 @@ require("mason-tool-installer").setup({
 		"gotests",
 		"golangci-lint",
 
-		"clang-format",
+		--"clang-format", " there's some issue during mason's installation and it was getting stuck.
 		"cpplint",
 		-- "cmake-format", -- not sure about the name
 
@@ -385,7 +385,6 @@ local cmp_format = {
 				path = "[PATH]",
 				luasnip = "[SNIP]",
 				calc = "[CALC]",
-				nvim_lsp_signature_help = "[SIG]",
 				look = "[LOOK]",
 			},
 		})(entry, item)
@@ -511,7 +510,6 @@ local default_cmp_sources = cmp.config.sources({
 	{ name = "emoji" }, -- hrsh7th/cmp-emoji
 	{ name = "path" }, -- hrsh7th/cmp-path
 	{ name = "luasnip" }, -- saadparwaiz1/cmp_luasnip
-	{ name = "nvim_lsp_signature_help" }, -- hrsh7th/cmp-nvim-lsp-signature-help
 	{ name = "calc" }, -- hrsh7th/cmp-calc
 	{ name = "git" }, -- petertriho/cmp-git
 	{ name = "codecompanion" },
