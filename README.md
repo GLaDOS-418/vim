@@ -69,13 +69,27 @@
 ### KNOWN ISSUES
 * when using airblade/vim-rooter: Changes Vim working directory to project root.( https://github.com/airblade/vim-rooter ) - doesn't work well with nerdtree because it unsets `autochdir` and because of that, I can't open NerdTree in the VCS root on vim start.
 
-### TODO
-I started with vim but now, I'm using neovim... the config has bloated quite a bit and its compatibility with vim may have been broken.
-At some point, I might have to split the config for vim and neovim exclusive.
+### ~~TODO~~ Migration Notes
 
-neovim has tree-sittersupport, native lua support, more exclusive plugins, better out-of-the-box config, several other optimisations (e.g. [better file change detection](https://github.com/neovim/neovim/issues/1380) (you can use [this workaround](https://github.com/GLaDOS-418/vim/blob/ea23b01022f56358030163471ed2f484ad9d4407/vimrc#L430) ) ),
-it has an inbuilt library 'Checkhealth' to see if everything's installed properly or not. It has more robust async support (RPC API), native lsp support and a better dap support, embedded terminal support, floating windows etc.
-a few of which eventually found its ways to vim but, apparently nvim does them better.
+~~I started with vim but now, I'm using neovim... the config has bloated quite a bit and its compatibility with vim may have been broken. At some point, I might have to split the config for vim and neovim exclusive.~~
 
-You can embed nvim into other editors (e.g. [vscode-neovim](https://github.com/vscode-neovim/vscode-neovim), [firenvim](https://github.com/glacambre/firenvim) ),
-no more half-baked vim emulations and more work is being done on this and more.
+This part is mostly done now. I already ended up splitting plugin stuff for vim and nvim, while keeping the common settings shared.
+So this is not really a TODO anymore, more like the reasons why nvim support got added here in the first place.
+
+As for reasons (excuses) for migration away from vim towards nvim:
+
+* nvim has tree-sitter support through [`nvim-treesitter`](https://github.com/nvim-treesitter/nvim-treesitter).
+* ~~native lua support~~. Nvim has built-in [Lua support](https://neovim.io/doc/user/lua.txt.html). Latest Vim also has [a Lua interface](https://vimhelp.org/if_lua.txt.html) when built with `+lua` (REF: [regular Vim has lua?! | r/neovim](https://www.reddit.com/r/neovim/comments/11gkxgj/regular_vim_has_lua/))
+* nvim has [`:checkhealth`](https://neovim.io/doc/user/pi_health.html), which is useful when plugins or external tools stop working.
+* ~~more robust async support~~. Nvim has a proper [API/RPC surface](https://neovim.io/doc/user/api/). Latest Vim also has [jobs, channels, and `lsp` / `dap` channel modes](https://vimhelp.org/channel.txt.html).
+* nvim has a native [LSP client](https://neovim.io/doc/user/lsp.html) in core.
+* dap support is better for me in practice. Vim now has [DAP protocol plumbing in channels](https://vimhelp.org/channel.txt.html), but that is not the same as a builtin debug client. See the [DAP spec](https://microsoft.github.io/debug-adapter-protocol/).
+* ~~embedded terminal support~~. Nvim has a [terminal](https://neovim.io/doc/user/terminal.html). Latest Vim also has [terminal windows](https://vimhelp.org/terminal.txt.html).
+* ~~floating windows / popup kind of UI~~. Latest Vim also has [popup windows](https://vimhelp.org/popup.txt.html).
+* file change detection was another reason i kept leaning nvim way back then; see [this old nvim issue](https://github.com/neovim/neovim/issues/1380). In Vim I had to use [workarounds like this](https://github.com/GLaDOS-418/vim/blob/ea23b01022f56358030163471ed2f484ad9d4407/vimrc#L430).
+* nvim can be embedded into other editors through things like [vscode-neovim](https://github.com/vscode-neovim/vscode-neovim) and [firenvim](https://github.com/glacambre/firenvim).
+* Lua plugins and user config fit nvim more naturally because [Lua is part of the runtime model](https://neovim.io/doc/user/lua.txt.html).
+* Biggest of all, vim could have only vim plugins, nvim can have both vim and nvim plugins. (although i haven't tried with the optional lua support in vim)
+
+A few of these did eventually find its ways to vim too. but for this config, nvim still seems better imo.
+but, given i spent too much time configuring vim, i'm still keeping the vim config around (sunk cost maybe?).

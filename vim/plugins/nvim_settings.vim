@@ -73,8 +73,10 @@ nnoremap <silent> <leader>td <cmd>TodoTelescope<cr>
 "   - ~/.vim/plugged/nvim-treesitter/README.md
 nnoremap <silent> <leader>n <cmd>lua require('neogen_cfg').run()<cr>
 
-" lsp-zero {{{2
-nnoremap <silent> <leader>lf <cmd>LspZeroFormat<cr>
+" lsp {{{2
+" keep the formatting alias, but point it directly at conform now that
+" native vim.lsp owns the attach/config flow instead of lsp-zero.
+nnoremap <silent> <leader>lf <cmd>lua require('conform').format({ timeout_ms = 1000, async = false, lsp_fallback = true })<cr>
 
 " snippets {{{2
 let g:snipMate = { 'snippet_version' : 1 }

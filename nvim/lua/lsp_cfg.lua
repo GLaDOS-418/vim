@@ -2,9 +2,36 @@
 ---  LSP CONFIG
 -----------------------------------------
 
-local zero = require("lsp-zero")
+-- Native LSP completion capabilities.
+-- Why this exists:
+--   - nvim-cmp advertises extra completion features to language servers.
+--   - without this, LSP completion still works, but it is less capable.
+-- ref:
+--   - https://github.com/hrsh7th/cmp-nvim-lsp
+local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-zero.on_attach(function(_, bufnr)
+-- Apply shared defaults to every server, then override per-server below.
+-- This keeps the common path small now that lsp-zero is gone.
+vim.lsp.config("*", {
+	capabilities = capabilities,
+})
+
+-- Shared formatting helper for both the LSP attach map and the global alias.
+-- Why conform instead of raw vim.lsp.buf.format():
+--   - some filetypes already use formatter chaining/fallback rules here.
+--   - this keeps <F3> and <leader>lf aligned.
+local format_with_conform = function()
+	require("conform").format({
+		timeout_ms = 1000,
+		async = false,
+		lsp_fallback = true,
+	})
+end
+
+-- Buffer-local LSP maps.
+-- Called from the native `LspAttach` event so mappings only exist when a
+-- language server is actually attached to the buffer.
+local attach_lsp_keymaps = function(bufnr)
 	local opts = { buffer = bufnr, remap = false }
 
 	vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", opts)
@@ -21,15 +48,11 @@ zero.on_attach(function(_, bufnr)
 	vim.keymap.set("i", "<C-h>", "<cmd>lua vim.lsp.buf.signature_help()<cr>", opts)
 	vim.keymap.set("n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
 	--- vim.keymap.set({ 'n', 'x' }, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
-	vim.keymap.set({ "n", "x" }, "<F3>", function()
-		require("conform").format({
-			timeout_ms = 1000,
-			async = false,
-			lsp_fallback = true,
-		})
-	end, opts)
+	vim.keymap.set({ "n", "x" }, "<F3>", format_with_conform, opts)
 
 	-- Inlay hints
+	-- Why disabled by default:
+	--   - they are useful on demand, but too noisy as an always-on default.
 	vim.lsp.inlay_hint.enable(false, { bufnr = bufnr }) -- disabled by default
 
 	vim.keymap.set("n", "<leader>lh", function()
@@ -65,19 +88,38 @@ zero.on_attach(function(_, bufnr)
 	----------------------------------------------------
 	vim.keymap.set("n", "<leader>k", "<cmd>ClangdSwitchSourceHeader<cr>", opts)
 	vim.keymap.set("n", "<leader>th", "<cmd>ClangdTypeHierarchy<cr>", opts)
-end)
+end
 
 
 -- required later during formatter/linter auto setup
 local lsp_augroup = vim.api.nvim_create_augroup("Lsp", { clear = true })
 
+-- Native attach hook replaces the old lsp-zero on_attach callback.
+-- How to add something new:
+--   - add new buffer-local LSP mappings inside `attach_lsp_keymaps()`
+--   - add new attach-time behavior in this autocmd callback if it truly depends
+--     on an active client
+vim.api.nvim_create_autocmd("LspAttach", {
+	group = lsp_augroup,
+	callback = function(args)
+		attach_lsp_keymaps(args.buf)
+	end,
+})
+
 -----------------------------------------
 ---  INSTALL  LSP SERVERS
 -----------------------------------------
 
+-- Install and auto-enable LSP servers through Mason.
 -- find names for servers at:
 -- https://mason-registry.dev/registry/list
 -- https://github.com/williamboman/mason-lspconfig.nvim#available-lsp-servers
+-- How to add a new server:
+--   1. add its lspconfig name to `ensure_installed`
+--   2. if it needs custom behavior, add a `vim.lsp.config("<name>", {...})`
+--      block in the setup section below
+--   3. if it should stay installed but NOT auto-start, add it to
+--      `automatic_enable.exclude`
 -- NOTE: don't add earthlyls. It hangs on certain Earthfile.
 --- To check what LSP server is active on current file run
 --- :lua print(vim.inspect(vim.lsp.get_active_clients()))
@@ -97,9 +139,12 @@ require("mason-lspconfig").setup({
 		"bashls", -- bash
 		"pylsp", -- python
 	},
-	handlers = {
-		zero.default_setup,
-		jdtls = zero.noop,
+	automatic_enable = {
+		-- Java usually wants a dedicated jdtls flow, so keep Mason installs but
+		-- do not auto-enable it from the generic path.
+		exclude = {
+			"jdtls",
+		},
 	},
 })
 
@@ -108,50 +153,59 @@ require("mason-lspconfig").setup({
 -----------------------------------------
 
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
+-- How to add a custom server config:
+--   - use `vim.lsp.config("<server>", {...})`
+--   - only add a block when the default Mason/native config is not enough
+--   - keep shared defaults in `vim.lsp.config("*", ...)` above
 
-vim.lsp.config('clangd', {
+-- clangd: extra flags for background indexing, clang-tidy, and richer header
+-- completion behavior.
+vim.lsp.config("clangd", {
 	single_file_support = true,
 	capabilities = capabilities,
-	cmd = { "clangd", "--background-index", "--clang-tidy" , "--completion-style=detailed", "--header-insertion=iwyu"},
+	cmd = { "clangd", "--background-index", "--clang-tidy", "--completion-style=detailed", "--header-insertion=iwyu" },
 })
 
 -- NOTE: disabled because mason installed stylua requires a GLIBC version that's ABI-incompatible with my system.
 -- vim.lsp.enable('stylua')
 
-vim.lsp.config('lua_ls', {
-  on_init = function(client)
-    if client.workspace_folders then
-      local path = client.workspace_folders[1].name
-      if
-        path ~= vim.fn.stdpath('config')
-        and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc'))
-      then
-        return
-      end
-    end
+-- lua_ls: teach the server about Neovim's runtime and avoid stomping over
+-- project-local `.luarc.json` / `.luarc.jsonc` files when they already exist.
+vim.lsp.config("lua_ls", {
+	capabilities = capabilities,
+	on_init = function(client)
+		if client.workspace_folders then
+			local path = client.workspace_folders[1].name
+			if
+				path ~= vim.fn.stdpath("config")
+				and (vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc"))
+			then
+				return
+			end
+		end
 
-    client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
-      runtime = {
-        -- Tell the language server which version of Lua you're using (LuaJIT since it's Neovim)
-        version = 'LuaJIT',
-        -- Tell the language server how to find Lua modules same way as Neovim (see `:h lua-module-load`)
-        path = {
-          'lua/?.lua',
-          'lua/?/init.lua',
-        },
-      },
-      -- Make the server aware of Neovim runtime files
-      workspace = {
-        checkThirdParty = false,
-        library = {
-          vim.env.VIMRUNTIME
-        }
-      }
-    })
-  end,
-  settings = {
-    Lua = {}
-  }
+		client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
+			runtime = {
+				-- Tell the language server which version of Lua you're using (LuaJIT since it's Neovim)
+				version = "LuaJIT",
+				-- Tell the language server how to find Lua modules same way as Neovim (see `:h lua-module-load`)
+				path = {
+					"lua/?.lua",
+					"lua/?/init.lua",
+				},
+			},
+			-- Make the server aware of Neovim runtime files
+			workspace = {
+				checkThirdParty = false,
+				library = {
+					vim.env.VIMRUNTIME,
+				},
+			},
+		})
+	end,
+	settings = {
+		Lua = {},
+	},
 })
 
 -- require("sonarlint").setup({
@@ -172,13 +226,15 @@ vim.lsp.config('lua_ls', {
 -- 	},
 -- })
 
--- default setup of servers
--- do I need this after mason-lspconfig/handlers ?
--- lsp_zero.setup_servers({'rust_analyzer', 'gopls'})
-
 -----------------------------------------
 ---  INSTALL FORMATTERS & LINTERS
 -----------------------------------------
+
+-- Non-LSP tools managed through Mason.
+-- How to add something new:
+--   - add the Mason package name to `ensure_installed`
+--   - if it formats code, wire it into conform below
+--   - if it lints code, wire it into nvim-lint below
 require("mason-tool-installer").setup({
 	ensure_installed = {
 		-- "stylua",
@@ -191,7 +247,7 @@ require("mason-tool-installer").setup({
 		"gotests",
 		"golangci-lint",
 
-		"clang-format",
+		--"clang-format", " there's some issue during mason's installation and it was getting stuck.
 		"cpplint",
 		-- "cmake-format", -- not sure about the name
 
@@ -283,11 +339,20 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
 -----------------------------------------
 ---  DIAGNOSTICS
 -----------------------------------------
-zero.set_sign_icons({
-	error = "✘",
-	warn = "▲",
-	hint = "H",
-	info = "»",
+
+-- Diagnostic signs.
+-- Why configure this explicitly:
+--   - native vim.diagnostic replaced lsp-zero's sign helper
+--   - keeping the icons here preserves the old visual language
+vim.diagnostic.config({
+	signs = {
+		text = {
+			[vim.diagnostic.severity.ERROR] = "✘",
+			[vim.diagnostic.severity.WARN] = "▲",
+			[vim.diagnostic.severity.HINT] = "H",
+			[vim.diagnostic.severity.INFO] = "»",
+		},
+	},
 })
 
 -----------------------------------------
@@ -299,8 +364,12 @@ zero.set_sign_icons({
 --- ************************
 
 local cmp = require("cmp")
-local cmp_action = require("lsp-zero").cmp_action()
--- local cmp_format = require("lsp-zero").cmp_format({
+local luasnip = require("luasnip")
+
+-- Completion popup formatting.
+-- What this does:
+--   - keeps symbol/icon, label, and source aligned in readable columns
+--   - trims noisy signature text from the right-hand menu
 local cmp_format = {
 	fields = { "kind", "abbr", "menu" },
 	format = function(entry, item)
@@ -316,7 +385,6 @@ local cmp_format = {
 				path = "[PATH]",
 				luasnip = "[SNIP]",
 				calc = "[CALC]",
-				nvim_lsp_signature_help = "[SIG]",
 				look = "[LOOK]",
 			},
 		})(entry, item)
@@ -416,6 +484,9 @@ end, { desc = 'Switch Copilot model' })
 --- COMPLETION SOURCES
 --- ************************
 
+-- Skip some heavier completion sources for very large files.
+-- Why:
+--   - completion latency matters more than extra sources once files get big
 local bufIsBig = function(bufnr)
 	local max_filesize = 100 * 1024 -- 100 KB
 	local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(bufnr))
@@ -428,6 +499,9 @@ end
 
 -- default sources for all buffers
 -- https://github.com/hrsh7th/nvim-cmp/wiki/List-of-sources
+-- How to add a new source:
+--   - add it to this table
+--   - give it a menu label in `cmp_format` above if you want it to show cleanly
 local default_cmp_sources = cmp.config.sources({
 
 	{ name = "nvim_lsp" },
@@ -436,7 +510,6 @@ local default_cmp_sources = cmp.config.sources({
 	{ name = "emoji" }, -- hrsh7th/cmp-emoji
 	{ name = "path" }, -- hrsh7th/cmp-path
 	{ name = "luasnip" }, -- saadparwaiz1/cmp_luasnip
-	{ name = "nvim_lsp_signature_help" }, -- hrsh7th/cmp-nvim-lsp-signature-help
 	{ name = "calc" }, -- hrsh7th/cmp-calc
 	{ name = "git" }, -- petertriho/cmp-git
 	{ name = "codecompanion" },
@@ -480,6 +553,9 @@ require("luasnip.loaders.from_vscode").lazy_load()
 require("luasnip.loaders.from_vscode").lazy_load({ paths = { vim.fn.stdpath("config") .. "/snips" } })
 
 -- friendly-snippets - extend snippet groups
+-- How to add a new snippet subgroup:
+--   - register it in `nvim/snips/package.json`
+--   - then extend the base filetype here, like cpp -> {"cppdoc", "gtest"}
 require("luasnip").filetype_extend("c", { "cdoc" })
 -- gtest stays a snippet group layered onto cpp; it is not a separate editor filetype.
 require("luasnip").filetype_extend("cpp", { "cppdoc", "gtest" })
@@ -491,8 +567,28 @@ require("luasnip").filetype_extend("cpp", { "cppdoc", "gtest" })
 cmp.setup({
 	mapping = {
 		["<c-space>"] = cmp.mapping.complete(),
-		["<tab>"] = cmp_action.luasnip_supertab(),
-		["<s-tab>"] = cmp_action.luasnip_shift_supertab(),
+		-- Super-tab behavior:
+		--   1. move in cmp menu when it is open
+		--   2. otherwise expand or jump through snippets
+		--   3. otherwise fall back to literal <Tab>
+		["<tab>"] = cmp.mapping(function(fallback)
+			if cmp.visible() then
+				cmp.select_next_item()
+			elseif luasnip.expand_or_locally_jumpable() then
+				luasnip.expand_or_jump()
+			else
+				fallback()
+			end
+		end, { "i", "s" }),
+		["<s-tab>"] = cmp.mapping(function(fallback)
+			if cmp.visible() then
+				cmp.select_prev_item()
+			elseif luasnip.locally_jumpable(-1) then
+				luasnip.jump(-1)
+			else
+				fallback()
+			end
+		end, { "i", "s" }),
 		["<cr>"] = cmp.mapping.confirm({
 			behavior = cmp.ConfirmBehavior.Replace,
 			select = false, -- do not insert first item on list on <cr>
@@ -505,7 +601,7 @@ cmp.setup({
 	snippet = {
 		-- REQUIRED - you must specify a snippet engine
 		expand = function(args)
-			require("luasnip").lsp_expand(args.body) -- For `luasnip` users.
+			luasnip.lsp_expand(args.body) -- For `luasnip` users.
 		end,
 	},
 

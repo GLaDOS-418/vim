@@ -83,7 +83,6 @@ Plug 'obsidian-nvim/obsidian.nvim'   " access obsidian from nvim
 " LSP SUPPORT {{{1
 "------------------------------------------------------------
 
-Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v3.x'}     " lsp config
 Plug 'williamboman/mason.nvim', {'do': ':MasonUpdate' }  " install LSP servers
 Plug 'williamboman/mason-lspconfig.nvim'                 " bridge between lspconfig and mason
 Plug 'WhoIsSethDaniel/mason-tool-installer.nvim'         " install third party tools
@@ -110,7 +109,6 @@ Plug 'hrsh7th/cmp-nvim-lua'                " nvim-cmp source for neovim Lua API
 Plug 'hrsh7th/cmp-emoji'                   " nvim-cmp source for emojis
 Plug 'hrsh7th/cmp-path'                    " nvim-cmp source for filesystem paths
 Plug 'hrsh7th/cmp-calc'                    " evaluate mathematical expressions
-Plug 'hrsh7th/cmp-nvim-lsp-signature-help' " displaying function signatures with the current parameter emphasized
 Plug 'petertriho/cmp-git'                  " git source for nvim-cmp
 Plug 'octaltree/cmp-look'                  " source for linux 'look' tool
 Plug 'saadparwaiz1/cmp_luasnip'
@@ -182,7 +180,7 @@ Plug 'HampusHauffman/block.nvim'
 Plug 'numToStr/Comment.nvim'
 Plug 'stevearc/aerial.nvim' " alternative to majutsushi/tagbar
 Plug 'Bekaboo/dropbar.nvim' " breadcrumbs
-" Plug 'SmiteshP/nvim-navic'   " TODO: check dropbar vs nvim-navic + lsp-zero
+" Plug 'SmiteshP/nvim-navic'   " TODO: check dropbar vs nvim-navic
 
 Plug 'kevinhwang91/nvim-ufo'          " set up code folding
 Plug 'nicolas-martin/region-folding.nvim' " region folding
