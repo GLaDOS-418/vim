@@ -64,7 +64,14 @@ nnoremap <silent> <leader>td <cmd>TodoTelescope<cr>
 
 " neogen {{{2
 " generate annotation
-nnoremap <silent> <leader>n <cmd>Neogen<cr>
+" Keep the wrapper instead of calling :Neogen directly.
+" Why: Neogen crashes on missing parsers because its generator calls
+" `vim.treesitter.get_parser()` internally; the wrapper turns that into a
+" clear message and a safe install hint instead.
+" refs:
+"   - ~/.vim/plugged/neogen/lua/neogen/generator.lua
+"   - ~/.vim/plugged/nvim-treesitter/README.md
+nnoremap <silent> <leader>n <cmd>lua require('neogen_cfg').run()<cr>
 
 " lsp-zero {{{2
 nnoremap <silent> <leader>lf <cmd>LspZeroFormat<cr>
