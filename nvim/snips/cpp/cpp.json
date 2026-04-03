@@ -113,5 +113,83 @@
       "}"
     ],
     "description": "a competitive programming bootstrap program."
+  },
+
+  "hdrcpp": {
+    "prefix": "hdrcpp",
+    "body": [
+      "#pragma once",
+      "",
+      "#include <${1:string}>",
+      "",
+      "namespace ${2:project} {",
+      "",
+      "$0",
+      "",
+      "} // namespace ${2:project}"
+    ],
+    "description": "a small personal header skeleton for modern C++."
+  },
+
+  "meth": {
+    "prefix": "meth",
+    "body": [
+      "${1:void} ${2:Class}::${3:Method}(${4})${5: const}${6: noexcept} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "an out-of-class method definition."
+  },
+
+  "ctor": {
+    "prefix": "ctor",
+    "body": [
+      "${1:Class}::${1}(${2}) {",
+      "\t$0",
+      "}"
+    ],
+    "description": "an out-of-class constructor definition."
+  },
+
+  "dtor": {
+    "prefix": "dtor",
+    "body": [
+      "${1:Class}::~${1}() {",
+      "\t$0",
+      "}"
+    ],
+    "description": "an out-of-class destructor definition."
+  },
+
+  "virt": {
+    "prefix": "virt",
+    "body": [
+      "virtual ${1:void} ${2:name}(${3})${4: const} = 0;$0"
+    ],
+    "description": "a pure virtual member function."
+  },
+
+  "ovrfn": {
+    "prefix": "ovrfn",
+    "body": [
+      "${1:void} ${2:name}(${3})${4: const} override${5: noexcept};$0"
+    ],
+    "description": "an override-style member declaration."
+  },
+
+  "uptr": {
+    "prefix": "uptr",
+    "body": [
+      "std::unique_ptr<${1:Type}> ${2:name}$0"
+    ],
+    "description": "a std::unique_ptr declaration."
+  },
+
+  "sptr": {
+    "prefix": "sptr",
+    "body": [
+      "std::shared_ptr<${1:Type}> ${2:name}$0"
+    ],
+    "description": "a std::shared_ptr declaration."
   }
 }

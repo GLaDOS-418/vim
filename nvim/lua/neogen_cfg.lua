@@ -12,6 +12,7 @@ local M = {}
 --   - ~/.vim/plugged/neogen/lua/neogen/generator.lua
 --   - ~/.vim/plugged/nvim-treesitter/README.md
 
+-- Resolve the parser name Neogen needs for the current buffer filetype.
 local function current_parser_name()
 	-- Map the current filetype to the tree-sitter parser name that Neogen needs.
 	-- Most filetypes match directly, but using the language helper keeps the
@@ -29,6 +30,7 @@ local function current_parser_name()
 	return filetype
 end
 
+-- Check whether the required parser is already installed locally.
 local function parser_is_installed(parser_name)
 	-- Check the parser registry first so we can fail gracefully before Neogen
 	-- reaches its deeper tree-sitter call stack.
@@ -41,12 +43,14 @@ local function parser_is_installed(parser_name)
 	return vim.list_contains(installed, parser_name)
 end
 
+-- Detect whether the external tree-sitter CLI is available for parser installs.
 local function has_treesitter_cli()
 	-- Newer nvim-treesitter shells out to the external `tree-sitter` binary when
 	-- compiling parsers, so we gate install attempts on that dependency.
 	return vim.fn.executable("tree-sitter") == 1
 end
 
+-- Kick off an async parser install when Neogen is blocked on a missing parser.
 local function install_parser(parser_name)
 	-- Start an async parser install when possible; the caller shows the follow-up
 	-- message instead of assuming the parser is immediately ready.
@@ -59,6 +63,8 @@ local function install_parser(parser_name)
 	return install_ok
 end
 
+-- Main user-facing entry point for <leader>n. It guards prerequisites and then
+-- delegates to Neogen's default generation flow.
 function M.run()
 	-- Entry point used by the <leader>n mapping in vim/plugins/nvim_settings.vim.
 	local parser_name = current_parser_name()
@@ -98,7 +104,7 @@ function M.run()
 		return
 	end
 
-	-- Happy path: prerequisites are in place, so hand off to the real command.
+	-- Happy path: prerequisites are in place, so hand off to Neogen itself.
 	local ok, err = pcall(vim.cmd, "Neogen")
 	if not ok then
 		vim.notify(err, vim.log.levels.ERROR)
