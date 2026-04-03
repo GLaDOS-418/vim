@@ -481,7 +481,8 @@ require("luasnip.loaders.from_vscode").lazy_load({ paths = { vim.fn.stdpath("con
 
 -- friendly-snippets - extend snippet groups
 require("luasnip").filetype_extend("c", { "cdoc" })
-require("luasnip").filetype_extend("cpp", { "cppdoc" })
+-- gtest stays a snippet group layered onto cpp; it is not a separate editor filetype.
+require("luasnip").filetype_extend("cpp", { "cppdoc", "gtest" })
 
 --- ************************
 --- FINAL COMPLETION SETUP

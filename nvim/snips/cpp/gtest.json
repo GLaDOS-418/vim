@@ -1,0 +1,316 @@
+{
+  "gtest_file": {
+    "prefix": "gtest_file",
+    "body": [
+      "/***********************************************************************************************",
+      " * @file ${1:${TM_FILENAME}}",
+      " *",
+      " * @brief ${2:GoogleTest coverage for ${TM_FILENAME_BASE}.}",
+      " ***********************************************************************************************/",
+      "#include <gmock/gmock.h>",
+      "#include <gtest/gtest.h>",
+      "",
+      "$0"
+    ],
+    "description": "a gtest file skeleton with a file-level doxygen block."
+  },
+
+  "test": {
+    "prefix": "test",
+    "body": [
+      "/**",
+      " * @brief ${1:Verifies the expected behavior.}",
+      " *",
+      " * @test ${2:Exercises the unit under test without a fixture.}",
+      " */",
+      "TEST(${3:SuiteName}, ${4:HandlesScenario}) {",
+      "\t// TODO(${5:you}): arrange inputs and assert outcomes.",
+      "\t$0",
+      "}"
+    ],
+    "description": "a documented TEST boilerplate."
+  },
+
+  "testf": {
+    "prefix": "testf",
+    "body": [
+      "/**",
+      " * @brief Fixture for ${1:unit under test}.",
+      " */",
+      "class ${2:${1}Test} : public ::testing::Test {",
+      "protected:",
+      "\t/**",
+      "\t * @brief Prepare shared state for each test case.",
+      "\t */",
+      "\tvoid SetUp() override {",
+      "\t\t// TODO(${3:you}): initialize fixture state.",
+      "\t}",
+      "",
+      "\t/**",
+      "\t * @brief Release shared state for each test case.",
+      "\t */",
+      "\tvoid TearDown() override {",
+      "\t\t// TODO(${3:you}): cleanup fixture state.",
+      "\t}",
+      "};",
+      "",
+      "/**",
+      " * @brief ${4:Verifies behavior that depends on fixture state.}",
+      " *",
+      " * @test ${5:Exercises the unit through a test fixture.}",
+      " */",
+      "TEST_F(${2:${1}Test}, ${6:HandlesScenario}) {",
+      "\t// TODO(${3:you}): use fixture members and assert outcomes.",
+      "\t$0",
+      "}"
+    ],
+    "description": "a documented TEST_F boilerplate with fixture setup."
+  },
+
+  "fixture": {
+    "prefix": "fixture",
+    "body": [
+      "/**",
+      " * @brief ${1:Fixture for ${2:unit under test}.}",
+      " */",
+      "class ${3:${2}Test} : public ::testing::Test {",
+      "protected:",
+      "\t/**",
+      "\t * @brief Prepare shared state for each test case.",
+      "\t */",
+      "\tvoid SetUp() override {",
+      "\t\t// TODO(${4:you}): initialize fixture state.",
+      "\t}",
+      "",
+      "\t/**",
+      "\t * @brief Release shared state for each test case.",
+      "\t */",
+      "\tvoid TearDown() override {",
+      "\t\t// TODO(${4:you}): cleanup fixture state.",
+      "\t}",
+      "",
+      "\t$0",
+      "};"
+    ],
+    "description": "a documented gtest fixture with setup and teardown."
+  },
+
+  "setup": {
+    "prefix": "setup",
+    "body": [
+      "/**",
+      " * @brief Prepare shared state for each test case.",
+      " */",
+      "void SetUp() override {",
+      "\t// TODO(${1:you}): initialize fixture state.",
+      "}$0"
+    ],
+    "description": "a documented SetUp override."
+  },
+
+  "teardown": {
+    "prefix": "teardown",
+    "body": [
+      "/**",
+      " * @brief Release shared state for each test case.",
+      " */",
+      "void TearDown() override {",
+      "\t// TODO(${1:you}): cleanup fixture state.",
+      "}$0"
+    ],
+    "description": "a documented TearDown override."
+  },
+
+  "testp_full": {
+    "prefix": "testp_full",
+    "body": [
+      "/**",
+      " * @brief Parameters that describe one test case.",
+      " */",
+      "struct ${1:CaseParam} {",
+      "\tstd::string name;",
+      "};",
+      "",
+      "/**",
+      " * @brief Fixture for parameterized tests of ${2:unit under test}.",
+      " */",
+      "class ${3:${2}Test} : public ::testing::TestWithParam<${1:CaseParam}> {",
+      "protected:",
+      "\t/**",
+      "\t * @brief Return a readable name for the active parameter set.",
+      "\t */",
+      "\tstd::string TestName() const {",
+      "\t\t// TODO(${4:you}): derive a richer test name when more params are added.",
+      "\t\treturn GetParam().name;",
+      "\t}",
+      "",
+      "\t/**",
+      "\t * @brief Prepare shared state for each parameterized case.",
+      "\t */",
+      "\tvoid SetUp() override {",
+      "\t\t// TODO(${4:you}): initialize parameterized fixture state.",
+      "\t}",
+      "",
+      "\t/**",
+      "\t * @brief Release shared state for each parameterized case.",
+      "\t */",
+      "\tvoid TearDown() override {",
+      "\t\t// TODO(${4:you}): cleanup parameterized fixture state.",
+      "\t}",
+      "};",
+      "",
+      "/**",
+      " * @brief ${5:Verifies the observable behavior for a parameterized case.}",
+      " *",
+      " * @test ${6:Exercises the test body with one parameter value.}",
+      " */",
+      "TEST_P(${3:${2}Test}, ${7:HandlesNamedCase}) {",
+      "\tconst auto& param = GetParam();",
+      "\t// TODO(${4:you}): use param and fixture state.",
+      "\tEXPECT_FALSE(param.name.empty());",
+      "}",
+      "",
+      "INSTANTIATE_TEST_SUITE_P(",
+      "\t${8:NamedCases},",
+      "\t${3:${2}Test},",
+      "\t::testing::Values(",
+      "\t\t${1:CaseParam}{\"${9:first_case}\"},",
+      "\t\t${1:CaseParam}{\"${10:second_case}\"}",
+      "\t)",
+      ");$0"
+    ],
+    "description": "a fully documented parameterized gtest scaffold."
+  },
+
+  "expect_ne": {
+    "prefix": "expect_ne",
+    "body": [
+      "EXPECT_NE(${1:lhs}, ${2:rhs});$0"
+    ],
+    "description": "EXPECT_NE assertion."
+  },
+
+  "expect_eq": {
+    "prefix": "expect_eq",
+    "body": [
+      "EXPECT_EQ(${1:lhs}, ${2:rhs});$0"
+    ],
+    "description": "EXPECT_EQ assertion."
+  },
+
+  "expect_true": {
+    "prefix": "expect_true",
+    "body": [
+      "EXPECT_TRUE(${1:condition});$0"
+    ],
+    "description": "EXPECT_TRUE assertion."
+  },
+
+  "expect_false": {
+    "prefix": "expect_false",
+    "body": [
+      "EXPECT_FALSE(${1:condition});$0"
+    ],
+    "description": "EXPECT_FALSE assertion."
+  },
+
+  "assert_ne": {
+    "prefix": "assert_ne",
+    "body": [
+      "ASSERT_NE(${1:lhs}, ${2:rhs});$0"
+    ],
+    "description": "ASSERT_NE assertion."
+  },
+
+  "assert_eq": {
+    "prefix": "assert_eq",
+    "body": [
+      "ASSERT_EQ(${1:lhs}, ${2:rhs});$0"
+    ],
+    "description": "ASSERT_EQ assertion."
+  },
+
+  "assert_true": {
+    "prefix": "assert_true",
+    "body": [
+      "ASSERT_TRUE(${1:condition});$0"
+    ],
+    "description": "ASSERT_TRUE assertion."
+  },
+
+  "assert_false": {
+    "prefix": "assert_false",
+    "body": [
+      "ASSERT_FALSE(${1:condition});$0"
+    ],
+    "description": "ASSERT_FALSE assertion."
+  },
+
+  "expect_throw": {
+    "prefix": "expect_throw",
+    "body": [
+      "EXPECT_THROW(${1:expression}, ${2:ExceptionType});$0"
+    ],
+    "description": "EXPECT_THROW assertion."
+  },
+
+  "assert_throw": {
+    "prefix": "assert_throw",
+    "body": [
+      "ASSERT_THROW(${1:expression}, ${2:ExceptionType});$0"
+    ],
+    "description": "ASSERT_THROW assertion."
+  },
+
+  "expect_no_throw": {
+    "prefix": "expect_no_throw",
+    "body": [
+      "EXPECT_NO_THROW(${1:expression});$0"
+    ],
+    "description": "EXPECT_NO_THROW assertion."
+  },
+
+  "assert_that": {
+    "prefix": "assert_that",
+    "body": [
+      "ASSERT_THAT(${1:actual}, ${2:::testing::Eq(${3:expected})});$0"
+    ],
+    "description": "ASSERT_THAT matcher assertion."
+  },
+
+  "expect_that": {
+    "prefix": "expect_that",
+    "body": [
+      "EXPECT_THAT(${1:actual}, ${2:::testing::Eq(${3:expected})});$0"
+    ],
+    "description": "EXPECT_THAT matcher assertion."
+  },
+
+  "matcher_p": {
+    "prefix": "matcher_p",
+    "body": [
+      "/**",
+      " * @brief ${1:Checks a custom condition with one matcher parameter.}",
+      " */",
+      "MATCHER_P(${2:HasProperty}, ${3:expected}, \"${4:describes the matcher}\") {",
+      "\t// TODO(${5:you}): implement the matcher logic.",
+      "\treturn ${6:arg == expected};",
+      "}$0"
+    ],
+    "description": "a documented MATCHER_P skeleton."
+  },
+
+  "matcher": {
+    "prefix": "matcher",
+    "body": [
+      "/**",
+      " * @brief ${1:Checks a custom condition without extra parameters.}",
+      " */",
+      "MATCHER(${2:IsValid}, \"${3:describes the matcher}\") {",
+      "\t// TODO(${4:you}): implement the matcher logic.",
+      "\treturn ${5:arg};",
+      "}$0"
+    ],
+    "description": "a documented MATCHER skeleton."
+  }
+}

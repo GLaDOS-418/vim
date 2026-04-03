@@ -8,6 +8,10 @@
       {
         "language": "cpp",
         "path": "./cpp/cpp.json"
+      },
+      {
+        "language": "gtest",
+        "path": "./cpp/gtest.json"
       }
     ]
   }

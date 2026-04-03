@@ -8,10 +8,6 @@ let mapleader      = " "    " leader is a global mapping
 let maplocalleader = ","    " localleader is for buffer local commands
 
 
-" vim-polyglot needs this variable before loading the script
-" TODO: move this to plugins.vim
-let g:polyglot_disabled = ['go', 'sensible']
-
 " required earlier for nvim-colorizer.lus
 "Use 24-bit (true-color) mode in Vim/Neovim (if inside tmux, it should be version 2.2 or later)
 " https://gist.github.com/weimeng23/60b51b30eb758bd7a2a648436da1e562
