@@ -36,33 +36,33 @@ require("todo-comments").setup({
 require("dressing").setup()
 
 -- obsidian-nvim/obsidian.nvim 
-require("obsidian").setup({
-    workspaces = {
-        {
-            name = "personal",
-            path = "/mnt/c/Users/arnob/Documents/notes/vault_notes/",
-            overrides = {
-                daily_notes = {
-                    folder = "_monthly",
-                    date_format = "%Y-%m",
-                },
-                templates = {
-                    subdir = "Templates",
-                    new_note = "t_new_note.md",
-                    -- default_tags = { "daily-notes" },
-                    -- template = nil
-                },
-                notes_subdir = "Stage I",
-            }
-        }
-    },
-    completion = {
-        nvim_cmp = true, -- if using nvim-cmp, otherwise set to false
-        min_chars = 2, -- set to 0 to show completion immediately
-    },
-    preferred_link_style = "markdown",
-    legacy_commands = false
-})
+-- require("obsidian").setup({
+--     workspaces = {
+--         {
+--             name = "personal",
+--             path = "/mnt/c/Users/arnob/Documents/notes/vault_notes/",
+--             overrides = {
+--                 daily_notes = {
+--                     folder = "_monthly",
+--                     date_format = "%Y-%m",
+--                 },
+--                 templates = {
+--                     subdir = "Templates",
+--                     new_note = "t_new_note.md",
+--                     -- default_tags = { "daily-notes" },
+--                     -- template = nil
+--                 },
+--                 notes_subdir = "Stage I",
+--             }
+--         }
+--     },
+--     completion = {
+--         nvim_cmp = true, -- if using nvim-cmp, otherwise set to false
+--         min_chars = 2, -- set to 0 to show completion immediately
+--     },
+--     preferred_link_style = "markdown",
+--     legacy_commands = false
+-- })
 
 -- sourcegraph/sg.nvim
 -- require("sg").setup ()

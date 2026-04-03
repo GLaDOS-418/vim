@@ -349,26 +349,68 @@ local cmp_format = {
 --- AI COMPLETION SETUP
 --------------------------
 
--- read an environment variable using lua
--- Ref: https://github.com/olimorris/codecompanion.nvim/blob/57bc5689a64a15b12251a8cd3c28dddd0d52c0cc/minimal.lua#L4
-vim.env["CODECOMPANION_TOKEN_PATH"] = vim.fn.expand("~/.config")
-
--- olimorris/codecompanion.nvim
--- Out of the box, the plugin supports completion with both nvim-cmp
--- TODO: Is this enough?
-require("codecompanion").setup({
-	strategies = {
-		chat = {
-			adapter = "copilot",
-		},
-		inline = {
-			adapter = "copilot",
+-- https://github.com/zbirenbaum/copilot.lua
+require("copilot").setup({
+	suggestion = {
+		enabled = true,
+		auto_trigger = true,
+		debounce = 75,
+		keymap = {
+			accept = "<C-j>",
+			accept_word = false,
+			accept_line = false,
+			next = "<M-]>",
+			prev = "<M-[>",
+			dismiss = "<C-]>",
 		},
 	},
-	opts = {
-		log_level = "DEBUG",
+	panel = { enabled = true },
+	filetypes = {
+		yaml = false,
+		markdown = false,
+		help = false,
+		gitcommit = false,
+		gitrebase = false,
+		hgcommit = false,
+		svn = false,
+		cvs = false,
+		["."] = false,
 	},
 })
+
+-- Setup CopilotChat for model selection
+require("CopilotChat").setup({
+	debug = false, -- Enable debugging
+	-- See Configuration section for rest
+	model = 'gemini-2.5-pro', -- default model
+	mappings = {
+		reset = {
+			normal = '<leader>ccr',
+			insert = '<C-l>'
+		},
+	},
+	-- Custom prompts
+	prompts = {
+		Explain = "Please explain how the following code works.",
+		Review = "Please review the following code and provide suggestions for improvement.",
+		Tests = "Please explain how the selected code works, then generate unit tests for it.",
+		Refactor = "Please refactor the following code to improve its clarity and readability.",
+	},
+})
+
+-- Copilot model selection keymaps
+vim.keymap.set('n', '<leader>cp', '<cmd>Copilot panel<cr>', { desc = 'Open Copilot panel' })
+vim.keymap.set('n', '<leader>cc', '<cmd>CopilotChat<cr>', { desc = 'Open Copilot Chat' })
+vim.keymap.set('v', '<leader>cc', '<cmd>CopilotChatVisual<cr>', { desc = 'Open Copilot Chat with selection' })
+vim.keymap.set('n', '<leader>cm', function()
+	-- Model switching command
+	vim.ui.input({ prompt = 'Enter model (gpt-4, claude-3.5-sonnet, etc.): ' }, function(input)
+		if input and input ~= '' then
+			vim.cmd('CopilotChatModel ' .. input)
+			vim.notify('Switched Copilot model to: ' .. input)
+		end
+	end)
+end, { desc = 'Switch Copilot model' })
 
 --- ************************
 --- COMPLETION SOURCES

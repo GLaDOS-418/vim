@@ -77,6 +77,8 @@ if has('nvim')
   " TODO: add auto installation of treesitter servers
   Plug 'nvim-treesitter/nvim-treesitter',
        \{'do': ':TSUpdate'}               "   it's a parser generator
+
+  Plug 'RRethy/vim-illuminate' " highlight all instances of word under cursor
 endif
 
 Plug 'lifepillar/vim-gruvbox8'          " a better gruvbox
@@ -95,7 +97,7 @@ Plug 'sindrets/diffview.nvim'
 
 " Navigation {{{3
 if has('nvim')
-  Plug 'nvim-neo-tree/neo-tree.nvim', { 'branch': 'v3.x' }
+  Plug 'nvim-neo-tree/neo-tree.nvim',
   Plug 'nvim-tree/nvim-web-devicons'
   Plug 'MunifTanjim/nui.nvim'
 
@@ -237,8 +239,11 @@ else
 endif
 
 " AI Tools {{{3
-Plug 'github/copilot.vim' " Copilot setup
 if has("nvim")
+    Plug 'copilotlsp-nvim/copilot-lsp'
+    Plug 'zbirenbaum/copilot.lua'
+    Plug 'CopilotC-Nvim/CopilotChat.nvim'
+
     Plug 'olimorris/codecompanion.nvim'    " AI completion
 endif
 
@@ -601,11 +606,6 @@ if has('nvim')
     nnoremap <silent><c-t> <Cmd>exe v:count1 . "ToggleTerm"<CR>
     inoremap <silent><c-t> <Esc><Cmd>exe v:count1 . "ToggleTerm"<CR>
 endif
-
-
-" copilot.vim {{{2
-inoremap <silent><script><expr> <c-j> copilot#Accept("\<cr>")
-let g:copilot_no_tab_map = v:true
 
 "------------------------------------------------------------
 " END {{{1
