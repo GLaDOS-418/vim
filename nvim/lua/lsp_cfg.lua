@@ -28,6 +28,53 @@ local format_with_conform = function()
 	})
 end
 
+-- Stop all LSP clients attached to one buffer.
+--   - built-in `:LspStop` is not always exposed in this setup/runtime.
+--   - this gives me one stable command I can remember.
+--   - use `client:stop()` here; `vim.lsp.stop_client()` is deprecated.
+local stop_lsp_for_buffer = function(bufnr)
+	local clients = vim.lsp.get_clients({ bufnr = bufnr })
+
+	if vim.tbl_isempty(clients) then
+		vim.notify("No LSP clients attached to this buffer.", vim.log.levels.INFO)
+		return false
+	end
+
+	local client_names = {}
+	for _, client in ipairs(clients) do
+		table.insert(client_names, client.name)
+		client:stop()
+	end
+
+	vim.notify("Stopped LSP for this buffer: " .. table.concat(client_names, ", "), vim.log.levels.INFO)
+	return true
+end
+
+-- Restart all LSP clients for one buffer by stopping them, then re-editing.
+-- Why `:edit`:
+--   - LSP servers are enabled from the normal lspconfig/Mason path.
+--   - reopening the buffer is enough to trigger attach again.
+local restart_lsp_for_buffer = function(bufnr)
+	if stop_lsp_for_buffer(bufnr) then
+		vim.cmd("edit")
+	end
+end
+
+-----------------------------------------
+---  LSP COMMAND HELPERS
+-----------------------------------------
+
+-- To add new commands:
+--   - keep these buffer-scoped unless there is a real need for a global action
+--   - put the real logic in a Lua helper above, then expose a tiny command here
+vim.api.nvim_create_user_command("LspBufStop", function()
+	stop_lsp_for_buffer(0)
+end, { desc = "Stop LSP clients attached to the current buffer" })
+
+vim.api.nvim_create_user_command("LspBufRestart", function()
+	restart_lsp_for_buffer(0)
+end, { desc = "Restart LSP clients attached to the current buffer" })
+
 -- Buffer-local LSP maps.
 -- Called from the native `LspAttach` event so mappings only exist when a
 -- language server is actually attached to the buffer.
