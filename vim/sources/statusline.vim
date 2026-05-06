@@ -82,6 +82,144 @@ exe 'hi! SGit ctermfg=223 ctermbg=235 cterm=bold guifg=#ebdbb2 guibg=#282828 gui
 " Define the custom highlight group for the filename
 hi FixedFilename ctermfg=White ctermbg=Black guifg=#FFFFFF guibg=#000000
 
+" WC statusline helpers {{{2
+" Display order is chars/words/lines.
+if !exists('g:statusline_wc_max_bytes')
+  let g:statusline_wc_max_bytes = 1048576
+endif
+
+function! s:IsVisualMode(mode) abort " {{{3
+  return a:mode ==# 'v' || a:mode ==# 'V' || a:mode ==# "\<C-V>"
+endfunction
+
+function! s:FormatCount(count) abort " {{{3
+  if a:count >= 1000000
+    let count = printf('%.1fM', a:count / 1000000.0)
+  elseif a:count >= 1000
+    let count = printf('%.1fk', a:count / 1000.0)
+  else
+    return a:count
+  endif
+
+  let count = substitute(count, '\.0\ze[ kM]', '', '')
+  return count
+endfunction
+
+function! s:CountWords(lines) abort " {{{3
+  let words = 0
+  for line in a:lines
+    let words += len(split(line, '[^[:alnum:]_]\+'))
+  endfor
+  return words
+endfunction
+
+function! s:CountChars(lines) abort " {{{3
+  let chars = 0
+  for line in a:lines
+    let chars += strchars(line)
+  endfor
+  if len(a:lines) > 1
+    let chars += len(a:lines) - 1
+  endif
+  return chars
+endfunction
+
+function! s:FormatWC(chars, words, lines) abort " {{{3
+  return s:FormatCount(a:chars) . '/'
+        \ . s:FormatCount(a:words) . '/'
+        \ . s:FormatCount(a:lines)
+endfunction
+
+function! s:SelectionLinesFallback(mode) abort " {{{3
+  let start = getpos('v')
+  let end = getpos('.')
+
+  if start[1] > end[1] || (start[1] == end[1] && start[2] > end[2])
+    let tmp = start
+    let start = end
+    let end = tmp
+  endif
+
+  if a:mode ==# 'V'
+    return getline(start[1], end[1])
+  endif
+
+  if a:mode ==# "\<C-V>"
+    return []
+  endif
+
+  let lines = getline(start[1], end[1])
+  if empty(lines)
+    return []
+  endif
+
+  if len(lines) == 1
+    let lines[0] = strpart(lines[0], start[2] - 1, end[2] - start[2] + 1)
+  else
+    let lines[0] = strpart(lines[0], start[2] - 1)
+    let lines[-1] = strpart(lines[-1], 0, end[2])
+  endif
+
+  return lines
+endfunction
+
+function! s:VisualWC(mode) abort " {{{3
+  let start = getpos('v')
+  let end = getpos('.')
+  let key = ['visual', b:changedtick, a:mode, start[1], start[2], end[1], end[2], &selection]
+
+  if exists('b:statusline_wc_cache') && get(b:statusline_wc_cache, 'key', []) ==# key
+    return b:statusline_wc_cache.text
+  endif
+
+  if exists('*getregion')
+    let lines = getregion(start, end, {'type': a:mode})
+  else
+    let lines = s:SelectionLinesFallback(a:mode)
+    if empty(lines) && a:mode ==# "\<C-V>"
+      let line_count = abs(start[1] - end[1]) + 1
+      let text = s:FormatCount(line_count)
+      let b:statusline_wc_cache = {'key': key, 'text': text}
+      return text
+    endif
+  endif
+
+  let text = s:FormatWC(s:CountChars(lines), s:CountWords(lines), len(lines))
+  let b:statusline_wc_cache = {'key': key, 'text': text}
+  return text
+endfunction
+
+function! s:BufferWC() abort " {{{3
+  let lines = line('$')
+  let bytes = line2byte(lines + 1) - 1
+  let max_bytes = get(g:, 'statusline_wc_max_bytes', 1048576)
+  let key = ['buffer', b:changedtick, bytes, lines, max_bytes]
+
+  if exists('b:statusline_wc_cache') && get(b:statusline_wc_cache, 'key', []) ==# key
+    return b:statusline_wc_cache.text
+  endif
+
+  " Avoid scanning huge buffers from statusline evaluation.
+  if bytes < 0 || bytes > max_bytes
+    let text = lines
+  else
+    let buffer_lines = getline(1, '$')
+    let text = s:FormatWC(s:CountChars(buffer_lines), s:CountWords(buffer_lines), lines)
+  endif
+
+  let b:statusline_wc_cache = {'key': key, 'text': text}
+  return text
+endfunction
+
+function! StatuslineWC() abort " {{{3
+  let current_mode = mode(1)
+  if s:IsVisualMode(current_mode)
+    return s:VisualWC(current_mode)
+  endif
+
+  return s:BufferWC()
+endfunction
+
 " General Format: %-0{minwid}.{maxwid}{item}
 " Higlight Groups: #<format-name>#  -> see :help hl for more group names
 function! ActiveStatus() " {{{2
@@ -111,7 +249,7 @@ function! ActiveStatus() " {{{2
   let statusline.="%#Title#"
   let statusline.="\ %l:%-c\ "                " line[width-4ch, pad-left]:col[width-3ch, pad-right]
   let statusline.="%*"                        " switch to normal statusline hl
-  let statusline.="\ %3L "                    " number of lines in buffer
+  let statusline.="\ %{StatuslineWC()} "      " wc-style chars/words/lines
   return statusline
 endfunction
 
