@@ -78,7 +78,12 @@ set updatetime=300              " slower update time leads to poor UX
 syntax enable                   " enable syntax processing
 "set mouse+=a                   " use mouse to place cursor and copy w/o line num
 set shortmess+=c                " req for `coc.nvim` : github.com/neoclide/coc.nvim
-set conceallevel=0              " check: https://github.com/epwalsh/obsidian.nvim/issues/286
+
+augroup conceal_level
+  au!
+  " setting conceallevel helps hide the verbose markdown syntax with the help of some plugins.
+  autocmd FileType markdown,vimwiki setlocal conceallevel=2
+augroup END
 
 if !has('nvim')
   set esckeys                   " Allow cursor keys in insert mode.

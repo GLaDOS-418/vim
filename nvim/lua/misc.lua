@@ -35,8 +35,22 @@ require("todo-comments").setup({
 -- stevearc/dressing.nvim
 require("dressing").setup()
 
+-- MeanderingProgrammer/render-markdown.nvim
+-- Notes:
+-- 1. for latex support, additional dependencies are required. see plugin readme.
+require('render-markdown').setup({
+    -- vimwiki changes the filetype so this enables plugin for vimwiki files as well.
+    file_types = { 'markdown', 'vimwiki' },
+    completions = { lsp = { enabled = true } },
+    checkbox = { checked = { scope_highlight = '@markup.strikethrough' } },
+    sign = { enabled = false },
+    enabled = true
+})
+vim.treesitter.language.register('markdown', 'vimwiki')
+
 -- obsidian-nvim/obsidian.nvim 
 -- require("obsidian").setup({
+--     ui = { enable = false }, -- conflicts with render-markdown. see render-markdown's README.
 --     workspaces = {
 --         {
 --             name = "personal",

@@ -26,6 +26,7 @@ local ensured_parsers = {
 	"java",
 	"javadoc",
 	"javascript",
+	"latex",
 	"lua",
 	"luadoc",
 	"make",
@@ -57,3 +58,16 @@ end, ensured_parsers)
 if has_treesitter_cli and #missing_parsers > 0 then
 	treesitter.install(missing_parsers)
 end
+
+-- Start Treesitter highlighting for listed file types.
+-- This is required because nvim-treesitter does not automatically start parsers.
+-- This is mentioned in the plugin README. Thus, add all ftypes in the 'pattern' field.
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = {
+		"markdown"
+		, "vimwiki"
+	},
+	callback = function(args)
+		pcall(vim.treesitter.start, args.buf)
+	end,
+})

@@ -51,7 +51,6 @@ Plug 'sindrets/diffview.nvim' " Neovim-only diff UI on top of git history
 "------------------------------------------------------------
 
 Plug 'nvim-neo-tree/neo-tree.nvim'  " Neovim-side tree. Vim counterpart is NERDTree.
-Plug 'nvim-tree/nvim-web-devicons'
 Plug 'MunifTanjim/nui.nvim'
 
 Plug 'stevearc/oil.nvim' " edit filesystem like buffer
@@ -78,6 +77,8 @@ Plug 'lambdalisue/vim-suda'
 
 Plug 'richardbizik/nvim-toc'         " create TOC for markdown files
 Plug 'obsidian-nvim/obsidian.nvim'   " access obsidian from nvim
+
+Plug 'MeanderingProgrammer/render-markdown.nvim'
 
 "------------------------------------------------------------
 " LSP SUPPORT {{{1
@@ -118,7 +119,10 @@ Plug 'saadparwaiz1/cmp_luasnip'
 "------------------------------------------------------------
 
 Plug 'stevearc/conform.nvim'
+
 Plug 'onsails/lspkind.nvim' " icons for snippet completion source
+Plug 'nvim-tree/nvim-web-devicons'
+Plug 'nvim-mini/mini.icons'
 
 "------------------------------------------------------------
 " CODE LINTING {{{1
