@@ -48,7 +48,7 @@ require('render-markdown').setup({
 })
 vim.treesitter.language.register('markdown', 'vimwiki')
 
--- obsidian-nvim/obsidian.nvim 
+-- obsidian-nvim/obsidian.nvim
 -- require("obsidian").setup({
 --     ui = { enable = false }, -- conflicts with render-markdown. see render-markdown's README.
 --     workspaces = {

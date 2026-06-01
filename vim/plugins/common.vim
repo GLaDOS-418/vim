@@ -25,6 +25,7 @@ Plug 'tpope/vim-fugitive'   " handle git commands
 "   Plug 'folke/trouble.nvim'          " pretty list for showing diagnostics
 " endif
 Plug 'airblade/vim-gitgutter' " shared git signs in both Vim and Neovim
+Plug 'badeggg/git-link.vim' " Get a browsable URL for the current file and line from git
 
 "------------------------------------------------------------
 " NAVIGATION {{{1
