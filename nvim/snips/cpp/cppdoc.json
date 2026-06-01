@@ -1,0 +1,17 @@
+{
+  "namegroup": {
+    "prefix": "namegroup",
+    "body": [
+      "/**",
+      " * @name ${1:GroupName}",
+      " *",
+      " * ${2:brief description of the group}",
+      " */",
+      "",
+      "///@{",
+      "$0",
+      "///@}"
+    ],
+    "description": "Named group."
+  }
+}
