@@ -10,6 +10,10 @@
         "path": "./cpp/cpp.json"
       },
       {
+        "language": "cppdoc",
+        "path": "./cpp/cppdoc.json"
+      },
+      {
         "language": "gtest",
         "path": "./cpp/gtest.json"
       }

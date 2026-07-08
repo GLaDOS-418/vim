@@ -159,9 +159,9 @@ nnoremap <leader>u :UndotreeToggle<cr>
 " vim-rooter {{{2
 " 'CMakeLists.txt' , 'Makefile', 'build.sh', 'Earthfile'
 " \ '.clangd'
-" \,'*.sln', '*.csproj', 'build/env.sh', 'go.mod', 'Jenkinsfile'
+" \,'*.sln', '*.csproj', 'build/env.sh', 'Jenkinsfile'
 " \,'package.json', 'package-lock.json', 'yarn.lock', 'pnpm-lock.yaml',
-let g:rooter_patterns = [ '.git', '.root' ]
+let g:rooter_patterns = [ '.git', '.root', 'go.mod' ]
 
 let g:rooter_silent_chdir = 1
 let g:rooter_change_directory_for_non_project_files = 'current'
