@@ -217,8 +217,8 @@ nnoremap <c-space> :call CycleColorscheme()<CR>
 
 set autoindent
 set cindent           " better alternative to smartindent
-set expandtab         " tabs are spaces
-" set tabstop=2       " commented: r/vim/wiki/tabstop
+set expandtab         " tabs are spaces (vim-polyglot sets this appropriately for relevant ftypes e.g. go & make)
+set tabstop=4         " width of a literal tab char
 set shiftwidth=4      " when (un)indenting lines shift with 1unit shiftwidth
 set softtabstop=4     " number of spaces in TAB when editing
 

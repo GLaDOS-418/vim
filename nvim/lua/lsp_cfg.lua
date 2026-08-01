@@ -288,13 +288,13 @@ require("mason-tool-installer").setup({
 		-- "luacheck",
 
 		"golines",
-		"goimports-reviser",
+		"gci",
 		"gofumpt",
 		"gomodifytags",
 		"gotests",
 		"golangci-lint",
 
-		--"clang-format", " there's some issue during mason's installation and it was getting stuck.
+		"clang-format", -- there's some issue during mason's installation and it was getting stuck.
 		"cpplint",
 		-- "cmake-format", -- not sure about the name
 
@@ -302,7 +302,7 @@ require("mason-tool-installer").setup({
 		"prettierd",
 		"jq",
 
-		-- "codespell",
+		"codespell",
 		"bash-language-server",
 		"shellcheck",
 		"shellharden",
@@ -326,9 +326,10 @@ require("conform").setup({
 		-- Conform will run multiple formatters sequentially
 		python = { "isort", "black" },
 
-		-- Use a sub-list to run only the first available formatter
-		javascript = { { "prettierd", "prettier" } },
-		go = { "golines", "goimports-reviser", "gofumpt" },
+		-- stop_after_first key runs only the first available formatter
+		javascript = { "prettierd", "prettier", stop_after_first = true },
+		-- gci reads its import-order groups from .golangci.yml
+		go = { "golines", "gci", "gofumpt" },
 		yaml = { "yamlfmt" },
 
 		-- "*" filetype to run formatters on all filetypes.
@@ -343,7 +344,6 @@ require("conform").setup({
 	-- 	async = false,
 	-- 	lsp_fallback = true,
 	-- },
-	stop_after_first = true,
 })
 
 -- automatically format buffer on save
@@ -366,7 +366,7 @@ local lint = require("lint")
 lint.linters_by_ft = {
 	-- c = { "cpplint" },
 	-- cpp = { "cpplint" },
-	-- go = { "golangci-lint" },
+	go = { "golangcilint" }, -- nvim-lint registers this linter without the hyphen
 	-- lua = { "luacheck" },
 	bash = { "shellcheck", "shellharden" },
 }
