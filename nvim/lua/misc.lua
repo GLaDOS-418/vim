@@ -44,7 +44,12 @@ require('render-markdown').setup({
     completions = { lsp = { enabled = true } },
     checkbox = { checked = { scope_highlight = '@markup.strikethrough' } },
     sign = { enabled = false },
-    enabled = true
+    code = {
+        enabled = false,
+    },
+    dash = {
+        enabled = false,
+    }
 })
 vim.treesitter.language.register('markdown', 'vimwiki')
 
@@ -141,6 +146,10 @@ require("toggleterm").setup({
 })
 
 -- stevearc/oil.nvim
+
+-- macOS does not have a trash specification, so we use the freedesktop implementation instead.
+package.loaded["oil.adapters.trash.mac"] = require("oil.adapters.trash.freedesktop")
+
 require("oil").setup({
 	columns = {
 		"icon",
@@ -161,6 +170,7 @@ require("oil").setup({
 		},
 	},
 	preview_split = "auto",
+    delete_to_trash = true,
 })
 vim.keymap.set("n", "=", "<cmd>Oil --float<cr>", { desc = "Open parent directory" })
 

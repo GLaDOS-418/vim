@@ -312,7 +312,26 @@ require("mason-tool-installer").setup({
 -----------------------------------------
 ---  FORMATTING
 -----------------------------------------
+-- Use the repository-level golangci-lint formatter configuration for Go.
+-- Resolve this at format time so buffers in different repositories use their
+-- own Git root rather than Neovim's current working directory.
+local golangci_lint_args = function(_, ctx)
+	local git_root = vim.fs.root(ctx.buf, { ".git" })
+	local config = git_root and (git_root .. "/.golangci-lint")
+
+	if config and vim.fn.filereadable(config) == 1 then
+		return { "--config", config, "fmt", "--stdin" }
+	end
+
+	return { "fmt", "--stdin" }
+end
+
 require("conform").setup({
+	formatters = {
+		["golangci-lint"] = {
+			args = golangci_lint_args,
+		},
+	},
 	formatters_by_ft = {
 		c = { "clang_format" },
 		cpp = { "clang_format" },
@@ -328,8 +347,7 @@ require("conform").setup({
 
 		-- stop_after_first key runs only the first available formatter
 		javascript = { "prettierd", "prettier", stop_after_first = true },
-		-- gci reads its import-order groups from .golangci.yml
-		go = { "golines", "gci", "gofumpt" },
+		go = { "golangci-lint" },
 		yaml = { "yamlfmt" },
 
 		-- "*" filetype to run formatters on all filetypes.
